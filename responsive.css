@@ -81,8 +81,19 @@
 /* Mobile devices */
 @media (max-width: 767px) {
     .header-top {
-        justify-content: center;
+        justify-content: flex-start;
         margin-bottom: 0.5rem;
+        padding: 0.3rem 0;
+    }
+    
+    .top-links {
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .top-links a {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
     }
     
     .logo {
@@ -94,36 +105,33 @@
     nav {
         padding: 0.6rem 0.8rem;
         margin: 0 0.5rem;
-        overflow: hidden;
     }
     
     nav ul {
-        display: flex;
         gap: 0.5rem;
         justify-content: flex-start;
         padding: 0.3rem 0;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        white-space: nowrap;
-    }
-    
-    nav ul::-webkit-scrollbar {
-        display: none;
-    }
-    
-    nav li {
-        flex-shrink: 0;
     }
     
     nav a {
         padding: 0.4rem 1rem;
         font-size: 0.9rem;
         border-radius: 20px;
-        white-space: nowrap;
-        display: block;
+    }
+    
+    .search-container {
+        flex-direction: column;
+        align-items: center;
+        margin: 0.8rem 0;
+        padding: 0.8rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    #searchInput {
+        max-width: 100%;
+        margin-bottom: 0.5rem;
     }
     
     .hero {
@@ -221,23 +229,26 @@
     .values-grid {
         grid-template-columns: 1fr;
     }
-    
-    .search-container {
-        flex-direction: column;
-        align-items: center;
-        margin: 0.8rem 0;
-    }
-    
-    #searchInput {
-        max-width: 100%;
-        margin-bottom: 0.5rem;
-    }
 }
 
 /* Small mobile devices */
 @media (max-width: 575px) {
     .container {
         width: 95%;
+    }
+    
+    .header-top {
+        margin-bottom: 0.3rem;
+        padding: 0.2rem 0;
+    }
+    
+    .top-links {
+        gap: 0.8rem;
+    }
+    
+    .top-links a {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
     }
     
     .logo {
@@ -259,6 +270,21 @@
         padding: 0.35rem 0.8rem;
         font-size: 0.85rem;
         border-radius: 18px;
+    }
+    
+    .search-container {
+        margin: 0.6rem 0;
+        padding: 0.6rem 0;
+    }
+    
+    #searchInput {
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+    }
+    
+    #searchButton {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
     }
     
     .hero-content h1 {
@@ -289,35 +315,32 @@
     .app-icon {
         font-size: 3rem;
     }
-    
-    .search-container {
-        margin: 0.6rem 0;
-    }
-    
-    #searchInput {
-        font-size: 0.9rem;
-        padding: 0.7rem 0.9rem;
-    }
-    
-    #searchButton {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-    }
 }
 
 /* Very small devices */
 @media (max-width: 375px) {
-    .hero-content h1 {
-        font-size: 1.6rem;
+    .header-top {
+        padding: 0.15rem 0;
+    }
+    
+    .top-links {
+        gap: 0.6rem;
+    }
+    
+    .top-links a {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
     }
     
     .logo {
         font-size: 1.6rem;
+        margin-bottom: 0.5rem;
     }
     
     /* Ultra Compact Navigation */
     nav {
         padding: 0.4rem 0.5rem;
+        margin: 0 0.2rem;
     }
     
     nav ul {
@@ -328,6 +351,25 @@
         padding: 0.3rem 0.7rem;
         font-size: 0.8rem;
         border-radius: 15px;
+    }
+    
+    .search-container {
+        margin: 0.5rem 0;
+        padding: 0.5rem 0;
+    }
+    
+    #searchInput {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    #searchButton {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.6rem;
     }
     
     .featured-item, .app-card, .game-card {
@@ -349,6 +391,19 @@
 
 /* Extra small devices */
 @media (max-width: 320px) {
+    .header-top {
+        padding: 0.1rem 0;
+    }
+    
+    .top-links {
+        gap: 0.4rem;
+    }
+    
+    .top-links a {
+        font-size: 0.65rem;
+        padding: 0.1rem 0.3rem;
+    }
+    
     .logo {
         font-size: 1.5rem;
         margin-bottom: 0.4rem;
@@ -357,7 +412,7 @@
     /* Super Compact Navigation */
     nav {
         padding: 0.3rem 0.4rem;
-        margin: 0 0.2rem;
+        margin: 0 0.15rem;
     }
     
     nav ul {
@@ -368,6 +423,21 @@
         padding: 0.25rem 0.6rem;
         font-size: 0.75rem;
         border-radius: 12px;
+    }
+    
+    .search-container {
+        margin: 0.4rem 0;
+        padding: 0.4rem 0;
+    }
+    
+    #searchInput {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.7rem;
+    }
+    
+    #searchButton {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -394,6 +464,11 @@
         padding: 0.5rem 0;
     }
     
+    .header-top {
+        margin-bottom: 0.3rem;
+        padding: 0.1rem 0;
+    }
+    
     .logo {
         font-size: 1.6rem;
         margin-bottom: 0.4rem;
@@ -406,6 +481,11 @@
     nav a {
         padding: 0.3rem 0.8rem;
         font-size: 0.8rem;
+    }
+    
+    .search-container {
+        margin: 0.4rem 0;
+        padding: 0.4rem 0;
     }
 }
 

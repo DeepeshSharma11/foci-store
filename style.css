@@ -37,24 +37,39 @@ body {
     backdrop-filter: blur(10px);
 }
 
+/* Top Links - Horizontal Scroll */
 .header-top {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin-bottom: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.5rem 0;
+    white-space: nowrap;
+}
+
+.header-top::-webkit-scrollbar {
+    display: none;
 }
 
 .top-links {
     display: flex;
     gap: 1.5rem;
+    flex-shrink: 0;
+    padding: 0 1rem;
 }
 
 .top-links a {
     color: white;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: all 0.3s ease;
     padding: 0.3rem 0.8rem;
     border-radius: 15px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .top-links a:hover {
@@ -74,17 +89,19 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Main Navigation - Horizontal Scroll */
 nav {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 0.8rem 1rem;
     backdrop-filter: blur(10px);
+    overflow: hidden;
 }
 
 nav ul {
     display: flex;
     list-style: none;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 1rem;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -92,6 +109,7 @@ nav ul {
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: 0.5rem 0;
+    white-space: nowrap;
 }
 
 nav ul::-webkit-scrollbar {
@@ -136,12 +154,17 @@ nav a:hover, nav a.active {
     transform: translateY(-2px);
 }
 
-/* Search functionality */
+/* Search functionality - Fixed Position */
 .search-container {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
     gap: 0.5rem;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1rem 0;
+    z-index: 100;
 }
 
 #searchInput {
@@ -163,76 +186,7 @@ nav a:hover, nav a.active {
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
-}
-
-#searchButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-/* Main Navigation Styles - Horizontal Always */
-nav ul {
-    display: flex;
-    list-style: none;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 0.5rem 0;
-    white-space: nowrap;
-}
-
-nav ul::-webkit-scrollbar {
-    display: none;
-}
-
-nav li {
-    flex-shrink: 0;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 0.5rem 1.2rem;
-    border-radius: 25px;
-    position: relative;
-    overflow: hidden;
-    white-space: nowrap;
-    display: block;
-    font-size: 0.95rem;
-}
-
-/* Search functionality */
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin: 1rem 0;
-    gap: 0.5rem;
-}
-
-#searchInput {
-    padding: 0.8rem 1rem;
-    border: none;
-    border-radius: 25px;
-    width: 100%;
-    max-width: 400px;
-    font-size: 1rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-#searchButton {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 #searchButton:hover {
