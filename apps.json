@@ -71,7 +71,7 @@
       "features": ["Multiple Formats", "Best Experience", "Modern UI"]
     },
      {
-      "id": 9,
+      "id": 6,
       "name": "New App 9",
       "description": "Another great app",
       "category": "tools",
@@ -83,8 +83,9 @@
       "downloadUrl": "#",
       "badge": "New"
     },
+
     {
-      "id": 6,
+      "id": 7,
       "name": "Office Suite MOD",
       "description": "Complete office suite with PDF editing, cloud sync, and all premium features unlocked.",
       "category": "productivity",
@@ -96,7 +97,47 @@
       "downloadUrl": "#",
       "badge": "Premium",
       "features": ["PDF Editing", "Cloud Sync", "Premium Features"]
+    },
+     {
+      "id": 8,
+      "name": "New App 10", 
+      "description": "One more app",
+      "category": "social",
+      "image": "assets/images/app10.png",
+      "size": "60 MB",
+      "version": "v1.0.0",
+      "rating": 4.6,
+      "downloads": "2K+",
+      "downloadUrl": "#",
+      "badge": "Hot"
+    },
+    {
+      "id": 9,
+      "name": "New App 10", 
+      "description": "One more app",
+      "category": "social",
+      "image": "assets/images/app10.png",
+      "size": "60 MB",
+      "version": "v1.0.0",
+      "rating": 4.6,
+      "downloads": "2K+",
+      "downloadUrl": "#",
+      "badge": "Hot"
+    },
+    {
+      "id": 10,
+      "name": "New App 10", 
+      "description": "One more app",
+      "category": "social",
+      "image": "assets/images/app10.png",
+      "size": "60 MB",
+      "version": "v1.0.0",
+      "rating": 4.6,
+      "downloads": "2K+",
+      "downloadUrl": "#",
+      "badge": "Hot"
     }
+  
   ],
   "games": [
     {
