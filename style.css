@@ -32,9 +32,26 @@ body {
 }
 
 .header.scrolled {
-    padding: 0.5rem 0;
+    padding: 0.4rem 0;
     background: rgba(102, 126, 234, 0.95);
     backdrop-filter: blur(10px);
+}
+
+.header.compact {
+    padding: 0.3rem 0;
+}
+
+.header.compact .logo {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.header.compact .header-top {
+    margin-bottom: 0.2rem;
+}
+
+.header.compact nav {
+    padding: 0.4rem;
 }
 
 /* Top Links - Horizontal Scroll */
@@ -46,7 +63,7 @@ body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0.5rem 0;
+    padding: 0.4rem 0;
     white-space: nowrap;
 }
 
@@ -87,6 +104,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
 /* Main Navigation - Horizontal Scroll */
@@ -97,6 +115,7 @@ nav {
     backdrop-filter: blur(10px);
     overflow: hidden;
     position: relative;
+    transition: all 0.3s ease;
 }
 
 nav ul {
@@ -173,6 +192,13 @@ nav a:hover, nav a.active {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nav-scroll-indicator.visible {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .nav-scroll-indicator:hover {
@@ -325,7 +351,6 @@ nav a:hover, nav a.active {
     padding: 1rem;
     border-radius: 20px;
     backdrop-filter: blur(10px);
-    animation: float 3s ease-in-out infinite;
 }
 
 .app-icon:nth-child(1) { top: 20%; left: 10%; }
@@ -1466,7 +1491,6 @@ footer {
     border: 2px solid transparent;
     border-top: 2px solid currentColor;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
 }
 
 /* Success Message */
@@ -1482,7 +1506,6 @@ footer {
 
 .contact-success.show {
     display: block;
-    animation: slideInUp 0.5s ease;
 }
 
 .success-icon {
@@ -1575,7 +1598,6 @@ footer {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
     transform: scale(0);
-    animation: ripple 0.6s linear;
 }
 
 /* Loading state */
@@ -1595,7 +1617,6 @@ footer {
     border: 2px solid transparent;
     border-top: 2px solid currentColor;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
 }
 
 /* Notification styles */
@@ -1610,7 +1631,6 @@ footer {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     z-index: 3000;
     max-width: 400px;
-    animation: slideInRight 0.3s ease;
 }
 
 .notification-content {
