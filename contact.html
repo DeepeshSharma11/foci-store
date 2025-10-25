@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - FociStore</title>
+    <meta name="description" content="Get in touch with FociStore team for support, suggestions, or partnerships">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <div class="top-links">
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="logo" data-aos="fade-down">FociStore</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="apps.html">Applications</a></li>
+                    <li><a href="games.html">MOD Games</a></li>
+                </ul>
+            </nav>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search apps and games...">
+                <button id="searchButton">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Contact Us</h1>
+            <p data-aos="fade-up" data-aos-delay="100">We're here to help! Get in touch with our team for any questions or support</p>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="contact-intro" data-aos="fade-up">
+                <h2>Get In Touch</h2>
+                <p>Have questions about our applications, need technical support, or want to suggest new features? We'd love to hear from you. Our team typically responds within 24 hours.</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-form-container" data-aos="fade-right">
+                    <h3>Send us a Message</h3>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required placeholder="What is this regarding?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" required placeholder="Tell us how we can help you..." rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Send Message</span>
+                            <span class="btn-loading" style="display: none;">
+                                <span class="loading-spinner"></span>
+                                Sending...
+                            </span>
+                        </button>
+                    </form>
+                    <div class="contact-success" id="successMessage">
+                        <div class="success-icon">✅</div>
+                        <h3>Message Sent Successfully!</h3>
+                        <p>We've received your message and will respond within 24 hours.</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-container" data-aos="fade-left">
+                    <div class="contact-info-card">
+                        <h3>Contact Information</h3>
+                        <p>Choose the most convenient way to reach us</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-icon">📧</div>
+                                <div class="method-details">
+                                    <h4>Email Support</h4>
+                                    <p>support@focistore.com</p>
+                                    <small>Typically responds within 24 hours</small>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-icon">💬</div>
+                                <div class="method-details">
+                                    <h4>Live Chat</h4>
+                                    <p>Available 9AM - 6PM EST</p>
+                                    <small>Click the chat icon in the corner</small>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-icon">🔧</div>
+                                <div class="method-details">
+                                    <h4>Technical Support</h4>
+                                    <p>tech@focistore.com</p>
+                                    <small>For app installation and technical issues</small>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-icon">🤝</div>
+                                <div class="method-details">
+                                    <h4>Partnerships</h4>
+                                    <p>partners@focistore.com</p>
+                                    <small>For business and collaboration inquiries</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-section">
+                        <h3>Quick Help</h3>
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <span>How do I install MOD applications?</span>
+                                    <span class="faq-toggle">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>After downloading, enable "Install from Unknown Sources" in your device settings, then open the APK file to install.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <span>Are the applications safe to use?</span>
+                                    <span class="faq-toggle">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, all applications are thoroughly tested for malware and security issues before being uploaded.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <span>How often are apps updated?</span>
+                                    <span class="faq-toggle">+</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We update our catalog daily with the latest versions and new applications.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">FociStore</div>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2023 FociStore. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
