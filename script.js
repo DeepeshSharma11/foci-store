@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeFilters();
     initializePageTransitions();
+    initializeNavScroll();
 });
 
 // AOS (Animate On Scroll) initialization
@@ -128,10 +129,14 @@ function initializeDownloadSystem() {
     }
     
     // Close modal when clicking X
-    closeBtn.addEventListener('click', closeModal);
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
     
     // Cancel download button
-    cancelBtn.addEventListener('click', closeModal);
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
     
     // Close modal when clicking outside
     window.addEventListener('click', function(event) {
@@ -159,20 +164,22 @@ function initializeDownloadSystem() {
 function initializeScrollEffects() {
     const header = document.querySelector('.header');
     
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-        
-        // Parallax effect for hero section
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.hero');
-        if (parallax) {
-            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
-    });
+    if (header) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Parallax effect for hero section
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    }
 }
 
 // Counter animations
@@ -216,34 +223,49 @@ function initializeFAQ() {
         const answer = item.querySelector('.faq-answer');
         const toggle = item.querySelector('.faq-toggle');
         
-        question.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
-            
-            // Close all other items
-            faqItems.forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                    otherItem.querySelector('.faq-answer').style.maxHeight = '0';
+        if (question && answer && toggle) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                        const otherAnswer = otherItem.querySelector('.faq-answer');
+                        if (otherAnswer) {
+                            otherAnswer.style.maxHeight = '0';
+                        }
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active', !isActive);
+                
+                // Animate height
+                if (!isActive) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                } else {
+                    answer.style.maxHeight = '0';
                 }
             });
-            
-            // Toggle current item
-            item.classList.toggle('active', !isActive);
-            
-            // Animate height
-            if (!isActive) {
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-            } else {
-                answer.style.maxHeight = '0';
-            }
-        });
+        }
     });
 }
 
-// Contact form handling
+// Contact form handling with FormSubmit.co integration
 function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
+        const successMessage = document.getElementById('successMessage');
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        const btnLoading = submitBtn?.querySelector('.btn-loading');
+
+        // Hide success message initially
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+
         // Add input event listeners for validation
         const inputs = contactForm.querySelectorAll('input, textarea');
         inputs.forEach(input => {
@@ -272,48 +294,73 @@ function initializeContactForm() {
                 return;
             }
             
+            // Show loading state
+            if (submitBtn && btnText && btnLoading) {
+                submitBtn.classList.add('loading');
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'flex';
+                submitBtn.disabled = true;
+            }
+
             // Get form data
             const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
             
-            // Show loading state
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const btnLoading = submitBtn.querySelector('.btn-loading');
-            
-            submitBtn.classList.add('loading');
-            btnText.style.display = 'none';
-            btnLoading.style.display = 'flex';
-            submitBtn.disabled = true;
-            
-            // Simulate API call
-            setTimeout(function() {
-                // Show success message
-                showNotification('Thank you for your message! We will get back to you within 24 hours.', 'success');
-                
-                // Reset form
-                contactForm.reset();
-                
-                // Remove loading state
-                submitBtn.classList.remove('loading');
-                btnText.style.display = 'block';
-                btnLoading.style.display = 'none';
-                submitBtn.disabled = false;
-                
-                // Show success animation
-                const successMessage = document.getElementById('successMessage');
-                if (successMessage) {
-                    successMessage.classList.add('show');
-                    
-                    // Remove success message after 5 seconds
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 5000);
+            // Create URL parameters for FormSubmit.co
+            const params = new URLSearchParams();
+            params.append('name', formData.get('name') || '');
+            params.append('email', formData.get('email') || '');
+            params.append('subject', formData.get('subject') || '');
+            params.append('message', formData.get('message') || '');
+            params.append('_subject', 'New Contact Form Submission - FociStore');
+            params.append('_template', 'table');
+            params.append('_captcha', 'false');
+
+            // Send to FormSubmit.co using AJAX
+            fetch('https://formsubmit.co/ajax/niku3325@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+                body: params.toString()
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            }, 2000);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    contactForm.style.display = 'none';
+                    if (successMessage) {
+                        successMessage.style.display = 'block';
+                        successMessage.style.opacity = '0';
+                        
+                        // Animate success message
+                        setTimeout(() => {
+                            successMessage.style.transition = 'opacity 0.5s ease';
+                            successMessage.style.opacity = '1';
+                        }, 100);
+                    }
+                    showNotification('Message sent successfully! We will get back to you soon.', 'success');
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Sorry, there was an error sending your message. Please try again later.', 'error');
+                
+                // Reset button state
+                if (submitBtn && btnText && btnLoading) {
+                    submitBtn.classList.remove('loading');
+                    btnText.style.display = 'block';
+                    btnLoading.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            });
         });
     }
 }
@@ -462,8 +509,8 @@ function initializeFilters() {
             const itemsArray = Array.from(items).filter(item => item.style.display !== 'none');
             
             itemsArray.sort((a, b) => {
-                const nameA = a.querySelector('h3').textContent.toLowerCase();
-                const nameB = b.querySelector('h3').textContent.toLowerCase();
+                const nameA = a.querySelector('h3')?.textContent.toLowerCase() || '';
+                const nameB = b.querySelector('h3')?.textContent.toLowerCase() || '';
                 
                 switch (sort) {
                     case 'name':
@@ -522,6 +569,94 @@ function initializePageTransitions() {
             }, 300);
         }
     });
+}
+
+// Navigation scroll functionality
+function initializeNavScroll() {
+    const nav = document.querySelector('nav ul');
+    const scrollLeft = document.querySelector('.nav-scroll-left');
+    const scrollRight = document.querySelector('.nav-scroll-right');
+    
+    if (nav) {
+        // Create scroll buttons if they don't exist
+        if (!scrollLeft && !scrollRight) {
+            const navContainer = document.querySelector('nav');
+            if (navContainer) {
+                const leftBtn = document.createElement('button');
+                leftBtn.className = 'nav-scroll-indicator nav-scroll-left';
+                leftBtn.innerHTML = '‹';
+                leftBtn.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 5px;
+                    transform: translateY(-50%);
+                    background: rgba(255,255,255,0.3);
+                    border: none;
+                    color: white;
+                    padding: 0.5rem;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    z-index: 10;
+                    display: none;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+                
+                const rightBtn = document.createElement('button');
+                rightBtn.className = 'nav-scroll-indicator nav-scroll-right';
+                rightBtn.innerHTML = '›';
+                rightBtn.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    right: 5px;
+                    transform: translateY(-50%);
+                    background: rgba(255,255,255,0.3);
+                    border: none;
+                    color: white;
+                    padding: 0.5rem;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    z-index: 10;
+                    display: none;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+                
+                navContainer.style.position = 'relative';
+                navContainer.appendChild(leftBtn);
+                navContainer.appendChild(rightBtn);
+                
+                // Add event listeners
+                leftBtn.addEventListener('click', () => {
+                    nav.scrollBy({ left: -100, behavior: 'smooth' });
+                });
+                
+                rightBtn.addEventListener('click', () => {
+                    nav.scrollBy({ left: 100, behavior: 'smooth' });
+                });
+                
+                // Show/hide scroll buttons based on scroll position
+                nav.addEventListener('scroll', () => {
+                    leftBtn.style.display = nav.scrollLeft > 0 ? 'flex' : 'none';
+                    rightBtn.style.display = 
+                        nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'flex' : 'none';
+                });
+                
+                // Initial check
+                setTimeout(() => {
+                    leftBtn.style.display = nav.scrollLeft > 0 ? 'flex' : 'none';
+                    rightBtn.style.display = 
+                        nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'flex' : 'none';
+                }, 100);
+            }
+        }
+    }
 }
 
 // Notification system
@@ -662,7 +797,7 @@ document.addEventListener('click', function(e) {
 document.addEventListener('click', function(e) {
     if (e.target.matches('.btn-details')) {
         const card = e.target.closest('.app-card, .game-card');
-        const appName = card.querySelector('h3').textContent;
+        const appName = card?.querySelector('h3')?.textContent || 'Application';
         showNotification(`Details for ${appName} would be displayed here.`, 'info');
     }
 });
@@ -681,9 +816,11 @@ if ('IntersectionObserver' in window) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
             }
         });
     });
@@ -721,12 +858,18 @@ document.addEventListener('keydown', function(e) {
             
             // Close current FAQ
             activeFaq.classList.remove('active');
-            activeFaq.querySelector('.faq-answer').style.maxHeight = '0';
+            const activeAnswer = activeFaq.querySelector('.faq-answer');
+            if (activeAnswer) {
+                activeAnswer.style.maxHeight = '0';
+            }
             
             // Open next FAQ
             const nextFaq = allFaqs[nextIndex];
             nextFaq.classList.add('active');
-            nextFaq.querySelector('.faq-answer').style.maxHeight = nextFaq.querySelector('.faq-answer').scrollHeight + 'px';
+            const nextAnswer = nextFaq.querySelector('.faq-answer');
+            if (nextAnswer) {
+                nextAnswer.style.maxHeight = nextAnswer.scrollHeight + 'px';
+            }
             
             // Scroll into view
             nextFaq.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -759,136 +902,9 @@ if (typeof module !== 'undefined' && module.exports) {
         initializeFAQ,
         initializeSearch,
         initializeFilters,
+        initializeNavScroll,
         showNotification,
         isValidEmail,
         validateField
     };
 }
-// Add this to your existing script.js file
-
-document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contactForm');
-    const successMessage = document.getElementById('successMessage');
-    const submitBtn = contactForm.querySelector('.submit-btn');
-    const btnText = submitBtn.querySelector('.btn-text');
-    const btnLoading = submitBtn.querySelector('.btn-loading');
-
-    // Hide success message initially
-    successMessage.style.display = 'none';
-
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Show loading state
-        btnText.style.display = 'none';
-        btnLoading.style.display = 'flex';
-        submitBtn.disabled = true;
-
-        // Get form data
-        const formData = new FormData(contactForm);
-        
-        // Create URL parameters for FormSubmit.co
-        const params = new URLSearchParams();
-        params.append('name', formData.get('name'));
-        params.append('email', formData.get('email'));
-        params.append('subject', formData.get('subject'));
-        params.append('message', formData.get('message'));
-        params.append('_subject', 'New Contact Form Submission - FociStore');
-        params.append('_template', 'table'); // Optional: makes email look nicer
-
-        // Send to FormSubmit.co using AJAX
-        fetch('https://formsubmit.co/ajax/niku3325@gmail.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json'
-            },
-            body: params.toString()
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Show success message
-                contactForm.style.display = 'none';
-                successMessage.style.display = 'block';
-                successMessage.style.opacity = '0';
-                
-                // Animate success message
-                setTimeout(() => {
-                    successMessage.style.transition = 'opacity 0.5s ease';
-                    successMessage.style.opacity = '1';
-                }, 100);
-            } else {
-                throw new Error('Form submission failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Sorry, there was an error sending your message. Please try again later.');
-            
-            // Reset button state
-            btnText.style.display = 'block';
-            btnLoading.style.display = 'none';
-            submitBtn.disabled = false;
-        });
-    });
-
-    // FAQ toggle functionality (if not already in your script.js)
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    faqQuestions.forEach(question => {
-        question.addEventListener('click', function() {
-            const faqItem = this.parentElement;
-            const answer = faqItem.querySelector('.faq-answer');
-            const toggle = this.querySelector('.faq-toggle');
-            
-            // Close all other FAQ items
-            document.querySelectorAll('.faq-item').forEach(item => {
-                if (item !== faqItem) {
-                    item.classList.remove('active');
-                    item.querySelector('.faq-answer').style.display = 'none';
-                    item.querySelector('.faq-toggle').textContent = '+';
-                }
-            });
-            
-            // Toggle current item
-            faqItem.classList.toggle('active');
-            if (faqItem.classList.contains('active')) {
-                answer.style.display = 'block';
-                toggle.textContent = '−';
-            } else {
-                answer.style.display = 'none';
-                toggle.textContent = '+';
-            }
-        });
-    });
-});
-
-// Add to script.js
-function initializeNavScroll() {
-    const nav = document.querySelector('nav ul');
-    const scrollLeft = document.querySelector('.nav-scroll-left');
-    const scrollRight = document.querySelector('.nav-scroll-right');
-    
-    if (nav && scrollLeft && scrollRight) {
-        scrollLeft.addEventListener('click', () => {
-            nav.scrollBy({ left: -100, behavior: 'smooth' });
-        });
-        
-        scrollRight.addEventListener('click', () => {
-            nav.scrollBy({ left: 100, behavior: 'smooth' });
-        });
-        
-        // Show/hide scroll buttons based on scroll position
-        nav.addEventListener('scroll', () => {
-            scrollLeft.style.display = nav.scrollLeft > 0 ? 'block' : 'none';
-            scrollRight.style.display = 
-                nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'block' : 'none';
-        });
-    }
-}
-
-// Call this in DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-    initializeNavScroll();
-    // ... other initializations
-});
