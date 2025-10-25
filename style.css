@@ -798,54 +798,101 @@ nav a.alternative-hover:hover::after {
 }
 
 /* Footer */
+/* Footer - Single Line Layout */
 footer {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: white;
-    padding: 3rem 0 1rem;
+    padding: 2rem 0 1rem;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    flex-wrap: wrap;
-    gap: 2rem;
+    flex-wrap: nowrap; /* Changed from wrap to nowrap */
+    gap: 1rem; /* Reduced gap */
 }
 
 .footer-logo {
-    font-size: 2rem;
+    font-size: 1.5rem; /* Slightly smaller */
     font-weight: bold;
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap; /* Prevent wrapping */
 }
 
 .footer-links {
     display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
+    gap: 1.5rem; /* Reduced gap */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    align-items: center;
+    justify-content: center;
+    flex: 1; /* Take available space */
 }
 
 .footer-links a {
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    padding: 0.4rem 0.8rem; /* Smaller padding */
+    border-radius: 15px;
+    font-size: 0.9rem; /* Slightly smaller font */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .footer-links a:hover {
     background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .copyright {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Slightly smaller */
     color: #ccc;
+    margin-top: 1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap; /* Allow wrapping on mobile */
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .footer-logo {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-links {
+        gap: 0.8rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .footer-logo {
+        font-size: 1.2rem;
+    }
 }
 
 /* Modal Styles */
