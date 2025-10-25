@@ -10,7 +10,7 @@ function initializeAllFeatures() {
     initializeScrollEffects();
     initializeCounters();
     initializeContactForm();
-    initializeNavigation();
+    initializeNavigation(); // This should work now
     initializeFAQ();
     initializeSearch();
     initializeFilters();
@@ -202,9 +202,6 @@ function initializeDownloadSystem() {
     function trackDownload(appName) {
         // Simulate analytics tracking
         console.log(`Download started: ${appName}`);
-        
-        // You can integrate with Google Analytics or other services here
-        // Example: gtag('event', 'download', { 'app_name': appName });
     }
 }
 
@@ -240,14 +237,26 @@ function initializeScrollEffects() {
 // Counter animations with improved performance
 function initializeCounters() {
     const counters = document.querySelectorAll('.stat-number');
-    let hasAnimated = false;
     
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
-            if (entry.isIntersecting && !hasAnimated) {
-                hasAnimated = true;
-                animateCounters(counters);
-                observer.unobserve(entry.target);
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-count') || counter.textContent);
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(function() {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    counter.textContent = Math.floor(current).toLocaleString();
+                }, 16);
+                
+                observer.unobserve(counter);
             }
         });
     }, { threshold: 0.5 });
@@ -255,24 +264,6 @@ function initializeCounters() {
     counters.forEach(counter => {
         observer.observe(counter);
     });
-    
-    function animateCounters(counters) {
-        counters.forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-count') || counter.textContent);
-            const duration = 2000;
-            const step = target / (duration / 16);
-            let current = 0;
-            
-            const timer = setInterval(function() {
-                current += step;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                counter.textContent = Math.floor(current).toLocaleString();
-            }, 16);
-        });
-    }
 }
 
 // FAQ functionality with improved accessibility
@@ -282,17 +273,16 @@ function initializeFAQ() {
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         const answer = item.querySelector('.faq-answer');
-        const toggle = item.querySelector('.faq-toggle');
         
-        if (question && answer && toggle) {
+        if (question && answer) {
             // Add ARIA attributes for accessibility
             question.setAttribute('role', 'button');
             question.setAttribute('aria-expanded', 'false');
-            question.setAttribute('aria-controls', answer.id || `faq-${Math.random().toString(36).substr(2, 9)}`);
             
             if (!answer.id) {
                 answer.id = `faq-${Math.random().toString(36).substr(2, 9)}`;
             }
+            question.setAttribute('aria-controls', answer.id);
             
             question.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
@@ -348,8 +338,6 @@ function initializeContactForm() {
 
     const successMessage = document.getElementById('successMessage');
     const submitBtn = contactForm.querySelector('.submit-btn');
-    const btnText = submitBtn?.querySelector('.btn-text');
-    const btnLoading = submitBtn?.querySelector('.btn-loading');
 
     // Initialize form state
     if (successMessage) {
@@ -380,7 +368,10 @@ function initializeContactForm() {
         }
         
         // Show loading state
-        setLoadingState(true, submitBtn, btnText, btnLoading);
+        if (submitBtn) {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        }
         
         try {
             await submitContactForm(contactForm);
@@ -397,7 +388,10 @@ function initializeContactForm() {
             console.error('Form submission error:', error);
             showNotification('Sorry, there was an error sending your message. Please try again later.', 'error');
         } finally {
-            setLoadingState(false, submitBtn, btnText, btnLoading);
+            if (submitBtn) {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
         }
     });
     
@@ -433,22 +427,6 @@ function initializeContactForm() {
         }
         
         return data;
-    }
-    
-    function setLoadingState(loading, submitBtn, btnText, btnLoading) {
-        if (!submitBtn) return;
-        
-        if (loading) {
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            if (btnText) btnText.style.display = 'none';
-            if (btnLoading) btnLoading.style.display = 'flex';
-        } else {
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            if (btnText) btnText.style.display = 'block';
-            if (btnLoading) btnLoading.style.display = 'none';
-        }
     }
 }
 
@@ -510,12 +488,6 @@ function validateField(field) {
         errorElement.className = 'field-error';
         errorElement.textContent = errorMessage;
         field.parentNode.appendChild(errorElement);
-        
-        // Add shake animation
-        field.style.animation = 'none';
-        setTimeout(() => {
-            field.style.animation = 'shake 0.5s ease-in-out';
-        }, 10);
     }
     
     return isValid || (!field.required && value === '');
@@ -539,11 +511,6 @@ function initializeSearch() {
                 performSearch();
             }
         });
-        
-        // Real-time search suggestions (optional)
-        searchInput.addEventListener('input', debounce(function() {
-            // Implement search suggestions here if needed
-        }, 300));
     }
     
     function performSearch() {
@@ -559,7 +526,7 @@ function initializeSearch() {
         searchButton.textContent = 'Searching...';
         searchButton.disabled = true;
         
-        // Simulate search (replace with actual search logic)
+        // Simulate search
         setTimeout(() => {
             showNotification(`Found results for "${query}"`, 'info');
             searchButton.textContent = originalText;
@@ -597,62 +564,38 @@ function initializeFilters() {
             }
         });
         
-        // Sort items
-        if (sort !== 'popular') {
-            sortItems(items, sort, category);
-        }
-        
         showNotification(`Found ${visibleItems} items`, 'success');
-    }
-    
-    function sortItems(items, sortBy, category) {
-        const container = document.querySelector('.apps-grid, .games-grid');
-        if (!container) return;
-        
-        const visibleItems = Array.from(items).filter(item => 
-            category === 'all' || item.getAttribute('data-category') === category
-        );
-        
-        visibleItems.sort((a, b) => {
-            switch (sortBy) {
-                case 'name':
-                    const nameA = a.querySelector('h3')?.textContent.toLowerCase() || '';
-                    const nameB = b.querySelector('h3')?.textContent.toLowerCase() || '';
-                    return nameA.localeCompare(nameB);
-                    
-                case 'newest':
-                    // Implement date-based sorting
-                    return 0;
-                    
-                default:
-                    return 0;
-            }
-        });
-        
-        // Reappend sorted items
-        visibleItems.forEach(item => {
-            container.appendChild(item);
-        });
     }
 }
 
-// Navigation initialization
+// FIXED Navigation initialization
 function initializeNavigation() {
-    // Add active class to current page
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('nav a[href]');
     
+    // Debug info
+    console.log('Current page:', currentPage);
+    
     navLinks.forEach(link => {
-        const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage || 
-            (currentPage === '' && linkHref === 'index.html') ||
-            (currentPage.includes(linkHref.replace('.html', '')) && linkHref !== 'index.html')) {
-            link.classList.add('active');
-        }
+        link.classList.remove('active');
         
-        // Smooth scrolling for anchor links
-        if (link.getAttribute('href')?.startsWith('#')) {
-            link.addEventListener('click', smoothScrollToAnchor);
+        const linkHref = link.getAttribute('href');
+        console.log('Checking link:', linkHref);
+        
+        // Home page case
+        if ((currentPage === '' || currentPage === 'index.html') && linkHref === 'index.html') {
+            link.classList.add('active');
+            console.log('Setting home as active');
+        }
+        // Other pages - exact match
+        else if (linkHref === currentPage) {
+            link.classList.add('active');
+            console.log('Setting', linkHref, 'as active');
+        }
+        // Other pages - partial match (for pages like about.html, contact.html)
+        else if (currentPage.includes(linkHref.replace('.html', '')) && linkHref !== 'index.html') {
+            link.classList.add('active');
+            console.log('Setting', linkHref, 'as active (partial match)');
         }
     });
 }
@@ -679,21 +622,6 @@ function initializePageTransitions() {
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
-    
-    // Handle internal link clicks
-    document.addEventListener('click', function(e) {
-        const link = e.target.closest('a');
-        if (link && link.href && link.href.startsWith(window.location.origin) && 
-            !link.href.includes('#') && link.target !== '_blank') {
-            e.preventDefault();
-            
-            document.body.style.opacity = '0';
-            
-            setTimeout(() => {
-                window.location.href = link.href;
-            }, 300);
-        }
-    });
 }
 
 // Navigation scroll functionality
@@ -916,14 +844,3 @@ document.addEventListener('error', function(e) {
         e.target.alt = 'Image not available';
     }
 }, true);
-
-// Export for module use
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        initializeAllFeatures,
-        showNotification,
-        isValidEmail,
-        validateField,
-        debounce
-    };
-}
