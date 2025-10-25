@@ -308,6 +308,236 @@
     border-color: #667eea;
 }
 
+/* Mobile Pagination Specific Styles */
+@media (max-width: 767px) {
+    .pagination {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        padding: 0 1rem;
+    }
+
+    .page-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 36px;
+        height: 36px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e0e0e0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+    }
+
+    .page-btn:not(.active):hover {
+        border-color: #667eea;
+        color: #667eea;
+    }
+
+    /* Previous/Next buttons */
+    .page-btn:first-child,
+    .page-btn:last-child {
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    /* Ensure pagination is visible */
+    .pagination[style*="display: none"] {
+        display: flex !important;
+    }
+
+    /* Loading state for pagination */
+    .pagination.loading .page-btn {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+/* Hide page numbers on very small screens, show only prev/next */
+@media (max-width: 480px) {
+    .page-btn:not(:first-child):not(:last-child) {
+        display: none !important;
+    }
+    
+    .page-btn:first-child,
+    .page-btn:last-child {
+        min-width: 80px;
+    }
+    
+    .pagination {
+        gap: 1rem;
+    }
+}
+
+/* Show limited page numbers on small screens */
+@media (max-width: 575px) and (min-width: 481px) {
+    .page-btn:nth-child(n+4):nth-child(-n+7) {
+        display: none !important;
+    }
+}
+
+/* Small mobile devices - Enhanced pagination */
+@media (max-width: 575px) {
+    .pagination {
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.75rem;
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .page-btn:first-child,
+    .page-btn:last-child {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* Very small devices - Simplified pagination */
+@media (max-width: 375px) {
+    .pagination {
+        gap: 0.1rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+        min-width: 28px;
+        height: 28px;
+    }
+
+    .page-btn:first-child,
+    .page-btn:last-child {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.65rem;
+        min-width: 70px;
+    }
+}
+
+/* Extra small devices - Minimal pagination */
+@media (max-width: 320px) {
+    .pagination {
+        gap: 0.1rem;
+    }
+
+    .page-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        min-width: 26px;
+        height: 26px;
+    }
+
+    .page-btn:first-child,
+    .page-btn:last-child {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6rem;
+        min-width: 65px;
+    }
+}
+
+/* Landscape mode pagination */
+@media (max-height: 500px) and (orientation: landscape) {
+    .pagination {
+        margin-top: 1.5rem;
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        min-width: 30px;
+        height: 30px;
+    }
+}
+
+/* Touch device optimizations for pagination */
+@media (hover: none) and (pointer: coarse) {
+    .page-btn {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .page-btn:active {
+        background: #f0f0f0;
+        transform: scale(0.95);
+    }
+
+    .page-btn.active:active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transform: scale(0.95);
+    }
+}
+
+/* Pagination visibility fixes */
+.pagination {
+    display: flex !important;
+}
+
+.pagination.hidden {
+    display: none !important;
+}
+
+/* Ensure pagination container is properly styled */
+.content-section .pagination {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Mobile-specific pagination enhancements */
+.mobile-pagination {
+    font-size: 0.8rem;
+}
+
+.mobile-pagination .page-btn {
+    margin: 0 0.1rem;
+}
+
+/* Ensure pagination is always visible when needed */
+@media (max-width: 767px) {
+    .content-section .container .pagination {
+        display: flex !important;
+        visibility: visible !important;
+    }
+    
+    /* Fix for pagination hiding */
+    .pagination[style*="display: none"] {
+        display: flex !important;
+    }
+}
+
+/* Pagination accessibility */
+.page-btn:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Loading state for better UX */
+.pagination.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
 /* Large desktops */
 @media (min-width: 1200px) {
     .container {
