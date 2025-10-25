@@ -18,11 +18,11 @@ body {
     margin: 0 auto;
 }
 
-/* Header Styles */
+/* Header Styles - More Compact */
 .header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 1rem 0;
+    padding: 0.6rem 0;
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     position: fixed;
     width: 100%;
@@ -32,38 +32,38 @@ body {
 }
 
 .header.scrolled {
-    padding: 0.4rem 0;
+    padding: 0.3rem 0;
     background: rgba(102, 126, 234, 0.95);
     backdrop-filter: blur(10px);
 }
 
 .header.compact {
-    padding: 0.3rem 0;
+    padding: 0.2rem 0;
 }
 
 .header.compact .logo {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .header.compact .header-top {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.1rem;
 }
 
 .header.compact nav {
-    padding: 0.4rem;
+    padding: 0.3rem;
 }
 
-/* Top Links - Horizontal Scroll */
+/* Top Links - More Compact */
 .header-top {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0.4rem 0;
+    padding: 0.2rem 0;
     white-space: nowrap;
 }
 
@@ -73,33 +73,33 @@ body {
 
 .top-links {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     flex-shrink: 0;
-    padding: 0 1rem;
+    padding: 0 0.8rem;
 }
 
 .top-links a {
     color: white;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
 .top-links a:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .logo {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem;
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -107,11 +107,11 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Main Navigation - Horizontal Scroll */
+/* Main Navigation - More Compact */
 nav {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
     backdrop-filter: blur(10px);
     overflow: hidden;
     position: relative;
@@ -122,13 +122,13 @@ nav ul {
     display: flex;
     list-style: none;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.8rem;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
     white-space: nowrap;
 }
 
@@ -145,13 +145,13 @@ nav a {
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
-    padding: 0.5rem 1.2rem;
-    border-radius: 25px;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
     display: block;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 nav a::before {
@@ -171,10 +171,10 @@ nav a:hover::before {
 
 nav a:hover, nav a.active {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
-/* Navigation Scroll Indicators */
+/* Navigation Scroll Indicators - More Compact */
 .nav-scroll-indicator {
     position: absolute;
     top: 50%;
@@ -182,18 +182,19 @@ nav a:hover, nav a.active {
     background: rgba(255,255,255,0.3);
     border: none;
     color: white;
-    padding: 0.5rem;
+    padding: 0.3rem;
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
     opacity: 0;
     pointer-events: none;
+    font-size: 0.8rem;
 }
 
 .nav-scroll-indicator.visible {
@@ -207,65 +208,18 @@ nav a:hover, nav a.active {
 }
 
 .nav-scroll-left {
-    left: 5px;
+    left: 3px;
 }
 
 .nav-scroll-right {
-    right: 5px;
+    right: 3px;
 }
 
-/* Search functionality */
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin: 1rem 0;
-    gap: 0.5rem;
-    position: sticky;
-    top: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 1rem 0;
-    z-index: 100;
-}
-
-#searchInput {
-    padding: 0.8rem 1rem;
-    border: none;
-    border-radius: 25px;
-    width: 100%;
-    max-width: 400px;
-    font-size: 1rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-#searchInput:focus {
-    outline: none;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
-    transform: translateY(-2px);
-}
-
-#searchButton {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-#searchButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-/* Hero Section */
+/* Hero Section - Adjusted for smaller header */
 .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 12rem 0 6rem;
+    padding: 10rem 0 6rem; /* Reduced top padding */
     position: relative;
     overflow: hidden;
 }
@@ -876,7 +830,7 @@ footer {
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 10rem 0 4rem;
+    padding: 8rem 0 4rem; /* Reduced top padding */
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1663,5 +1617,5 @@ footer {
 }
 
 .notification-warning {
-    background: linear-gradient(135deg, #fbbc04, #f57c00);
+    background: linear-gradient(135deg, #fbbc04, #f57c00); 
 }
