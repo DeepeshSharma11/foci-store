@@ -1,10 +1,17 @@
+// Global variables
+let appsData = [];
+let gamesData = [];
+let currentPage = 1;
+const itemsPerPage = 8; // 6 items per page
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeAllFeatures();
 });
 
 // Initialize all features
-function initializeAllFeatures() {
+async function initializeAllFeatures() {
+    await loadData();
     initializePageSpecificFeatures();
     initializeAnimations();
     initializeDownloadSystem();
@@ -23,6 +30,478 @@ function initializeAllFeatures() {
     initializeModalSystem();
 }
 
+// Load data from JSON
+async function loadData() {
+    try {
+        const response = await fetch('apps.json');
+        const data = await response.json();
+        appsData = data.apps || [];
+        gamesData = data.games || [];
+        
+        // Populate apps and games on respective pages
+        populateAppsPage();
+        populateGamesPage();
+        populateFeaturedApps();
+    } catch (error) {
+        console.error('Error loading data:', error);
+        // Fallback to static data if JSON fails
+        loadStaticData();
+    }
+}
+
+// Fallback static data
+function loadStaticData() {
+    appsData = [
+        {
+            id: 1,
+            name: "WhatsApp MOD",
+            description: "Enhanced version with extra features like theme customization, privacy options, and more",
+            category: "social",
+            image: "assets/images/fmwhatsapp.png",
+            size: "95 MB",
+            version: "v2.23.5.76",
+            rating: 4.7,
+            downloads: "10K+",
+            downloadUrl: "https://getkukuymun.site/url/2A8QZ54HRrD",
+            badge: "Trending"
+        },
+        {
+            id: 2,
+            name: "Instagram MOD",
+            description: "Download photos, videos, stories with enhanced privacy and customization options.",
+            category: "social",
+            image: "assets/images/Insta-Pro-APK.png",
+            size: "143 MB",
+            version: "v289.0.0.18.109",
+            rating: 4.7,
+            downloads: "8K+",
+            downloadUrl: "https://getkukuymun.site/url/2A8QZ54HRrD",
+            badge: "New"
+        },
+        {
+            id: 3,
+            name: "YouTube MOD",
+            description: "Ad-free YouTube experience with background play and video download capabilities.",
+            category: "media",
+            image: "assets/images/youtube-mod.png",
+            size: "85 MB",
+            version: "v18.45.43",
+            rating: 4.8,
+            downloads: "15K+",
+            downloadUrl: "https://vanced.to/",
+            badge: "Popular"
+        },
+        {
+            id: 4,
+            name: "File Manager MOD",
+            description: "Advanced file management with root access, cloud integration, and premium themes.",
+            category: "tools",
+            image: "assets/images/file-manager.png",
+            size: "8 MB",
+            version: "v4.2.1",
+            rating: 4.8,
+            downloads: "5K+",
+            downloadUrl: "https://liteapks.com/download/file-manager-77834",
+            badge: "Pro"
+        },
+        {
+            id: 5,
+            name: "XPlayer",
+            description: "XPlayer Mod APK is an impressive video player tool and gives you the best experience with support for multiple formats.",
+            category: "media",
+            image: "assets/images/xplayer.png",
+            size: "38 MB",
+            version: "v2.4.8.2",
+            rating: 4.5,
+            downloads: "7K+",
+            downloadUrl: "https://liteapks.com/download/xplayer-5858",
+            badge: "Enhanced"
+        },
+        {
+            id: 6,
+            name: "Office Suite MOD",
+            description: "Complete office suite with PDF editing, cloud sync, and all premium features unlocked.",
+            category: "productivity",
+            image: "assets/images/office-suite.png",
+            size: "120 MB",
+            version: "v14.8.4",
+            rating: 4.7,
+            downloads: "6K+",
+            downloadUrl: "#",
+            badge: "Premium"
+        },
+        {
+            id: 7,
+            name: "TikTok MOD",
+            description: "Download videos without watermark, unlimited features and enhanced privacy options.",
+            category: "social",
+            image: "assets/images/tiktok-mod.png",
+            size: "120 MB",
+            version: "v30.5.4",
+            rating: 4.6,
+            downloads: "15K+",
+            downloadUrl: "https://example.com/tiktok",
+            badge: "Popular"
+        },
+        {
+            id: 8,
+            name: "Spotify MOD",
+            description: "Ad-free music, unlimited skips, and premium features unlocked.",
+            category: "media",
+            image: "assets/images/spotify-mod.png",
+            size: "85 MB",
+            version: "v8.8.96",
+            rating: 4.9,
+            downloads: "20K+",
+            downloadUrl: "https://example.com/spotify",
+            badge: "Premium"
+        }
+    ];
+    
+    gamesData = [
+        {
+            id: 1,
+            name: "Subway Surfers MOD",
+            description: "Unlimited coins, keys, and all characters unlocked. Run endlessly without restrictions.",
+            category: "action",
+            image: "assets/images/subway-surfers.png",
+            size: "150 MB",
+            version: "v3.12.1",
+            rating: 4.8,
+            downloads: "25K+",
+            downloadUrl: "https://an1.com/file_4683-dw.html",
+            badge: "Unlimited"
+        },
+        {
+            id: 2,
+            name: "Asphalt 9 MOD",
+            description: "Unlimited credits, all cars unlocked, and premium features for the ultimate racing experience.",
+            category: "racing",
+            image: "assets/images/asphalt-9.png",
+            size: "2.1 GB",
+            version: "v3.9.4",
+            rating: 4.9,
+            downloads: "12K+",
+            downloadUrl: "https://asphalt-9-legends-mod.apkresult.io/download",
+            badge: "Premium"
+        },
+        {
+            id: 3,
+            name: "Candy Crush MOD",
+            description: "Unlimited lives, boosters, and all levels unlocked. Sweet gaming without limits.",
+            category: "puzzle",
+            image: "assets/images/candy-crush.png",
+            size: "95 MB",
+            version: "v1.260.1.2",
+            rating: 4.7,
+            downloads: "18K+",
+            downloadUrl: "https://candy-crush-soda-saga.apkrabi.com/download/",
+            badge: "Unlimited"
+        },
+        {
+            id: 4,
+            name: "Minecraft MOD",
+            description: "Unlocked skins, texture packs, and premium features for unlimited creativity.",
+            category: "adventure",
+            image: "assets/images/minecraft.png",
+            size: "180 MB",
+            version: "v1.20.15.01",
+            rating: 4.9,
+            downloads: "15K+",
+            downloadUrl: "#",
+            badge: "Premium"
+        },
+        {
+            id: 5,
+            name: "FIFA Mobile MOD",
+            description: "Unlimited coins, all players unlocked, and premium features for the ultimate football experience.",
+            category: "sports",
+            image: "assets/images/fifa-mobile.png",
+            size: "1.2 GB",
+            version: "v17.0.14",
+            rating: 4.8,
+            downloads: "10K+",
+            downloadUrl: "#",
+            badge: "Enhanced"
+        },
+        {
+            id: 6,
+            name: "Call of Duty MOD",
+            description: "Unlimited CP, all weapons unlocked, and premium battle pass for ultimate warfare.",
+            category: "action",
+            image: "assets/images/call-of-duty.png",
+            size: "2.5 GB",
+            version: "v1.0.39",
+            rating: 4.9,
+            downloads: "20K+",
+            downloadUrl: "#",
+            badge: "Pro"
+        },
+        {
+            id: 7,
+            name: "Temple Run 2 MOD",
+            description: "Unlimited coins, all characters unlocked, and infinite energy for endless running.",
+            category: "adventure",
+            image: "assets/images/temple-run.png",
+            size: "80 MB",
+            version: "v1.100.0",
+            rating: 4.6,
+            downloads: "8K+",
+            downloadUrl: "#",
+            badge: "Unlimited"
+        },
+        {
+            id: 8,
+            name: "PUBG Mobile MOD",
+            description: "Unlimited UC, aim assist, and all skins unlocked for battle royale dominance.",
+            category: "action",
+            image: "assets/images/pubg-mobile.png",
+            size: "1.8 GB",
+            version: "v3.0.0",
+            rating: 4.9,
+            downloads: "30K+",
+            downloadUrl: "#",
+            badge: "Pro"
+        }
+    ];
+    
+    populateAppsPage();
+    populateGamesPage();
+    populateFeaturedApps();
+}
+
+// Populate apps page with pagination
+function populateAppsPage() {
+    const appsGrid = document.querySelector('.apps-grid');
+    if (!appsGrid) return;
+
+    // Remove loading message
+    const loadingMessage = document.getElementById('loadingMessage');
+    if (loadingMessage) {
+        loadingMessage.remove();
+    }
+
+    // Apply pagination
+    const paginatedData = applyPagination(appsData);
+    updateGrid(paginatedData, 'apps');
+    updatePaginationButtons(appsData.length);
+}
+
+// Populate games page with pagination
+function populateGamesPage() {
+    const gamesGrid = document.querySelector('.games-grid');
+    if (!gamesGrid) return;
+
+    // Apply pagination
+    const paginatedData = applyPagination(gamesData);
+    updateGrid(paginatedData, 'games');
+    updatePaginationButtons(gamesData.length);
+}
+
+// Populate featured apps on homepage
+function populateFeaturedApps() {
+    const featuredGrid = document.querySelector('.featured-grid');
+    if (!featuredGrid) return;
+
+    // Get first 3 apps for featured section
+    const featuredApps = appsData.slice(0, 3);
+    
+    featuredGrid.innerHTML = '';
+    
+    if (featuredApps.length === 0) {
+        return;
+    }
+    
+    featuredApps.forEach((app, index) => {
+        const featuredItem = createFeaturedItem(app, index);
+        featuredGrid.appendChild(featuredItem);
+    });
+    
+    // Re-initialize animations for new elements
+    initializeAnimations();
+}
+
+// Apply pagination to data
+function applyPagination(data) {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.slice(startIndex, endIndex);
+}
+
+// Update pagination buttons
+function updatePaginationButtons(totalItems) {
+    const pagination = document.querySelector('.pagination');
+    if (!pagination) return;
+
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
+    if (totalPages <= 1) {
+        pagination.style.display = 'none';
+        return;
+    }
+    
+    pagination.style.display = 'flex';
+    pagination.innerHTML = '';
+    
+    // Previous button
+    if (currentPage > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.innerHTML = '‹ Previous';
+        prevBtn.addEventListener('click', () => {
+            currentPage--;
+            applyFilters();
+        });
+        pagination.appendChild(prevBtn);
+    }
+    
+    // Page numbers
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust if we're at the start
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener('click', () => {
+            currentPage = i;
+            applyFilters();
+        });
+        pagination.appendChild(pageBtn);
+    }
+    
+    // Next button
+    if (currentPage < totalPages) {
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn next';
+        nextBtn.innerHTML = 'Next ›';
+        nextBtn.addEventListener('click', () => {
+            currentPage++;
+            applyFilters();
+        });
+        pagination.appendChild(nextBtn);
+    }
+}
+
+// Update grid with data
+function updateGrid(data, type) {
+    const grid = document.querySelector(type === 'games' ? '.games-grid' : '.apps-grid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    if (data.length === 0) {
+        grid.innerHTML = `
+            <div class="no-results">
+                <div class="no-results-icon">${type === 'games' ? '🎮' : '📱'}</div>
+                <h3>No ${type === 'games' ? 'games' : 'applications'} found</h3>
+                <p>${currentPage > 1 ? 'Try going back to previous pages' : 'Try changing your filters or search terms'}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    data.forEach((item, index) => {
+        const card = type === 'games' ? createGameCard(item, index) : createAppCard(item, index);
+        grid.appendChild(card);
+    });
+    
+    // Re-initialize animations for new elements
+    initializeAnimations();
+}
+
+// Create app card HTML
+function createAppCard(app, index) {
+    const card = document.createElement('div');
+    card.className = 'app-card';
+    card.setAttribute('data-aos', 'zoom-in');
+    card.setAttribute('data-aos-delay', (index * 100).toString());
+    card.setAttribute('data-category', app.category);
+    
+    card.innerHTML = `
+        <div class="card-image">
+            <img src="${app.image}" alt="${app.name}" onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=App+Image'">
+            <div class="card-badge">${app.badge}</div>
+        </div>
+        <div class="card-content">
+            <h3>${app.name}</h3>
+            <p>${app.description}</p>
+            <div class="card-meta">
+                <span class="app-size">${app.size}</span>
+                <span class="app-version">${app.version}</span>
+                <span class="app-rating">⭐ ${app.rating}</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-download" data-name="${app.name}" data-url="${app.downloadUrl}">Download</button>
+                <button class="btn-details" data-name="${app.name}">Details</button>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+// Create game card HTML
+function createGameCard(game, index) {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.setAttribute('data-aos', 'zoom-in');
+    card.setAttribute('data-aos-delay', (index * 100).toString());
+    card.setAttribute('data-category', game.category);
+    
+    card.innerHTML = `
+        <div class="card-image">
+            <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Game+Image'">
+            <div class="card-badge">${game.badge}</div>
+        </div>
+        <div class="card-content">
+            <h3>${game.name}</h3>
+            <p>${game.description}</p>
+            <div class="card-meta">
+                <span class="app-size">${game.size}</span>
+                <span class="app-version">${game.version}</span>
+                <span class="app-rating">⭐ ${game.rating}</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-download" data-name="${game.name}" data-url="${game.downloadUrl}">Download</button>
+                <button class="btn-details" data-name="${game.name}">Details</button>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+// Create featured item HTML
+function createFeaturedItem(app, index) {
+    const item = document.createElement('div');
+    item.className = 'featured-item';
+    item.setAttribute('data-aos', 'zoom-in');
+    item.setAttribute('data-aos-delay', ((index + 1) * 100).toString());
+    
+    item.innerHTML = `
+        <div class="featured-image">
+            <img src="${app.image}" alt="${app.name}" onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Featured+App'">
+            <div class="featured-badge">${app.badge}</div>
+        </div>
+        <h3>${app.name}</h3>
+        <p>${app.description}</p>
+        <div class="app-info">
+            <span class="app-size">${app.size}</span>
+            <span class="app-version">${app.version}</span>
+        </div>
+        <button class="download-btn" data-name="${app.name}" data-url="${app.downloadUrl}">Download Now</button>
+    `;
+    
+    return item;
+}
+
 // Page-specific feature initialization
 function initializePageSpecificFeatures() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -31,11 +510,9 @@ function initializePageSpecificFeatures() {
         case 'index.html':
         case '':
             initializeHeroAnimations();
-            initializeFeaturedApps();
             break;
         case 'apps.html':
         case 'games.html':
-            initializeAppGrid();
             initializeAdvancedFilters();
             break;
         case 'about.html':
@@ -95,48 +572,6 @@ function initializeHeroAnimations() {
     if (heroGraphic) {
         heroGraphic.classList.add('slide-in-right');
     }
-}
-
-// Featured apps carousel for homepage
-function initializeFeaturedApps() {
-    const featuredGrid = document.querySelector('.featured-grid');
-    if (!featuredGrid) return;
-
-    // Add hover animations to featured items
-    const featuredItems = featuredGrid.querySelectorAll('.featured-item');
-    featuredItems.forEach(item => {
-        item.classList.add('card-hover', 'stagger-item');
-    });
-
-    // Make items visible with delay
-    setTimeout(() => {
-        featuredItems.forEach((item, index) => {
-            setTimeout(() => {
-                item.classList.add('visible');
-            }, index * 100);
-        });
-    }, 500);
-}
-
-// App grid animations for apps/games pages
-function initializeAppGrid() {
-    const appGrids = document.querySelectorAll('.apps-grid, .games-grid');
-    
-    appGrids.forEach(grid => {
-        const cards = grid.querySelectorAll('.app-card, .game-card');
-        cards.forEach((card, index) => {
-            card.classList.add('stagger-item');
-            card.style.animationDelay = `${index * 0.1}s`;
-            
-            // Add hover effects
-            card.classList.add('card-hover');
-            
-            // Make visible with delay
-            setTimeout(() => {
-                card.classList.add('visible');
-            }, index * 100);
-        });
-    });
 }
 
 // Team animations for about page
@@ -200,25 +635,162 @@ function initializeLegalPage() {
     });
 }
 
+// Enhanced filter functionality with pagination
+function initializeFilters() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    if (categoryFilter) {
+        populateCategoryFilter(categoryFilter, getCurrentPageType());
+        categoryFilter.addEventListener('change', () => {
+            currentPage = 1; // Reset to first page when filter changes
+            debounce(applyFilters, 300)();
+        });
+    }
+    
+    if (sortFilter) {
+        sortFilter.addEventListener('change', () => {
+            currentPage = 1; // Reset to first page when sort changes
+            debounce(applyFilters, 300)();
+        });
+    }
+}
+
+function getCurrentPageType() {
+    const currentPage = window.location.pathname.split('/').pop();
+    if (currentPage.includes('games')) return 'games';
+    if (currentPage.includes('apps')) return 'apps';
+    return 'apps'; // default
+}
+
+function populateCategoryFilter(filter, type) {
+    const categories = type === 'games' ? 
+        ['all', 'action', 'adventure', 'puzzle', 'racing', 'sports'] :
+        ['all', 'social', 'media', 'productivity', 'tools'];
+    
+    filter.innerHTML = '<option value="all">All Categories</option>';
+    
+    categories.forEach(category => {
+        if (category !== 'all') {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+            filter.appendChild(option);
+        }
+    });
+}
+
+function applyFilters() {
+    const category = document.getElementById('categoryFilter')?.value || 'all';
+    const sort = document.getElementById('sortFilter')?.value || 'popular';
+    const pageType = getCurrentPageType();
+    const data = pageType === 'games' ? gamesData : appsData;
+    
+    let filteredData = data.filter(item => 
+        category === 'all' || item.category === category
+    );
+    
+    // Sort data
+    filteredData = sortData(filteredData, sort);
+    
+    // Apply pagination
+    const paginatedData = applyPagination(filteredData);
+    
+    // Update grid
+    updateGrid(paginatedData, pageType);
+    
+    // Update pagination buttons
+    updatePaginationButtons(filteredData.length);
+    
+    showNotification(`Showing page ${currentPage} of ${Math.ceil(filteredData.length / itemsPerPage)}`, 'success');
+}
+
+function sortData(data, sortType) {
+    switch(sortType) {
+        case 'newest':
+            return [...data].reverse();
+        case 'name':
+            return [...data].sort((a, b) => a.name.localeCompare(b.name));
+        case 'popular':
+        default:
+            return data;
+    }
+}
+
+// Advanced filters for apps/games pages
+function initializeAdvancedFilters() {
+    const filterControls = document.querySelector('.filter-controls');
+    if (!filterControls) return;
+
+    // Add animation to filter controls
+    filterControls.classList.add('slide-in-top');
+}
+
+// Enhanced search functionality with pagination
+function initializeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    
+    if (searchInput && searchButton) {
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Real-time search with debounce
+        searchInput.addEventListener('input', debounce(performSearch, 500));
+    }
+}
+
+function performSearch() {
+    const query = document.getElementById('searchInput')?.value.trim().toLowerCase();
+    const pageType = getCurrentPageType();
+    const data = pageType === 'games' ? gamesData : appsData;
+    
+    // Reset to first page when searching
+    currentPage = 1;
+    
+    if (!query || query.length < 2) {
+        // If search query is too short, show all items
+        const paginatedData = applyPagination(data);
+        updateGrid(paginatedData, pageType);
+        updatePaginationButtons(data.length);
+        return;
+    }
+    
+    const filteredData = data.filter(item => 
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query)
+    );
+    
+    const paginatedData = applyPagination(filteredData);
+    updateGrid(paginatedData, pageType);
+    updatePaginationButtons(filteredData.length);
+    
+    showNotification(`Found ${filteredData.length} results for "${query}"`, 'info');
+}
+
 // Download functionality with improved error handling
 function initializeDownloadSystem() {
     let downloadInProgress = false;
     let progressInterval;
     
-    // Add event listeners to all download buttons
-    const downloadButtons = document.querySelectorAll('.download-btn, .btn-download');
-    downloadButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
+    // Add event listeners to all download buttons (delegated for dynamic content)
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.download-btn, .btn-download')) {
             e.preventDefault();
             
             // Get app details
-            const appName = this.getAttribute('data-name') || 
-                           this.closest('.app-card, .game-card, .featured-item')?.querySelector('h3')?.textContent || 
+            const appName = e.target.getAttribute('data-name') || 
+                           e.target.closest('.app-card, .game-card, .featured-item')?.querySelector('h3')?.textContent || 
                            'Application';
-            const downloadUrl = this.getAttribute('data-url') || '#';
+            const downloadUrl = e.target.getAttribute('data-url') || '#';
             
             startDownload(appName, downloadUrl);
-        });
+        }
     });
     
     function startDownload(appName, downloadUrl) {
@@ -297,6 +869,7 @@ function initializeDownloadSystem() {
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h3>Download <span id="appName">App</span></h3>
+                    <p>Your download will begin shortly...</p>
                     <div class="download-progress">
                         <div class="progress-bar">
                             <div class="progress progress-animated"></div>
@@ -651,84 +1224,6 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-// Search functionality
-function initializeSearch() {
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-    
-    if (searchInput && searchButton) {
-        searchButton.addEventListener('click', performSearch);
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
-    }
-    
-    function performSearch() {
-        const query = searchInput.value.trim();
-        if (query.length < 2) {
-            showNotification('Please enter at least 2 characters to search.', 'warning');
-            searchInput.focus();
-            return;
-        }
-        
-        // Show loading state
-        const originalText = searchButton.textContent;
-        searchButton.textContent = 'Searching...';
-        searchButton.disabled = true;
-        
-        // Simulate search
-        setTimeout(() => {
-            showNotification(`Found results for "${query}"`, 'info');
-            searchButton.textContent = originalText;
-            searchButton.disabled = false;
-        }, 1000);
-    }
-}
-
-// Filter functionality
-function initializeFilters() {
-    const categoryFilter = document.getElementById('categoryFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    
-    [categoryFilter, sortFilter].forEach(filter => {
-        if (filter) {
-            filter.addEventListener('change', debounce(applyFilters, 300));
-        }
-    });
-    
-    function applyFilters() {
-        const category = categoryFilter ? categoryFilter.value : 'all';
-        const sort = sortFilter ? sortFilter.value : 'popular';
-        
-        const items = document.querySelectorAll('.app-card, .game-card');
-        let visibleItems = 0;
-        
-        // Filter by category
-        items.forEach(item => {
-            const itemCategory = item.getAttribute('data-category');
-            if (category === 'all' || itemCategory === category) {
-                item.style.display = 'block';
-                visibleItems++;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        
-        showNotification(`Found ${visibleItems} items`, 'success');
-    }
-}
-
-// Advanced filters for apps/games pages
-function initializeAdvancedFilters() {
-    const filterControls = document.querySelector('.filter-controls');
-    if (!filterControls) return;
-
-    // Add animation to filter controls
-    filterControls.classList.add('slide-in-top');
-}
-
 // FIXED Navigation initialization
 function initializeNavigation() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -858,15 +1353,7 @@ function initializeDetailsButtons() {
 
 // Pagination functionality
 function initializePagination() {
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('.page-btn') && !e.target.classList.contains('active')) {
-            const buttons = document.querySelectorAll('.page-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            
-            showNotification('Loading page content...', 'info');
-        }
-    });
+    // This is now handled by updatePaginationButtons
 }
 
 // Modal system initialization
@@ -980,7 +1467,7 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
-// Add CSS for page visibility state
+// Add CSS for page visibility state and loading
 const style = document.createElement('style');
 style.textContent = `
     .page-hidden .pulse,
@@ -989,5 +1476,124 @@ style.textContent = `
     .page-hidden .animated-gradient {
         animation-play-state: paused;
     }
+    
+    .loading-message {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+    }
+    
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+        grid-column: 1 / -1;
+    }
+
+    .no-results-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .no-results h3 {
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    .no-results p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        padding: 0.8rem 1.2rem;
+        border: 2px solid #e0e0e0;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .page-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+    }
+
+    .page-btn.next {
+        padding: 0.8rem 1.5rem;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 `;
 document.head.appendChild(style);
+
+// Function to add new apps dynamically
+function addNewApp(appData) {
+    const newApp = {
+        id: appsData.length + 1,
+        ...appData
+    };
+    appsData.push(newApp);
+    
+    // Update all relevant pages
+    populateAppsPage();
+    populateFeaturedApps();
+    
+    showNotification(`New app "${appData.name}" added successfully!`, 'success');
+}
+
+// Function to add new games dynamically
+function addNewGame(gameData) {
+    const newGame = {
+        id: gamesData.length + 1,
+        ...gameData
+    };
+    gamesData.push(newGame);
+    
+    // Update games page
+    populateGamesPage();
+    
+    showNotification(`New game "${gameData.name}" added successfully!`, 'success');
+}
+
+// Reset to first page when page loads
+window.addEventListener('load', function() {
+    currentPage = 1;
+});
