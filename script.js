@@ -1,5 +1,10 @@
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    initializeAllFeatures();
+});
+
+// Initialize all features
+function initializeAllFeatures() {
     initializeAnimations();
     initializeDownloadSystem();
     initializeScrollEffects();
@@ -11,7 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFilters();
     initializePageTransitions();
     initializeNavScroll();
-});
+    initializeRippleEffects();
+    initializeDetailsButtons();
+    initializePagination();
+}
 
 // AOS (Animate On Scroll) initialization
 function initializeAnimations() {
@@ -23,11 +31,15 @@ function initializeAnimations() {
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('aos-animate');
+                const element = entry.target;
+                element.classList.add('aos-animate');
                 
                 // Add delay for staggered animations
-                const delay = entry.target.getAttribute('data-aos-delay') || 0;
-                entry.target.style.transitionDelay = `${delay}ms`;
+                const delay = element.getAttribute('data-aos-delay') || 0;
+                element.style.transitionDelay = `${delay}ms`;
+                
+                // Remove observer after animation
+                observer.unobserve(element);
             }
         });
     }, observerOptions);
@@ -38,17 +50,9 @@ function initializeAnimations() {
     });
 }
 
-// Download functionality
+// Download functionality with improved error handling
 function initializeDownloadSystem() {
-    const modal = document.getElementById('downloadModal');
-    const closeBtn = document.querySelector('.close');
-    const cancelBtn = document.getElementById('cancelDownload');
-    const appNameSpan = document.getElementById('appName');
-    const progressBar = document.querySelector('.progress');
-    const progressText = document.querySelector('.progress-text');
-    
     let downloadInProgress = false;
-    let downloadProgress = 0;
     let progressInterval;
     
     // Add event listeners to all download buttons
@@ -56,67 +60,142 @@ function initializeDownloadSystem() {
     downloadButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Get app details
             const appName = this.getAttribute('data-name') || 
                            this.closest('.app-card, .game-card, .featured-item')?.querySelector('h3')?.textContent || 
                            'Application';
-            startDownload(appName);
+            const downloadUrl = this.getAttribute('data-url') || '#';
+            
+            startDownload(appName, downloadUrl);
         });
     });
     
-    function startDownload(appName) {
+    function startDownload(appName, downloadUrl) {
         if (downloadInProgress) {
             showNotification('A download is already in progress. Please wait for it to complete.', 'warning');
             return;
         }
         
-        // Set app name in modal
-        appNameSpan.textContent = appName;
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('downloadModal');
+        if (!modal) {
+            modal = createDownloadModal();
+        }
+        
+        // Update modal content
+        const appNameSpan = modal.querySelector('#appName');
+        const progressBar = modal.querySelector('.progress');
+        const progressText = modal.querySelector('.progress-text');
+        
+        if (appNameSpan) appNameSpan.textContent = appName;
         
         // Reset progress
-        downloadProgress = 0;
-        progressBar.style.width = '0%';
-        progressText.textContent = 'Preparing download...';
+        let downloadProgress = 0;
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressText) progressText.textContent = 'Preparing download...';
         
-        // Show modal with animation
+        // Show modal
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
         
         // Start progress simulation
         downloadInProgress = true;
-        progressInterval = setInterval(updateProgress, 200);
+        progressInterval = setInterval(() => {
+            updateProgress(downloadProgress, progressBar, progressText, downloadUrl, modal);
+            downloadProgress += Math.random() * 15;
+            if (downloadProgress > 100) downloadProgress = 100;
+        }, 200);
         
-        // Track download in analytics (simulated)
+        // Track download in analytics
         trackDownload(appName);
     }
     
-    function updateProgress() {
-        if (downloadProgress < 100) {
-            downloadProgress += Math.random() * 15;
-            if (downloadProgress > 100) downloadProgress = 100;
-            
-            progressBar.style.width = downloadProgress + '%';
-            
-            if (downloadProgress < 30) {
-                progressText.textContent = 'Preparing download...';
-            } else if (downloadProgress < 70) {
-                progressText.textContent = 'Downloading...';
-            } else {
-                progressText.textContent = 'Almost done...';
-            }
+    function updateProgress(progress, progressBar, progressText, downloadUrl, modal) {
+        if (progressBar) progressBar.style.width = progress + '%';
+        
+        if (progress < 30) {
+            if (progressText) progressText.textContent = 'Preparing download...';
+        } else if (progress < 70) {
+            if (progressText) progressText.textContent = `Downloading... ${Math.floor(progress)}%`;
+        } else if (progress < 100) {
+            if (progressText) progressText.textContent = 'Almost done...';
         } else {
             // Download complete
             clearInterval(progressInterval);
-            progressText.textContent = 'Download complete!';
+            if (progressText) progressText.textContent = 'Download complete!';
             
-            // Hide modal after a delay
-            setTimeout(function() {
-                modal.style.display = 'none';
+            // Hide modal after a delay and redirect
+            setTimeout(() => {
+                if (modal) modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
                 downloadInProgress = false;
                 
-                // Show success message
+                // Redirect to download URL
+                if (downloadUrl && downloadUrl !== '#') {
+                    window.open(downloadUrl, '_blank');
+                }
+                
                 showNotification('Download completed successfully!', 'success');
             }, 1000);
+        }
+    }
+    
+    function createDownloadModal() {
+        const modalHTML = `
+            <div class="modal" id="downloadModal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Download <span id="appName">App</span></h3>
+                    <div class="download-progress">
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <span class="progress-text">Preparing download...</span>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="cancel-btn" id="cancelDownload">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        const modal = document.getElementById('downloadModal');
+        
+        // Add event listeners for modal
+        const closeBtn = modal.querySelector('.close');
+        const cancelBtn = modal.querySelector('.cancel-btn');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => closeModal(modal));
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => closeModal(modal));
+        }
+        
+        // Close when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal);
+            }
+        });
+        
+        return modal;
+    }
+    
+    function closeModal(modal) {
+        if (downloadInProgress) {
+            if (confirm('Download in progress. Are you sure you want to cancel?')) {
+                clearInterval(progressInterval);
+                if (modal) modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                downloadInProgress = false;
+            }
+        } else {
+            if (modal) modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     }
     
@@ -124,87 +203,51 @@ function initializeDownloadSystem() {
         // Simulate analytics tracking
         console.log(`Download started: ${appName}`);
         
-        // In a real implementation, you would send this to your analytics service
+        // You can integrate with Google Analytics or other services here
         // Example: gtag('event', 'download', { 'app_name': appName });
-    }
-    
-    // Close modal when clicking X
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-    }
-    
-    // Cancel download button
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeModal);
-    }
-    
-    // Close modal when clicking outside
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
-    });
-    
-    function closeModal() {
-        if (downloadInProgress) {
-            if (confirm('Download in progress. Are you sure you want to cancel?')) {
-                clearInterval(progressInterval);
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                downloadInProgress = false;
-            }
-        } else {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
     }
 }
 
-// Scroll effects
+// Scroll effects with improved performance
 function initializeScrollEffects() {
     const header = document.querySelector('.header');
+    let ticking = false;
     
     if (header) {
         window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-            
-            // Parallax effect for hero section
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.hero');
-            if (parallax) {
-                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    if (window.scrollY > 100) {
+                        header.classList.add('scrolled');
+                        
+                        // Add compact class when scrolling down
+                        if (window.scrollY > 200) {
+                            header.classList.add('compact');
+                        } else {
+                            header.classList.remove('compact');
+                        }
+                    } else {
+                        header.classList.remove('scrolled', 'compact');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
         });
     }
 }
 
-// Counter animations
+// Counter animations with improved performance
 function initializeCounters() {
     const counters = document.querySelectorAll('.stat-number');
+    let hasAnimated = false;
     
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.getAttribute('data-count'));
-                const duration = 2000; // 2 seconds
-                const step = target / (duration / 16); // 60fps
-                let current = 0;
-                
-                const timer = setInterval(function() {
-                    current += step;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    counter.textContent = Math.floor(current);
-                }, 16);
-                
-                observer.unobserve(counter);
+            if (entry.isIntersecting && !hasAnimated) {
+                hasAnimated = true;
+                animateCounters(counters);
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
@@ -212,9 +255,27 @@ function initializeCounters() {
     counters.forEach(counter => {
         observer.observe(counter);
     });
+    
+    function animateCounters(counters) {
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count') || counter.textContent);
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(function() {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                counter.textContent = Math.floor(current).toLocaleString();
+            }, 16);
+        });
+    }
 }
 
-// FAQ functionality
+// FAQ functionality with improved accessibility
 function initializeFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
     
@@ -224,148 +285,174 @@ function initializeFAQ() {
         const toggle = item.querySelector('.faq-toggle');
         
         if (question && answer && toggle) {
+            // Add ARIA attributes for accessibility
+            question.setAttribute('role', 'button');
+            question.setAttribute('aria-expanded', 'false');
+            question.setAttribute('aria-controls', answer.id || `faq-${Math.random().toString(36).substr(2, 9)}`);
+            
+            if (!answer.id) {
+                answer.id = `faq-${Math.random().toString(36).substr(2, 9)}`;
+            }
+            
             question.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
                 
                 // Close all other items
                 faqItems.forEach(otherItem => {
                     if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                        const otherAnswer = otherItem.querySelector('.faq-answer');
-                        if (otherAnswer) {
-                            otherAnswer.style.maxHeight = '0';
-                        }
+                        closeFAQItem(otherItem);
                     }
                 });
                 
                 // Toggle current item
-                item.classList.toggle('active', !isActive);
-                
-                // Animate height
                 if (!isActive) {
-                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    openFAQItem(item);
                 } else {
-                    answer.style.maxHeight = '0';
+                    closeFAQItem(item);
+                }
+            });
+            
+            // Keyboard support
+            question.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    question.click();
                 }
             });
         }
     });
-}
-
-// Contact form handling with FormSubmit.co integration
-function initializeContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        const successMessage = document.getElementById('successMessage');
-        const submitBtn = contactForm.querySelector('.submit-btn');
-        const btnText = submitBtn?.querySelector('.btn-text');
-        const btnLoading = submitBtn?.querySelector('.btn-loading');
-
-        // Hide success message initially
-        if (successMessage) {
-            successMessage.style.display = 'none';
-        }
-
-        // Add input event listeners for validation
-        const inputs = contactForm.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                validateField(this);
-            });
-            
-            input.addEventListener('blur', function() {
-                validateField(this);
-            });
-        });
+    
+    function openFAQItem(item) {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
         
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate all fields
-            let isValid = true;
-            inputs.forEach(input => {
-                if (!validateField(input)) {
-                    isValid = false;
-                }
-            });
-            
-            if (!isValid) {
-                showNotification('Please fix the errors in the form before submitting.', 'error');
-                return;
-            }
-            
-            // Show loading state
-            if (submitBtn && btnText && btnLoading) {
-                submitBtn.classList.add('loading');
-                btnText.style.display = 'none';
-                btnLoading.style.display = 'flex';
-                submitBtn.disabled = true;
-            }
-
-            // Get form data
-            const formData = new FormData(contactForm);
-            
-            // Create URL parameters for FormSubmit.co
-            const params = new URLSearchParams();
-            params.append('name', formData.get('name') || '');
-            params.append('email', formData.get('email') || '');
-            params.append('subject', formData.get('subject') || '');
-            params.append('message', formData.get('message') || '');
-            params.append('_subject', 'New Contact Form Submission - FociStore');
-            params.append('_template', 'table');
-            params.append('_captcha', 'false');
-
-            // Send to FormSubmit.co using AJAX
-            fetch('https://formsubmit.co/ajax/focistore@gmail.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                },
-                body: params.toString()
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Show success message
-                    contactForm.style.display = 'none';
-                    if (successMessage) {
-                        successMessage.style.display = 'block';
-                        successMessage.style.opacity = '0';
-                        
-                        // Animate success message
-                        setTimeout(() => {
-                            successMessage.style.transition = 'opacity 0.5s ease';
-                            successMessage.style.opacity = '1';
-                        }, 100);
-                    }
-                    showNotification('Message sent successfully! We will get back to you soon.', 'success');
-                } else {
-                    throw new Error('Form submission failed');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Sorry, there was an error sending your message. Please try again later.', 'error');
-                
-                // Reset button state
-                if (submitBtn && btnText && btnLoading) {
-                    submitBtn.classList.remove('loading');
-                    btnText.style.display = 'block';
-                    btnLoading.style.display = 'none';
-                    submitBtn.disabled = false;
-                }
-            });
-        });
+        item.classList.add('active');
+        question.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+    
+    function closeFAQItem(item) {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        
+        item.classList.remove('active');
+        question.setAttribute('aria-expanded', 'false');
+        answer.style.maxHeight = '0';
     }
 }
 
-// Field validation function
+// Contact form handling with improved validation
+function initializeContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    const successMessage = document.getElementById('successMessage');
+    const submitBtn = contactForm.querySelector('.submit-btn');
+    const btnText = submitBtn?.querySelector('.btn-text');
+    const btnLoading = submitBtn?.querySelector('.btn-loading');
+
+    // Initialize form state
+    if (successMessage) {
+        successMessage.style.display = 'none';
+    }
+
+    // Real-time validation
+    const inputs = contactForm.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', () => validateField(input));
+        input.addEventListener('blur', () => validateField(input));
+    });
+    
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Validate all fields
+        let isValid = true;
+        inputs.forEach(input => {
+            if (!validateField(input)) {
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            showNotification('Please fix the errors in the form before submitting.', 'error');
+            return;
+        }
+        
+        // Show loading state
+        setLoadingState(true, submitBtn, btnText, btnLoading);
+        
+        try {
+            await submitContactForm(contactForm);
+            
+            // Success handling
+            contactForm.style.display = 'none';
+            if (successMessage) {
+                successMessage.style.display = 'block';
+                successMessage.classList.add('show');
+            }
+            showNotification('Message sent successfully! We will get back to you soon.', 'success');
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showNotification('Sorry, there was an error sending your message. Please try again later.', 'error');
+        } finally {
+            setLoadingState(false, submitBtn, btnText, btnLoading);
+        }
+    });
+    
+    async function submitContactForm(form) {
+        const formData = new FormData(form);
+        
+        // For FormSubmit.co integration
+        const params = new URLSearchParams();
+        params.append('name', formData.get('name') || '');
+        params.append('email', formData.get('email') || '');
+        params.append('subject', formData.get('subject') || '');
+        params.append('message', formData.get('message') || '');
+        params.append('_subject', 'New Contact Form Submission - FociStore');
+        params.append('_template', 'table');
+        params.append('_captcha', 'false');
+
+        const response = await fetch('https://formsubmit.co/ajax/focistore@gmail.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'
+            },
+            body: params.toString()
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        if (!data.success) {
+            throw new Error('Form submission failed');
+        }
+        
+        return data;
+    }
+    
+    function setLoadingState(loading, submitBtn, btnText, btnLoading) {
+        if (!submitBtn) return;
+        
+        if (loading) {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            if (btnText) btnText.style.display = 'none';
+            if (btnLoading) btnLoading.style.display = 'flex';
+        } else {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+            if (btnText) btnText.style.display = 'block';
+            if (btnLoading) btnLoading.style.display = 'none';
+        }
+    }
+}
+
+// Improved field validation
 function validateField(field) {
     const value = field.value.trim();
     const fieldName = field.getAttribute('name');
@@ -381,57 +468,57 @@ function validateField(field) {
     field.classList.remove('error');
     
     // Validation rules
-    switch (fieldName) {
-        case 'name':
-            if (value.length < 2) {
-                isValid = false;
-                errorMessage = 'Name must be at least 2 characters long';
-            }
-            break;
-            
-        case 'email':
-            if (!isValidEmail(value)) {
-                isValid = false;
-                errorMessage = 'Please enter a valid email address';
-            }
-            break;
-            
-        case 'subject':
-            if (value.length < 5) {
-                isValid = false;
-                errorMessage = 'Subject must be at least 5 characters long';
-            }
-            break;
-            
-        case 'message':
-            if (value.length < 10) {
-                isValid = false;
-                errorMessage = 'Message must be at least 10 characters long';
-            }
-            break;
+    if (field.required && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
+    } else if (value) {
+        switch (fieldName) {
+            case 'name':
+                if (value.length < 2) {
+                    isValid = false;
+                    errorMessage = 'Name must be at least 2 characters long';
+                }
+                break;
+                
+            case 'email':
+                if (!isValidEmail(value)) {
+                    isValid = false;
+                    errorMessage = 'Please enter a valid email address';
+                }
+                break;
+                
+            case 'subject':
+                if (value.length < 5) {
+                    isValid = false;
+                    errorMessage = 'Subject must be at least 5 characters long';
+                }
+                break;
+                
+            case 'message':
+                if (value.length < 10) {
+                    isValid = false;
+                    errorMessage = 'Message must be at least 10 characters long';
+                }
+                break;
+        }
     }
     
     // Show error if invalid
-    if (!isValid && value !== '') {
+    if (!isValid) {
         field.classList.add('error');
         const errorElement = document.createElement('div');
         errorElement.className = 'field-error';
         errorElement.textContent = errorMessage;
-        errorElement.style.cssText = `
-            color: #ea4335;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        `;
         field.parentNode.appendChild(errorElement);
         
         // Add shake animation
-        field.style.animation = 'shake 0.5s ease-in-out';
+        field.style.animation = 'none';
         setTimeout(() => {
-            field.style.animation = '';
-        }, 500);
+            field.style.animation = 'shake 0.5s ease-in-out';
+        }, 10);
     }
     
-    return isValid || value === '';
+    return isValid || (!field.required && value === '');
 }
 
 // Email validation
@@ -452,117 +539,155 @@ function initializeSearch() {
                 performSearch();
             }
         });
+        
+        // Real-time search suggestions (optional)
+        searchInput.addEventListener('input', debounce(function() {
+            // Implement search suggestions here if needed
+        }, 300));
     }
     
     function performSearch() {
         const query = searchInput.value.trim();
         if (query.length < 2) {
             showNotification('Please enter at least 2 characters to search.', 'warning');
+            searchInput.focus();
             return;
         }
         
         // Show loading state
+        const originalText = searchButton.textContent;
         searchButton.textContent = 'Searching...';
         searchButton.disabled = true;
         
-        // Simulate search
+        // Simulate search (replace with actual search logic)
         setTimeout(() => {
-            showNotification(`Search results for "${query}" would be displayed here.`, 'info');
-            searchButton.textContent = 'Search';
+            showNotification(`Found results for "${query}"`, 'info');
+            searchButton.textContent = originalText;
             searchButton.disabled = false;
         }, 1000);
     }
 }
 
-// Filter functionality for apps and games pages
+// Filter functionality
 function initializeFilters() {
     const categoryFilter = document.getElementById('categoryFilter');
     const sortFilter = document.getElementById('sortFilter');
     
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', applyFilters);
-    }
-    
-    if (sortFilter) {
-        sortFilter.addEventListener('change', applyFilters);
-    }
+    [categoryFilter, sortFilter].forEach(filter => {
+        if (filter) {
+            filter.addEventListener('change', debounce(applyFilters, 300));
+        }
+    });
     
     function applyFilters() {
         const category = categoryFilter ? categoryFilter.value : 'all';
         const sort = sortFilter ? sortFilter.value : 'popular';
         
-        // Get all items
         const items = document.querySelectorAll('.app-card, .game-card');
+        let visibleItems = 0;
         
         // Filter by category
         items.forEach(item => {
-            if (category === 'all' || item.getAttribute('data-category') === category) {
+            const itemCategory = item.getAttribute('data-category');
+            if (category === 'all' || itemCategory === category) {
                 item.style.display = 'block';
+                visibleItems++;
             } else {
                 item.style.display = 'none';
             }
         });
         
-        // Sort items (simplified implementation)
-        const container = document.querySelector('.apps-grid, .games-grid');
-        if (container) {
-            const itemsArray = Array.from(items).filter(item => item.style.display !== 'none');
-            
-            itemsArray.sort((a, b) => {
-                const nameA = a.querySelector('h3')?.textContent.toLowerCase() || '';
-                const nameB = b.querySelector('h3')?.textContent.toLowerCase() || '';
-                
-                switch (sort) {
-                    case 'name':
-                        return nameA.localeCompare(nameB);
-                    case 'newest':
-                        // This would compare dates in a real implementation
-                        return 0;
-                    case 'popular':
-                    default:
-                        // This would compare popularity in a real implementation
-                        return 0;
-                }
-            });
-            
-            // Reappend sorted items
-            itemsArray.forEach(item => {
-                container.appendChild(item);
-            });
+        // Sort items
+        if (sort !== 'popular') {
+            sortItems(items, sort, category);
         }
         
-        showNotification('Filters applied successfully!', 'success');
+        showNotification(`Found ${visibleItems} items`, 'success');
+    }
+    
+    function sortItems(items, sortBy, category) {
+        const container = document.querySelector('.apps-grid, .games-grid');
+        if (!container) return;
+        
+        const visibleItems = Array.from(items).filter(item => 
+            category === 'all' || item.getAttribute('data-category') === category
+        );
+        
+        visibleItems.sort((a, b) => {
+            switch (sortBy) {
+                case 'name':
+                    const nameA = a.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const nameB = b.querySelector('h3')?.textContent.toLowerCase() || '';
+                    return nameA.localeCompare(nameB);
+                    
+                case 'newest':
+                    // Implement date-based sorting
+                    return 0;
+                    
+                default:
+                    return 0;
+            }
+        });
+        
+        // Reappend sorted items
+        visibleItems.forEach(item => {
+            container.appendChild(item);
+        });
     }
 }
 
 // Navigation initialization
 function initializeNavigation() {
-    // Add active class to current page in navigation
+    // Add active class to current page
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('nav a');
+    const navLinks = document.querySelectorAll('nav a[href]');
     
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
+        if (linkHref === currentPage || 
+            (currentPage === '' && linkHref === 'index.html') ||
+            (currentPage.includes(linkHref.replace('.html', '')) && linkHref !== 'index.html')) {
             link.classList.add('active');
+        }
+        
+        // Smooth scrolling for anchor links
+        if (link.getAttribute('href')?.startsWith('#')) {
+            link.addEventListener('click', smoothScrollToAnchor);
         }
     });
 }
 
+// Smooth scroll to anchor
+function smoothScrollToAnchor(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+
 // Page transitions
 function initializePageTransitions() {
-    // Add page transition in
-    document.body.classList.add('page-transition');
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s ease';
     
-    // Add click handlers for internal links
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 100);
+    
+    // Handle internal link clicks
     document.addEventListener('click', function(e) {
         const link = e.target.closest('a');
         if (link && link.href && link.href.startsWith(window.location.origin) && 
             !link.href.includes('#') && link.target !== '_blank') {
             e.preventDefault();
             
-            // Add page transition out
-            document.body.style.animation = 'pageOut 0.3s ease';
+            document.body.style.opacity = '0';
             
             setTimeout(() => {
                 window.location.href = link.href;
@@ -574,122 +699,153 @@ function initializePageTransitions() {
 // Navigation scroll functionality
 function initializeNavScroll() {
     const nav = document.querySelector('nav ul');
-    const scrollLeft = document.querySelector('.nav-scroll-left');
-    const scrollRight = document.querySelector('.nav-scroll-right');
+    if (!nav) return;
     
-    if (nav) {
-        // Create scroll buttons if they don't exist
-        if (!scrollLeft && !scrollRight) {
-            const navContainer = document.querySelector('nav');
-            if (navContainer) {
-                const leftBtn = document.createElement('button');
-                leftBtn.className = 'nav-scroll-indicator nav-scroll-left';
-                leftBtn.innerHTML = '‹';
-                leftBtn.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    left: 5px;
-                    transform: translateY(-50%);
-                    background: rgba(255,255,255,0.3);
-                    border: none;
-                    color: white;
-                    padding: 0.5rem;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    z-index: 10;
-                    display: none;
-                    width: 30px;
-                    height: 30px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                `;
-                
-                const rightBtn = document.createElement('button');
-                rightBtn.className = 'nav-scroll-indicator nav-scroll-right';
-                rightBtn.innerHTML = '›';
-                rightBtn.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    right: 5px;
-                    transform: translateY(-50%);
-                    background: rgba(255,255,255,0.3);
-                    border: none;
-                    color: white;
-                    padding: 0.5rem;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    z-index: 10;
-                    display: none;
-                    width: 30px;
-                    height: 30px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                `;
-                
-                navContainer.style.position = 'relative';
-                navContainer.appendChild(leftBtn);
-                navContainer.appendChild(rightBtn);
-                
-                // Add event listeners
-                leftBtn.addEventListener('click', () => {
-                    nav.scrollBy({ left: -100, behavior: 'smooth' });
-                });
-                
-                rightBtn.addEventListener('click', () => {
-                    nav.scrollBy({ left: 100, behavior: 'smooth' });
-                });
-                
-                // Show/hide scroll buttons based on scroll position
-                nav.addEventListener('scroll', () => {
-                    leftBtn.style.display = nav.scrollLeft > 0 ? 'flex' : 'none';
-                    rightBtn.style.display = 
-                        nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'flex' : 'none';
-                });
-                
-                // Initial check
-                setTimeout(() => {
-                    leftBtn.style.display = nav.scrollLeft > 0 ? 'flex' : 'none';
-                    rightBtn.style.display = 
-                        nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'flex' : 'none';
-                }, 100);
-            }
-        }
+    // Create scroll buttons
+    const navContainer = document.querySelector('nav');
+    if (!navContainer) return;
+    
+    const leftBtn = document.createElement('button');
+    leftBtn.className = 'nav-scroll-indicator nav-scroll-left';
+    leftBtn.innerHTML = '‹';
+    leftBtn.setAttribute('aria-label', 'Scroll left');
+    
+    const rightBtn = document.createElement('button');
+    rightBtn.className = 'nav-scroll-indicator nav-scroll-right';
+    rightBtn.innerHTML = '›';
+    rightBtn.setAttribute('aria-label', 'Scroll right');
+    
+    navContainer.style.position = 'relative';
+    navContainer.appendChild(leftBtn);
+    navContainer.appendChild(rightBtn);
+    
+    // Scroll functions
+    leftBtn.addEventListener('click', () => {
+        nav.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+    
+    rightBtn.addEventListener('click', () => {
+        nav.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+    
+    // Update button visibility
+    function updateScrollButtons() {
+        const scrollLeft = nav.scrollLeft;
+        const maxScrollLeft = nav.scrollWidth - nav.clientWidth;
+        
+        leftBtn.classList.toggle('visible', scrollLeft > 0);
+        rightBtn.classList.toggle('visible', scrollLeft < maxScrollLeft - 1);
     }
+    
+    nav.addEventListener('scroll', debounce(updateScrollButtons, 100));
+    window.addEventListener('resize', debounce(updateScrollButtons, 100));
+    
+    // Initial update
+    setTimeout(updateScrollButtons, 100);
+}
+
+// Ripple effects for buttons
+function initializeRippleEffects() {
+    document.addEventListener('click', function(e) {
+        const button = e.target.closest('.cta-button, .download-btn, .btn-download, .submit-btn, .btn-details');
+        if (button) {
+            createRippleEffect(e, button);
+        }
+    });
+}
+
+function createRippleEffect(event, button) {
+    const ripple = document.createElement('span');
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+    
+    ripple.style.width = ripple.style.height = `${diameter}px`;
+    ripple.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+    ripple.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+    ripple.classList.add('ripple-effect');
+    
+    // Remove existing ripples
+    const existingRipples = button.querySelectorAll('.ripple-effect');
+    existingRipples.forEach(ripple => ripple.remove());
+    
+    button.style.position = 'relative';
+    button.style.overflow = 'hidden';
+    button.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// Details button functionality
+function initializeDetailsButtons() {
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.btn-details')) {
+            const card = e.target.closest('.app-card, .game-card');
+            const appName = card?.querySelector('h3')?.textContent || 'Application';
+            showNotification(`Details for ${appName} would be displayed here.`, 'info');
+        }
+    });
+}
+
+// Pagination functionality
+function initializePagination() {
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.page-btn') && !e.target.classList.contains('active')) {
+            const buttons = document.querySelectorAll('.page-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            showNotification('Loading page content...', 'info');
+        }
+    });
+}
+
+// Utility function: Debounce
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 // Notification system
 function showNotification(message, type = 'info') {
     // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    });
     
-    // Create notification element
+    // Create notification
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
             <span class="notification-message">${message}</span>
-            <button class="notification-close">&times;</button>
+            <button class="notification-close" aria-label="Close notification">&times;</button>
         </div>
     `;
     
     // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        z-index: 3000;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-    `;
+    Object.assign(notification.style, {
+        position: 'fixed',
+        top: '100px',
+        right: '20px',
+        color: 'white',
+        padding: '1rem 1.5rem',
+        borderRadius: '10px',
+        boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
+        zIndex: '3000',
+        maxWidth: '400px',
+        animation: 'slideInRight 0.3s ease'
+    });
     
     // Set background based on type
     const colors = {
@@ -701,124 +857,47 @@ function showNotification(message, type = 'info') {
     
     notification.style.background = colors[type] || colors.info;
     
-    notification.querySelector('.notification-content').style.cssText = `
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-    `;
-    
-    notification.querySelector('.notification-close').style.cssText = `
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 0;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    `;
-    
-    // Add to page
     document.body.appendChild(notification);
     
     // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }
+    const autoRemove = setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
     }, 5000);
     
     // Close on click
     notification.querySelector('.notification-close').addEventListener('click', () => {
+        clearTimeout(autoRemove);
         notification.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     });
 }
 
-// Add ripple effect to buttons
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.cta-button, .download-btn, .btn-download, .submit-btn, .btn-details')) {
-        const button = e.target;
-        const ripple = document.createElement('span');
-        const diameter = Math.max(button.clientWidth, button.clientHeight);
-        const radius = diameter / 2;
+// Keyboard navigation support
+document.addEventListener('keydown', function(e) {
+    // Close modal with Escape
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('downloadModal');
+        if (modal && modal.style.display === 'block') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
         
-        ripple.style.width = ripple.style.height = `${diameter}px`;
-        ripple.style.left = `${e.clientX - button.getBoundingClientRect().left - radius}px`;
-        ripple.style.top = `${e.clientY - button.getBoundingClientRect().top - radius}px`;
-        ripple.classList.add('ripple-effect');
-        
-        // Remove existing ripples
-        const existingRipples = button.querySelectorAll('.ripple-effect');
-        existingRipples.forEach(ripple => ripple.remove());
-        
-        button.appendChild(ripple);
-        
-        setTimeout(() => {
-            ripple.remove();
-        }, 600);
+        // Close notifications
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => notification.remove());
     }
 });
 
-// Add loading state for buttons
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.download-btn, .btn-download, .submit-btn')) {
-        const button = e.target;
-        button.classList.add('loading');
-        
-        setTimeout(() => {
-            button.classList.remove('loading');
-        }, 2000);
-    }
-});
-
-// Pagination functionality
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.page-btn') && !e.target.classList.contains('active')) {
-        const buttons = document.querySelectorAll('.page-btn');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
-        
-        showNotification('Loading page...', 'info');
-        
-        // Simulate page load
-        setTimeout(() => {
-            showNotification('Page loaded successfully!', 'success');
-        }, 1000);
-    }
-});
-
-// Details button functionality
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.btn-details')) {
-        const card = e.target.closest('.app-card, .game-card');
-        const appName = card?.querySelector('h3')?.textContent || 'Application';
-        showNotification(`Details for ${appName} would be displayed here.`, 'info');
-    }
-});
-
-// Initialize tooltips for rating stars
-document.addEventListener('DOMContentLoaded', function() {
-    const ratings = document.querySelectorAll('.app-rating');
-    ratings.forEach(rating => {
-        rating.title = 'User Rating';
-    });
-});
-
-// Performance optimization: Lazy loading for images
+// Performance optimization: Lazy loading
 if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
+    const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 if (img.dataset.src) {
                     img.src = img.dataset.src;
-                    img.classList.remove('lazy');
+                    img.removeAttribute('data-src');
                     imageObserver.unobserve(img);
                 }
             }
@@ -830,81 +909,21 @@ if ('IntersectionObserver' in window) {
     });
 }
 
-// Add keyboard navigation support
-document.addEventListener('keydown', function(e) {
-    // Close modal with Escape key
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('downloadModal');
-        if (modal && modal.style.display === 'block') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+// Error handling for images
+document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') {
+        e.target.src = 'https://via.placeholder.com/300x200/667eea/ffffff?text=Image+Not+Found';
+        e.target.alt = 'Image not available';
     }
-    
-    // Navigate with arrow keys in FAQ
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        const activeFaq = document.querySelector('.faq-item.active');
-        if (activeFaq) {
-            e.preventDefault();
-            const allFaqs = Array.from(document.querySelectorAll('.faq-item'));
-            const currentIndex = allFaqs.indexOf(activeFaq);
-            let nextIndex;
-            
-            if (e.key === 'ArrowDown') {
-                nextIndex = (currentIndex + 1) % allFaqs.length;
-            } else {
-                nextIndex = (currentIndex - 1 + allFaqs.length) % allFaqs.length;
-            }
-            
-            // Close current FAQ
-            activeFaq.classList.remove('active');
-            const activeAnswer = activeFaq.querySelector('.faq-answer');
-            if (activeAnswer) {
-                activeAnswer.style.maxHeight = '0';
-            }
-            
-            // Open next FAQ
-            const nextFaq = allFaqs[nextIndex];
-            nextFaq.classList.add('active');
-            const nextAnswer = nextFaq.querySelector('.faq-answer');
-            if (nextAnswer) {
-                nextAnswer.style.maxHeight = nextAnswer.scrollHeight + 'px';
-            }
-            
-            // Scroll into view
-            nextFaq.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-    }
-});
+}, true);
 
-// Add service worker for PWA functionality (commented out as it's optional)
-/*
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js').then(function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
-*/
-
-// Export functions for potential module use
+// Export for module use
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
-        initializeAnimations,
-        initializeDownloadSystem,
-        initializeScrollEffects,
-        initializeCounters,
-        initializeContactForm,
-        initializeNavigation,
-        initializeFAQ,
-        initializeSearch,
-        initializeFilters,
-        initializeNavScroll,
+        initializeAllFeatures,
         showNotification,
         isValidEmail,
-        validateField
+        validateField,
+        debounce
     };
 }
