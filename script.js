@@ -862,3 +862,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Add to script.js
+function initializeNavScroll() {
+    const nav = document.querySelector('nav ul');
+    const scrollLeft = document.querySelector('.nav-scroll-left');
+    const scrollRight = document.querySelector('.nav-scroll-right');
+    
+    if (nav && scrollLeft && scrollRight) {
+        scrollLeft.addEventListener('click', () => {
+            nav.scrollBy({ left: -100, behavior: 'smooth' });
+        });
+        
+        scrollRight.addEventListener('click', () => {
+            nav.scrollBy({ left: 100, behavior: 'smooth' });
+        });
+        
+        // Show/hide scroll buttons based on scroll position
+        nav.addEventListener('scroll', () => {
+            scrollLeft.style.display = nav.scrollLeft > 0 ? 'block' : 'none';
+            scrollRight.style.display = 
+                nav.scrollLeft < (nav.scrollWidth - nav.clientWidth) ? 'block' : 'none';
+        });
+    }
+}
+
+// Call this in DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeNavScroll();
+    // ... other initializations
+});
