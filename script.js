@@ -5,12 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize all features
 function initializeAllFeatures() {
+    initializePageSpecificFeatures();
     initializeAnimations();
     initializeDownloadSystem();
     initializeScrollEffects();
     initializeCounters();
     initializeContactForm();
-    initializeNavigation(); // This should work now
+    initializeNavigation();
     initializeFAQ();
     initializeSearch();
     initializeFilters();
@@ -19,10 +20,43 @@ function initializeAllFeatures() {
     initializeRippleEffects();
     initializeDetailsButtons();
     initializePagination();
+    initializeModalSystem();
+}
+
+// Page-specific feature initialization
+function initializePageSpecificFeatures() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    switch(currentPage) {
+        case 'index.html':
+        case '':
+            initializeHeroAnimations();
+            initializeFeaturedApps();
+            break;
+        case 'apps.html':
+        case 'games.html':
+            initializeAppGrid();
+            initializeAdvancedFilters();
+            break;
+        case 'about.html':
+            initializeTeamAnimations();
+            break;
+        case 'contact.html':
+            initializeContactAnimations();
+            break;
+        case 'privacy.html':
+        case 'terms.html':
+            initializeLegalPage();
+            break;
+    }
 }
 
 // AOS (Animate On Scroll) initialization
 function initializeAnimations() {
+    // Check if we're on a page that needs scroll animations
+    const needsScrollAnimations = document.querySelectorAll('[data-aos]').length > 0;
+    if (!needsScrollAnimations) return;
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -47,6 +81,122 @@ function initializeAnimations() {
     // Observe all elements with data-aos attribute
     document.querySelectorAll('[data-aos]').forEach(el => {
         observer.observe(el);
+    });
+}
+
+// Hero section animations for homepage
+function initializeHeroAnimations() {
+    const heroContent = document.querySelector('.hero-content');
+    const heroGraphic = document.querySelector('.hero-graphic');
+    
+    if (heroContent) {
+        heroContent.classList.add('slide-in-left');
+    }
+    if (heroGraphic) {
+        heroGraphic.classList.add('slide-in-right');
+    }
+}
+
+// Featured apps carousel for homepage
+function initializeFeaturedApps() {
+    const featuredGrid = document.querySelector('.featured-grid');
+    if (!featuredGrid) return;
+
+    // Add hover animations to featured items
+    const featuredItems = featuredGrid.querySelectorAll('.featured-item');
+    featuredItems.forEach(item => {
+        item.classList.add('card-hover', 'stagger-item');
+    });
+
+    // Make items visible with delay
+    setTimeout(() => {
+        featuredItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('visible');
+            }, index * 100);
+        });
+    }, 500);
+}
+
+// App grid animations for apps/games pages
+function initializeAppGrid() {
+    const appGrids = document.querySelectorAll('.apps-grid, .games-grid');
+    
+    appGrids.forEach(grid => {
+        const cards = grid.querySelectorAll('.app-card, .game-card');
+        cards.forEach((card, index) => {
+            card.classList.add('stagger-item');
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            // Add hover effects
+            card.classList.add('card-hover');
+            
+            // Make visible with delay
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, index * 100);
+        });
+    });
+}
+
+// Team animations for about page
+function initializeTeamAnimations() {
+    const valueItems = document.querySelectorAll('.value-item');
+    const statsItems = document.querySelectorAll('.stat-mini');
+    
+    // Animate value items
+    valueItems.forEach((item, index) => {
+        item.classList.add('stagger-item');
+        setTimeout(() => {
+            item.classList.add('visible');
+        }, index * 150);
+    });
+    
+    // Animate stats
+    statsItems.forEach((item, index) => {
+        item.classList.add('stagger-item');
+        setTimeout(() => {
+            item.classList.add('visible');
+        }, index * 100 + 500);
+    });
+}
+
+// Contact page animations
+function initializeContactAnimations() {
+    const contactMethods = document.querySelectorAll('.contact-method');
+    const formElements = document.querySelectorAll('.form-group');
+    
+    // Animate contact methods
+    contactMethods.forEach((method, index) => {
+        method.classList.add('stagger-item');
+        setTimeout(() => {
+            method.classList.add('visible');
+        }, index * 100);
+    });
+    
+    // Animate form elements
+    formElements.forEach((element, index) => {
+        element.classList.add('stagger-item');
+        setTimeout(() => {
+            element.classList.add('visible');
+        }, index * 80 + 300);
+    });
+}
+
+// Legal page initialization
+function initializeLegalPage() {
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
 }
 
@@ -149,7 +299,7 @@ function initializeDownloadSystem() {
                     <h3>Download <span id="appName">App</span></h3>
                     <div class="download-progress">
                         <div class="progress-bar">
-                            <div class="progress"></div>
+                            <div class="progress progress-animated"></div>
                         </div>
                         <span class="progress-text">Preparing download...</span>
                     </div>
@@ -237,6 +387,7 @@ function initializeScrollEffects() {
 // Counter animations with improved performance
 function initializeCounters() {
     const counters = document.querySelectorAll('.stat-number');
+    if (counters.length === 0) return;
     
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
@@ -269,6 +420,7 @@ function initializeCounters() {
 // FAQ functionality with improved accessibility
 function initializeFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
+    if (faqItems.length === 0) return;
     
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
@@ -568,50 +720,38 @@ function initializeFilters() {
     }
 }
 
+// Advanced filters for apps/games pages
+function initializeAdvancedFilters() {
+    const filterControls = document.querySelector('.filter-controls');
+    if (!filterControls) return;
+
+    // Add animation to filter controls
+    filterControls.classList.add('slide-in-top');
+}
+
 // FIXED Navigation initialization
 function initializeNavigation() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('nav a[href]');
     
-    // Debug info
-    console.log('Current page:', currentPage);
-    
     navLinks.forEach(link => {
         link.classList.remove('active');
         
         const linkHref = link.getAttribute('href');
-        console.log('Checking link:', linkHref);
         
         // Home page case
         if ((currentPage === '' || currentPage === 'index.html') && linkHref === 'index.html') {
             link.classList.add('active');
-            console.log('Setting home as active');
         }
         // Other pages - exact match
         else if (linkHref === currentPage) {
             link.classList.add('active');
-            console.log('Setting', linkHref, 'as active');
         }
-        // Other pages - partial match (for pages like about.html, contact.html)
+        // Other pages - partial match
         else if (currentPage.includes(linkHref.replace('.html', '')) && linkHref !== 'index.html') {
             link.classList.add('active');
-            console.log('Setting', linkHref, 'as active (partial match)');
         }
     });
-}
-
-// Smooth scroll to anchor
-function smoothScrollToAnchor(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const targetElement = document.querySelector(targetId);
-    
-    if (targetElement) {
-        targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
 }
 
 // Page transitions
@@ -675,7 +815,7 @@ function initializeNavScroll() {
 // Ripple effects for buttons
 function initializeRippleEffects() {
     document.addEventListener('click', function(e) {
-        const button = e.target.closest('.cta-button, .download-btn, .btn-download, .submit-btn, .btn-details');
+        const button = e.target.closest('.cta-button, .download-btn, .btn-download, .submit-btn, .btn-details, .catalog-link, .page-btn, .cancel-btn');
         if (button) {
             createRippleEffect(e, button);
         }
@@ -729,6 +869,30 @@ function initializePagination() {
     });
 }
 
+// Modal system initialization
+function initializeModalSystem() {
+    // Close modals when clicking outside
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Close modals with escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+}
+
 // Utility function: Debounce
 function debounce(func, wait) {
     let timeout;
@@ -761,30 +925,6 @@ function showNotification(message, type = 'info') {
         </div>
     `;
     
-    // Add styles
-    Object.assign(notification.style, {
-        position: 'fixed',
-        top: '100px',
-        right: '20px',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        borderRadius: '10px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
-        zIndex: '3000',
-        maxWidth: '400px',
-        animation: 'slideInRight 0.3s ease'
-    });
-    
-    // Set background based on type
-    const colors = {
-        success: 'linear-gradient(135deg, #34a853, #2e7d32)',
-        error: 'linear-gradient(135deg, #ea4335, #c62828)',
-        warning: 'linear-gradient(135deg, #fbbc04, #f57c00)',
-        info: 'linear-gradient(135deg, #4285f4, #1565c0)'
-    };
-    
-    notification.style.background = colors[type] || colors.info;
-    
     document.body.appendChild(notification);
     
     // Auto remove after 5 seconds
@@ -800,22 +940,6 @@ function showNotification(message, type = 'info') {
         setTimeout(() => notification.remove(), 300);
     });
 }
-
-// Keyboard navigation support
-document.addEventListener('keydown', function(e) {
-    // Close modal with Escape
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('downloadModal');
-        if (modal && modal.style.display === 'block') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Close notifications
-        const notifications = document.querySelectorAll('.notification');
-        notifications.forEach(notification => notification.remove());
-    }
-});
 
 // Performance optimization: Lazy loading
 if ('IntersectionObserver' in window) {
@@ -844,3 +968,26 @@ document.addEventListener('error', function(e) {
         e.target.alt = 'Image not available';
     }
 }, true);
+
+// Handle page visibility changes for performance
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Page is hidden, pause animations if needed
+        document.body.classList.add('page-hidden');
+    } else {
+        // Page is visible, resume animations
+        document.body.classList.remove('page-hidden');
+    }
+});
+
+// Add CSS for page visibility state
+const style = document.createElement('style');
+style.textContent = `
+    .page-hidden .pulse,
+    .page-hidden .bounce,
+    .page-hidden .float,
+    .page-hidden .animated-gradient {
+        animation-play-state: paused;
+    }
+`;
+document.head.appendChild(style);
