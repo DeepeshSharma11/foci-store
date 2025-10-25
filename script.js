@@ -316,7 +316,7 @@ function initializeContactForm() {
             params.append('_captcha', 'false');
 
             // Send to FormSubmit.co using AJAX
-            fetch('https://formsubmit.co/ajax/niku3325@gmail.com', {
+            fetch('https://formsubmit.co/ajax/focistore@gmail.com', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
