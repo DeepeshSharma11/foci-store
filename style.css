@@ -107,7 +107,7 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Main Navigation - Fixed Hover Effects */
+/* Main Navigation - FIXED HOVER EFFECTS */
 nav {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
@@ -152,6 +152,7 @@ nav a {
     white-space: nowrap;
     display: block;
     font-size: 0.85rem;
+    background: transparent;
 }
 
 /* Fixed hover effect with z-index */
@@ -171,31 +172,14 @@ nav a:hover::before {
     left: 100%;
 }
 
-nav a:hover, nav a.active {
-    background: rgba(255, 255, 255, 0.2);
+/* FIXED HOVER EFFECT - Works on all navigation links */
+nav a:hover, 
+nav a.active,
+nav ul li a:hover,
+.header nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* Alternative hover effect */
-nav a.alternative-hover {
-    position: relative;
-    overflow: hidden;
-}
-
-nav a.alternative-hover::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.3s ease;
-}
-
-nav a.alternative-hover:hover::after {
-    width: 100%;
 }
 
 /* Navigation Scroll Indicators - More Compact */
@@ -797,7 +781,6 @@ nav a.alternative-hover:hover::after {
     line-height: 1.6;
 }
 
-/* Footer */
 /* Footer - Single Line Layout */
 footer {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
@@ -812,36 +795,36 @@ footer {
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    flex-wrap: nowrap; /* Changed from wrap to nowrap */
-    gap: 1rem; /* Reduced gap */
+    flex-wrap: nowrap;
+    gap: 1rem;
 }
 
 .footer-logo {
-    font-size: 1.5rem; /* Slightly smaller */
+    font-size: 1.5rem;
     font-weight: bold;
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    white-space: nowrap; /* Prevent wrapping */
+    white-space: nowrap;
 }
 
 .footer-links {
     display: flex;
-    gap: 1.5rem; /* Reduced gap */
-    flex-wrap: nowrap; /* Prevent wrapping */
+    gap: 1.5rem;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    flex: 1; /* Take available space */
+    flex: 1;
 }
 
 .footer-links a {
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
-    padding: 0.4rem 0.8rem; /* Smaller padding */
+    padding: 0.4rem 0.8rem;
     border-radius: 15px;
-    font-size: 0.9rem; /* Slightly smaller font */
-    white-space: nowrap; /* Prevent text wrapping */
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .footer-links a:hover {
@@ -851,48 +834,9 @@ footer {
 
 .copyright {
     text-align: center;
-    font-size: 0.85rem; /* Slightly smaller */
+    font-size: 0.85rem;
     color: #ccc;
     margin-top: 1rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .footer-links {
-        flex-wrap: wrap; /* Allow wrapping on mobile */
-        justify-content: center;
-        gap: 1rem;
-    }
-    
-    .footer-links a {
-        font-size: 0.85rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .footer-logo {
-        font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .footer-links {
-        gap: 0.8rem;
-    }
-    
-    .footer-links a {
-        font-size: 0.8rem;
-        padding: 0.25rem 0.5rem;
-    }
-    
-    .footer-logo {
-        font-size: 1.2rem;
-    }
 }
 
 /* Modal Styles */

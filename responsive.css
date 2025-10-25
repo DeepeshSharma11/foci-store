@@ -106,7 +106,7 @@
         margin-bottom: 0.8rem;
     }
     
-    /* Horizontal Navigation - Fixed */
+    /* Horizontal Navigation - Fixed for mobile */
     nav {
         padding: 0.6rem 0.8rem;
         margin: 0 0.5rem;
@@ -124,13 +124,23 @@
         border-radius: 20px;
     }
     
+    /* FIXED: Navigation hover effect for mobile */
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
     .nav-scroll-indicator {
         width: 25px;
         height: 25px;
         font-size: 0.8rem;
     }
     
-    /* Fixed search container reference */
+    /* Search container styles */
     .search-container {
         flex-direction: column;
         align-items: center;
@@ -148,11 +158,34 @@
         max-width: 100%;
         margin-bottom: 0.5rem;
         width: 100%;
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    
+    #searchInput::placeholder {
+        color: rgba(255, 255, 255, 0.7);
     }
     
     #searchButton {
         width: 100%;
         max-width: 200px;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    #searchButton:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
     }
     
     .hero {
@@ -339,6 +372,15 @@
         border-radius: 18px;
     }
     
+    /* FIXED: Ensure hover works on small screens */
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+    }
+    
     .nav-scroll-indicator {
         width: 22px;
         height: 22px;
@@ -445,6 +487,15 @@
         border-radius: 15px;
     }
     
+    /* FIXED: Hover effect for very small screens */
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+    }
+    
     .nav-scroll-indicator {
         width: 20px;
         height: 20px;
@@ -530,6 +581,15 @@
         padding: 0.25rem 0.6rem;
         font-size: 0.75rem;
         border-radius: 12px;
+    }
+    
+    /* FIXED: Hover effect for extra small screens */
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
     }
     
     .nav-scroll-indicator {
@@ -622,6 +682,15 @@
         font-size: 0.8rem;
     }
     
+    /* FIXED: Hover effect in landscape */
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+    }
+    
     .search-container {
         margin: 0.3rem 0;
         padding: 0.3rem 0;
@@ -640,22 +709,26 @@
     }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    /* This would require additional dark mode styles */
-    /* Currently just a placeholder for future implementation */
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Improve touch experience */
+    nav a {
+        padding: 0.5rem 1.2rem;
     }
     
-    .hero::before,
-    .page-header::before {
+    .cta-button, 
+    .download-btn, 
+    .btn-download, 
+    .catalog-link,
+    .page-btn {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Reduce hover effects on touch devices */
+    nav a:hover::before {
         animation: none;
     }
 }
@@ -668,7 +741,8 @@
     .download-btn, 
     .btn-download,
     .nav-scroll-indicator,
-    .search-container {
+    .search-container,
+    nav {
         display: none !important;
     }
     
@@ -719,4 +793,37 @@
     .btn-details {
         display: none !important;
     }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .hero::before,
+    .page-header::before {
+        animation: none;
+    }
+    
+    /* Remove hover animations for reduced motion */
+    nav a::before {
+        display: none;
+    }
+    
+    nav a:hover, 
+    nav a.active,
+    nav ul li a:hover,
+    .header nav ul li a:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+/* Dark mode support placeholder */
+@media (prefers-color-scheme: dark) {
+    /* Dark mode styles can be added here when needed */
+    /* This is just a placeholder for future implementation */
 }
