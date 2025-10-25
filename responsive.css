@@ -1,3 +1,144 @@
+/* Team Section Animations */
+.team-card {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.team-card.animate {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.team-card.deepesh.animate {
+    animation-delay: 0.1s;
+}
+
+.team-card.nikhil.animate {
+    animation-delay: 0.2s;
+}
+
+.team-card.sandhya.animate {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.team-image {
+    overflow: hidden;
+    position: relative;
+}
+
+.team-image .initials {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.team-card:hover .team-image .initials {
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+}
+
+.social-link {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+}
+
+.team-card.animate .social-link {
+    animation: fadeInRotate 0.5s ease forwards;
+}
+
+.team-card.animate .social-link:nth-child(1) {
+    animation-delay: 0.4s;
+}
+
+.team-card.animate .social-link:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.team-card.animate .social-link:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes fadeInRotate {
+    from {
+        opacity: 0;
+        transform: scale(0.8) rotate(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Hover effects for team cards */
+.team-card:hover .team-image::before {
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+.team-card:hover .team-name {
+    color: #6C63FF;
+    transition: color 0.3s ease;
+}
+
+/* Loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.team-card.loading .team-image {
+    animation: shimmer 1.5s infinite linear;
+    background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+    background-size: 800px 104px;
+}
+
+
+
+
+
+
+
+
+
+
 /* Large desktops */
 @media (min-width: 1200px) {
     .container {
