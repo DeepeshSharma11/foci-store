@@ -69,14 +69,13 @@
                 </div>
             </div>
 
-           
+            <!-- Pagination Container -->
+            <div class="pagination-container" data-aos="fade-up">
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be generated dynamically -->
+                </div>
+            </div>
         </div>
-        <!-- Current Pagination Section को Replace करें -->
-<div class="pagination-container" data-aos="fade-up">
-    <div class="pagination" id="pagination">
-        <!-- Pagination buttons will be generated dynamically -->
-    </div>
-</div>
     </section>
 
     <!-- Footer -->
@@ -100,17 +99,29 @@
     <!-- Download Modal -->
     <div id="downloadModal" class="modal">
         <div class="modal-content" data-aos="zoom-in">
-            <span class="close">&times;</span>
-            <h2>Download <span id="appName"></span></h2>
-            <p>Your download will begin shortly...</p>
-            <div class="download-progress">
-                <div class="progress-bar">
-                    <div class="progress"></div>
+            <!-- Main Content Wrapper -->
+            <div class="modal-main-content">
+                <span class="close">&times;</span>
+                <h2>Download <span id="appName">App Name</span></h2>
+                <p>Your download will begin shortly...</p>
+                <div class="download-progress">
+                    <div class="progress-bar">
+                        <div class="progress progress-animated"></div>
+                    </div>
+                    <span class="progress-text">Preparing download...</span>
                 </div>
-                <span class="progress-text">Preparing download...</span>
+                <div class="modal-actions">
+                    <button id="cancelDownload" class="cancel-btn">Cancel</button>
+                </div>
             </div>
-            <div class="modal-actions">
-                <button id="cancelDownload" class="cancel-btn">Cancel</button>
+            <!-- Custom Confirm Dialog -->
+            <div class="modal-confirm-cancel" style="display: none;">
+                <h4>Cancel Download?</h4>
+                <p>Are you sure you want to stop the download?</p>
+                <div>
+                    <button class="btn-confirm-cancel" id="confirmCancel">Yes, Cancel</button>
+                    <button class="btn-resume-cancel" id="resumeDownload">No, Resume</button>
+                </div>
             </div>
         </div>
     </div>

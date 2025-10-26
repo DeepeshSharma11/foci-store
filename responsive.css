@@ -148,10 +148,10 @@
         border-radius: 20px;
     }
 
-    /* Keep hover styles consistent */
+    /* Fixed: Consistent hover/active states */
     nav a:hover,
     nav a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
@@ -162,15 +162,14 @@
         font-size: 0.8rem;
     }
 
-    /* Search container styles - Moved from responsive.css for clarity */
+    /* Search container styles */
     .search-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin: 0.8rem 0;
         padding: 0.8rem 0;
-        position: sticky;
-        top: 0; /* Adjust if header height changes */
+        position: relative; /* Changed from sticky for better mobile behavior */
         z-index: 100;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
@@ -186,7 +185,7 @@
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.1);
-        color: white; /* Make text visible on header bg */
+        color: white;
     }
 
     #searchInput::placeholder {
@@ -212,7 +211,7 @@
     }
 
     .hero {
-        padding: 8rem 0 3rem; /* Adjusted for header */
+        padding: 8rem 0 3rem;
     }
 
     .hero .container {
@@ -288,7 +287,7 @@
     }
 
     .page-header {
-        padding: 7rem 0 2rem; /* Adjusted for header */
+        padding: 7rem 0 2rem;
     }
 
     .page-header h1 {
@@ -343,35 +342,11 @@
         width: 100%;
     }
 
+    /* FIXED: Clean pagination styles - removed conflicting !important declarations */
     .pagination {
-        flex-wrap: wrap;
-        gap: 0.3rem;
-    }
-
-    .page-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-        min-width: 40px;
-    }
-
-    .no-results {
-        padding: 2rem 1rem;
-    }
-
-    .no-results-icon {
-        font-size: 3rem;
-    }
-
-    .no-results h3 {
-        font-size: 1.3rem;
-    }
-
-    /* --- Mobile Pagination Specific --- */
-    /* These styles target pagination specifically on mobile, overriding general styles */
-    .pagination {
-        display: flex !important; /* Force display */
-        visibility: visible !important; /* Force visibility */
-        opacity: 1 !important; /* Force opacity */
+        display: flex;
+        visibility: visible;
+        opacity: 1;
         justify-content: center;
         align-items: center;
         gap: 0.3rem;
@@ -385,7 +360,7 @@
         font-size: 0.8rem;
         min-width: 36px;
         height: 36px;
-        display: flex !important; /* Force display */
+        display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #e0e0e0;
@@ -409,15 +384,10 @@
     }
 
     /* Previous/Next buttons */
-    .page-btn:first-child, /* Targets Previous */
-    .page-btn.next /* Targets Next */ {
+    .page-btn:first-child,
+    .page-btn.next {
         padding: 0.6rem 1rem;
         font-size: 0.75rem;
-    }
-
-    /* Ensure pagination container is visible even if JS tries to hide it */
-    .pagination[style*="display: none"] {
-        display: flex !important;
     }
 
     /* Loading state for pagination */
@@ -426,20 +396,21 @@
         pointer-events: none;
     }
 
-    .pagination.hidden { /* Added class for explicit JS hiding */
-        display: none !important;
-    }
-     /* Ensure pagination is always visible when needed */
-     .content-section .container .pagination {
-        display: flex !important;
-        visibility: visible !important;
+    .pagination.hidden {
+        display: none;
     }
 
-    /* Fix for pagination hiding */
-    .pagination[style*="display: none"] {
-        display: flex !important;
+    .no-results {
+        padding: 2rem 1rem;
     }
-    /* --- End Mobile Pagination Specific --- */
+
+    .no-results-icon {
+        font-size: 3rem;
+    }
+
+    .no-results h3 {
+        font-size: 1.3rem;
+    }
 }
 
 /* Small mobile devices */
@@ -483,10 +454,10 @@
         border-radius: 18px;
     }
 
-    /* Keep hover consistent */
+    /* Fixed: Consistent hover states */
     nav a:hover,
     nav a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
     }
 
@@ -569,26 +540,11 @@
         min-width: 36px;
     }
 
-     /* Mobile Pagination Adjustments for 575px */
-    .pagination {
-        gap: 0.2rem;
-    }
-
-    .page-btn {
-        padding: 0.5rem 0.7rem;
-        font-size: 0.75rem;
-        min-width: 32px;
-        height: 32px;
-    }
-
-    .page-btn:first-child, /* Previous */
-    .page-btn.next /* Next */ {
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
         padding: 0.5rem 0.8rem;
         font-size: 0.7rem;
-    }
-     /* Show limited page numbers on small screens */
-     .page-btn:nth-child(n+4):nth-child(-n+7) { /* Adjust selector based on structure if needed */
-        display: none !important;
     }
 }
 
@@ -628,10 +584,10 @@
         border-radius: 15px;
     }
 
-    /* Keep hover consistent */
+    /* Fixed: Consistent hover states */
     nav a:hover,
     nav a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
     }
 
@@ -695,16 +651,9 @@
         min-width: 32px;
     }
 
-    /* Mobile Pagination Adjustments for 375px */
-    .page-btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.7rem;
-        min-width: 28px;
-        height: 28px;
-    }
-
-    .page-btn:first-child, /* Previous */
-    .page-btn.next /* Next */ {
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
         padding: 0.4rem 0.7rem;
         font-size: 0.65rem;
         min-width: 70px;
@@ -747,10 +696,10 @@
         border-radius: 12px;
     }
 
-    /* Keep hover consistent */
+    /* Fixed: Consistent hover states */
     nav a:hover,
     nav a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
     }
 
@@ -799,16 +748,9 @@
         min-width: 28px;
     }
 
-    /* Mobile Pagination Adjustments for 320px */
-    .page-btn {
-        padding: 0.3rem 0.5rem;
-        font-size: 0.65rem;
-        min-width: 26px;
-        height: 26px;
-    }
-
-    .page-btn:first-child, /* Previous */
-    .page-btn.next /* Next */ {
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
         padding: 0.3rem 0.6rem;
         font-size: 0.6rem;
         min-width: 65px;
@@ -838,7 +780,7 @@
     }
 
     .page-header {
-        padding: 6rem 0 1.5rem; /* Adjusted for header */
+        padding: 6rem 0 1.5rem;
     }
 
     /* Compact header in landscape */
@@ -869,10 +811,10 @@
         font-size: 0.8rem;
     }
 
-    /* Keep hover consistent */
+    /* Fixed: Consistent hover states */
     nav a:hover,
     nav a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
     }
 
@@ -887,10 +829,6 @@
 
     .pagination {
         margin-top: 1.5rem;
-    }
-
-    /* Landscape pagination */
-    .pagination {
         gap: 0.2rem;
     }
 
@@ -922,23 +860,21 @@
     .btn-download,
     .catalog-link,
     .page-btn {
-        min-height: 44px; /* Touch target size */
-        display: flex; /* Ensure centering if needed */
+        min-height: 44px;
+        display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    /* Reduce hover effects on touch devices */
-    nav a:hover::before {
-        display: none; /* Disable shimmer */
-    }
-    nav a:hover { /* Disable background/transform on hover */
-        background: transparent !important;
+    /* Fixed: Remove hover effects on touch devices */
+    nav a:hover {
+        background: transparent;
         transform: none;
         box-shadow: none;
     }
-    nav a.active { /* Keep active style */
-        background: rgba(255, 255, 255, 0.2) !important;
+    
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
@@ -1027,12 +963,13 @@
 @media (prefers-reduced-motion: reduce) {
     * {
         transition-duration: 0.01ms !important;
-        /* Animation properties removed */
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
     }
 
     .hero::before,
     .page-header::before {
-       /* Animation removed */
+        animation: none !important;
     }
 
     /* Remove hover transitions for reduced motion */
@@ -1051,20 +988,11 @@
     }
 
     .loading-spinner {
-       /* Animation removed */
+        animation: none !important;
     }
 }
 
 /* Dark mode support placeholder */
 @media (prefers-color-scheme: dark) {
     /* Dark mode styles can be added here when needed */
-    /* This is just a placeholder for future implementation */
-}
-/* Force pagination visibility on mobile */
-@media (max-width: 767px) {
-    .pagination {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
 }

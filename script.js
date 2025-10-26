@@ -28,7 +28,7 @@
         initializeContactForm();
         initializeNavigation();
         initializeFAQ();
-        initializePageTransitions();S
+        initializePageTransitions();
         initializeNavScroll();
         initializeRippleEffects();
         initializeDetailsButtons();
@@ -1827,4 +1827,3 @@
 
 
 })(); // End of IIFE
-
