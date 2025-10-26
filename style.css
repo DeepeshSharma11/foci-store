@@ -180,7 +180,6 @@ nav a.active {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-
 /* Navigation Scroll Indicators - More Compact */
 .nav-scroll-indicator {
     position: absolute;
@@ -1280,7 +1279,7 @@ footer {
     border-top: 4px solid #667eea;
     border-radius: 50%;
     margin: 0 auto 1rem;
-    /* Animation definition removed - should be in animations.css */
+    animation: spin 1s linear infinite;
 }
 
 .no-results {
@@ -1477,6 +1476,7 @@ footer {
     line-height: 1.7;
 }
 
+/* FIXED: Contact Grid Layout for Mobile */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1772,12 +1772,13 @@ footer {
     border-color: #ea4335;
 }
 
-/* Ripple effect - Animation removed */
+/* Ripple effect */
 .ripple-effect {
     position: absolute;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
     transform: scale(0);
+    animation: ripple 0.6s linear;
 }
 
 /* Loading state for buttons etc */
@@ -1797,7 +1798,7 @@ footer {
     border: 2px solid transparent;
     border-top: 2px solid currentColor;
     border-radius: 50%;
-    /* Animation removed */
+    animation: spin 1s linear infinite;
 }
 
 /* Notification styles */
@@ -1822,9 +1823,8 @@ footer {
     max-width: 350px;
     border-left: 5px solid #3182ce;
     color: #333;
-    /* Animation removed */
+    animation: notification-slide-in 0.3s ease;
 }
-
 
 .notification-content {
     display: flex;
@@ -1871,7 +1871,6 @@ footer {
     border-left-color: #dd6b20;
 }
 
-
 /* Team Section Styles */
 .team-section {
     padding: 80px 0;
@@ -1915,7 +1914,6 @@ footer {
     transition: all 0.3s ease;
     text-align: center;
     position: relative;
-    /* Styles related to animation removed */
 }
 
 .team-card:hover {
@@ -1950,7 +1948,7 @@ footer {
     color: white;
     z-index: 2;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    /* Animation removed */
+    animation: pulse 2s infinite ease-in-out;
 }
 
 .team-card.deepesh .team-image {
@@ -1974,7 +1972,7 @@ footer {
     font-weight: 600;
     margin-bottom: 5px;
     color: #2c3e50;
-    transition: color 0.3s ease; /* Kept transition */
+    transition: color 0.3s ease;
 }
 
 .team-role {
@@ -2011,7 +2009,6 @@ footer {
     transition: all 0.3s ease;
     text-decoration: none;
     border: 2px solid transparent;
-    /* Styles related to animation removed */
 }
 
 .social-link:hover {
@@ -2035,12 +2032,44 @@ footer {
 .team-card.loading .team-image {
     background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
     background-size: 800px 104px;
-    /* Animation removed */
+    animation: shimmer 1.5s infinite linear;
 }
 
+/* Keyframes for animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes notification-slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
 
 /* Accessibility Improvements */
-/* Focus styles for better accessibility */
 button:focus,
 a:focus,
 input:focus,
@@ -2051,6 +2080,17 @@ select:focus {
 }
 
 /* High contrast mode support */
-/* @media (prefers-contrast: high) { ... } */
-/* Add high contrast styles if needed */
-
+@media (prefers-contrast: high) {
+    .header {
+        background: #000;
+    }
+    
+    .btn-download, .download-btn, .submit-btn {
+        background: #000;
+        color: #fff;
+    }
+    
+    .featured-item, .app-card, .game-card {
+        border: 2px solid #000;
+    }
+}
