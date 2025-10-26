@@ -33,6 +33,7 @@
         initializeRippleEffects();
         initializeDetailsButtons();
         initializeModalSystem(); // CRITICAL: Bug fixed
+        // initializeLazyLoading(); // <-- REMOVED Lazy Loading Call
     }
 
     // Page-specific feature initialization (NOW CONTROLS DATA LOADING)
@@ -143,28 +144,282 @@
      // --- END NEW FUNCTION ---
 
 
-    // Fallback static data (from your new code)
+    // Fallback static data (UPDATED with user's JSON)
     function loadStaticData() {
         const staticApps = [
-            { id: 1, name: "WhatsApp MOD", description: "Enhanced version...", category: "social", image: "assets/images/fmwhatsapp.png", size: "95 MB", version: "v2.23.5.76", rating: 4.7, popularity: 95, releaseDate: "2024-10-20T00:00:00Z", downloads: "10K+", downloadUrl: "https://getkukuymun.site/url/2A8QZ54HRrD", badge: "Trending" },
-            { id: 2, name: "Instagram MOD", description: "Download photos, videos...", category: "social", image: "assets/images/Insta-Pro-APK.png", size: "143 MB", version: "v289.0.0.18.109", rating: 4.7, popularity: 92, releaseDate: "2024-10-19T00:00:00Z", downloads: "8K+", downloadUrl: "https://getkukuymun.site/url/2A8QZ54HRrD", badge: "New" },
-            { id: 3, name: "YouTube MOD", description: "Ad-free YouTube experience...", category: "media", image: "assets/images/youtube-mod.png", size: "85 MB", version: "v18.45.43", rating: 4.8, popularity: 98, releaseDate: "2024-10-22T00:00:00Z", downloads: "15K+", downloadUrl: "https://vanced.to/", badge: "Popular" },
-            { id: 4, name: "File Manager MOD", description: "Advanced file management...", category: "tools", image: "assets/images/file-manager.png", size: "8 MB", version: "v4.2.1", rating: 4.8, popularity: 80, releaseDate: "2024-10-18T00:00:00Z", downloads: "5K+", downloadUrl: "https://liteapks.com/download/file-manager-77834", badge: "Pro" },
-            { id: 5, name: "XPlayer", description: "XPlayer Mod APK is an impressive video player...", category: "media", image: "assets/images/xplayer.png", size: "38 MB", version: "v2.4.8.2", rating: 4.5, popularity: 82, releaseDate: "2024-10-17T00:00:00Z", downloads: "7K+", downloadUrl: "https://liteapks.com/download/xplayer-5858", badge: "Enhanced" },
-            { id: 6, name: "Office Suite MOD", description: "Complete office suite with PDF editing...", category: "productivity", image: "assets/images/office-suite.png", size: "120 MB", version: "v14.8.4", rating: 4.7, popularity: 85, releaseDate: "2024-10-16T00:00:00Z", downloads: "6K+", downloadUrl: "#", badge: "Premium" },
-            { id: 7, name: "TikTok MOD", description: "Download videos without watermark...", category: "social", image: "assets/images/tiktok-mod.png", size: "120 MB", version: "v30.5.4", rating: 4.6, popularity: 96, releaseDate: "2024-10-21T00:00:00Z", downloads: "15K+", downloadUrl: "https://example.com/tiktok", badge: "Popular" },
-            { id: 8, name: "Spotify MOD", description: "Ad-free music, unlimited skips...", category: "media", image: "assets/images/spotify-mod.png", size: "85 MB", version: "v8.8.96", rating: 4.9, popularity: 99, releaseDate: "2024-10-23T00:00:00Z", downloads: "20K+", downloadUrl: "https://example.com/spotify", badge: "Premium" }
+            {
+                "id": 1,
+                "name": "WhatsApp MOD",
+                "description": "Enhanced version with extra features like theme customization, privacy options, and more",
+                "category": "social",
+                "image": "assets/images/fmwhatsapp.png",
+                "size": "95 MB",
+                "version": "v2.23.5.76",
+                "rating": 4.7,
+                "popularity": 95,
+                "releaseDate": "2024-10-20T00:00:00Z",
+                "downloads": "10K+",
+                "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
+                "badge": "Trending"
+            },
+            {
+                "id": 2,
+                "name": "Instagram MOD",
+                "description": "Download photos, videos, stories with enhanced privacy and customization options.",
+                "category": "social",
+                "image": "assets/images/Insta-Pro-APK.png",
+                "size": "143 MB",
+                "version": "v289.0.0.18.109",
+                "rating": 4.7,
+                "popularity": 92,
+                "releaseDate": "2024-10-19T00:00:00Z",
+                "downloads": "8K+",
+                "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
+                "badge": "New"
+            },
+            {
+                "id": 3,
+                "name": "YouTube MOD",
+                "description": "Ad-free YouTube experience with background play and video download capabilities.",
+                "category": "media",
+                "image": "assets/images/app.revanced.android.youtube.200.png", // Updated image name
+                "size": "85 MB",
+                "version": "v18.45.43",
+                "rating": 4.8,
+                "popularity": 98,
+                "releaseDate": "2024-10-22T00:00:00Z",
+                "downloads": "15K+",
+                "downloadUrl": "https://vanced.to/",
+                "badge": "Popular"
+            },
+            {
+                "id": 4,
+                "name": "File Manager MOD",
+                "description": "Advanced file management with root access, cloud integration, and premium themes.",
+                "category": "tools",
+                "image": "assets/images/video-player-all-format-1 mobile.png", // Updated image name
+                "size": "8 MB",
+                "version": "v4.2.1",
+                "rating": 4.8,
+                "popularity": 80,
+                "releaseDate": "2024-10-18T00:00:00Z",
+                "downloads": "5K+",
+                "downloadUrl": "https://liteapks.com/download/file-manager-77834",
+                "badge": "Pro"
+            },
+            {
+                "id": 5,
+                "name": "XPlayer",
+                "description": "XPlayer Mod APK is an impressive video player tool and gives you the best experience.", // Updated description
+                "category": "media",
+                "image": "assets/images/xplayer.png",
+                "size": "38 MB",
+                "version": "v2.4.8.2",
+                "rating": 4.5,
+                "popularity": 82,
+                "releaseDate": "2024-10-17T00:00:00Z",
+                "downloads": "7K+",
+                "downloadUrl": "https://liteapks.com/download/xplayer-5858",
+                "badge": "Enhanced"
+            },
+            {
+                "id": 6,
+                "name": "Office Suite MOD",
+                "description": "Complete office suite with PDF editing, cloud sync, and all premium features unlocked.",
+                "category": "productivity",
+                "image": "assets/images/office-suite.png",
+                "size": "120 MB",
+                "version": "v14.8.4",
+                "rating": 4.7,
+                "popularity": 85,
+                "releaseDate": "2024-10-16T00:00:00Z",
+                "downloads": "6K+",
+                "downloadUrl": "#",
+                "badge": "Premium"
+            },
+            {
+                "id": 7,
+                "name": "TikTok MOD",
+                "description": "Download videos without watermark, unlimited features and enhanced privacy options.",
+                "category": "social",
+                "image": "assets/images/tiktok-mod.png",
+                "size": "120 MB",
+                "version": "v30.5.4",
+                "rating": 4.6,
+                "popularity": 96,
+                "releaseDate": "2024-10-21T00:00:00Z",
+                "downloads": "15K+",
+                "downloadUrl": "https://example.com/tiktok",
+                "badge": "Popular"
+            },
+            {
+                "id": 8,
+                "name": "Spotify MOD",
+                "description": "Ad-free music, unlimited skips, and premium features unlocked.",
+                "category": "media",
+                "image": "assets/images/spotify-mod.png",
+                "size": "85 MB",
+                "version": "v8.8.96",
+                "rating": 4.9,
+                "popularity": 99,
+                "releaseDate": "2024-10-23T00:00:00Z",
+                "downloads": "20K+",
+                "downloadUrl": "https://example.com/spotify",
+                "badge": "Premium"
+            },
+            {
+                "id": 9,
+                "name": "Snapchat MOD",
+                "description": "Save snaps, view stories anonymously, and access premium filters.",
+                "category": "social",
+                "image": "assets/images/snapchat-mod.png",
+                "size": "95 MB",
+                "version": "v12.1.0.30",
+                "rating": 4.5,
+                "popularity": 90,
+                "releaseDate": "2024-10-15T00:00:00Z",
+                "downloads": "9K+",
+                "downloadUrl": "#",
+                "badge": "New"
+            }
         ];
 
         const staticGames = [
-            { id: 1, name: "Subway Surfers MOD", description: "Unlimited coins, keys...", category: "action", image: "assets/images/subway-surfers.png", size: "150 MB", version: "v3.12.1", rating: 4.8, popularity: 98, releaseDate: "2024-10-23T00:00:00Z", downloads: "25K+", downloadUrl: "https://an1.com/file_4683-dw.html", badge: "Unlimited" },
-            { id: 2, name: "Asphalt 9 MOD", description: "Unlimited credits, all cars unlocked...", category: "racing", image: "assets/images/asphalt-9.png", size: "2.1 GB", version: "v3.9.4", rating: 4.9, popularity: 95, releaseDate: "2024-10-22T00:00:00Z", downloads: "12K+", downloadUrl: "https://asphalt-9-legends-mod.apkresult.io/download", badge: "Premium" },
-            { id: 3, name: "Candy Crush MOD", description: "Unlimited lives, boosters...", category: "puzzle", image: "assets/images/candy-crush.png", size: "95 MB", version: "v1.260.1.2", rating: 4.7, popularity: 90, releaseDate: "2024-10-21T00:00:00Z", downloads: "18K+", downloadUrl: "https://candy-crush-soda-saga.apkrabi.com/download/", badge: "Unlimited" },
-            { id: 4, name: "Minecraft MOD", description: "Unlocked skins, texture packs...", category: "adventure", image: "assets/images/minecraft.png", size: "180 MB", version: "v1.20.15.01", rating: 4.9, popularity: 96, releaseDate: "2024-10-20T00:00:00Z", downloads: "15K+", downloadUrl: "#", badge: "Premium" },
-            { id: 5, name: "FIFA Mobile MOD", description: "Unlimited coins, all players unlocked...", category: "sports", image: "assets/images/fifa-mobile.png", size: "1.2 GB", version: "v17.0.14", rating: 4.8, popularity: 88, releaseDate: "2024-10-19T00:00:00Z", downloads: "10K+", downloadUrl: "#", badge: "Enhanced" },
-            { id: 6, name: "Call of Duty MOD", description: "Unlimited CP, all weapons unlocked...", category: "action", image: "assets/images/call-of-duty.png", size: "2.5 GB", version: "v1.0.39", rating: 4.9, popularity: 97, releaseDate: "2024-10-18T00:00:00Z", downloads: "20K+", downloadUrl: "#", badge: "Pro" },
-            { id: 7, name: "Temple Run 2 MOD", description: "Unlimited coins, all characters unlocked...", category: "adventure", image: "assets/images/temple-run.png", size: "80 MB", version: "v1.100.0", rating: 4.6, popularity: 85, releaseDate: "2024-10-17T00:00:00Z", downloads: "8K+", downloadUrl: "#", badge: "Unlimited" },
-            { id: 8, name: "PUBG Mobile MOD", description: "Unlimited UC, aim assist...", category: "action", image: "assets/images/pubg-mobile.png", size: "1.8 GB", version: "v3.0.0", rating: 4.9, popularity: 100, releaseDate: "2024-10-24T00:00:00Z", downloads: "30K+", downloadUrl: "#", badge: "Pro" }
+            {
+                "id": 1,
+                "name": "Subway Surfers MOD",
+                "description": "Unlimited coins, keys, and all characters unlocked. Run endlessly without restrictions.",
+                "category": "action",
+                "image": "assets/images/subway-surfers.png",
+                "size": "150 MB",
+                "version": "v3.12.1",
+                "rating": 4.8,
+                "popularity": 98,
+                "releaseDate": "2024-10-23T00:00:00Z",
+                "downloads": "25K+",
+                "downloadUrl": "https://an1.com/file_4683-dw.html",
+                "badge": "Unlimited"
+            },
+            {
+                "id": 2,
+                "name": "Asphalt 9 MOD",
+                "description": "Unlimited credits, all cars unlocked, and premium features for the ultimate racing experience.",
+                "category": "racing",
+                "image": "assets/images/asphalt-9.png",
+                "size": "2.1 GB",
+                "version": "v3.9.4",
+                "rating": 4.9,
+                "popularity": 95,
+                "releaseDate": "2024-10-22T00:00:00Z",
+                "downloads": "12K+",
+                "downloadUrl": "https://asphalt-9-legends-mod.apkresult.io/download",
+                "badge": "Premium"
+            },
+            {
+                "id": 3,
+                "name": "Candy Crush MOD",
+                "description": "Unlimited lives, boosters, and all levels unlocked. Sweet gaming without limits.",
+                "category": "puzzle",
+                "image": "assets/images/candy-crush.png",
+                "size": "95 MB",
+                "version": "v1.260.1.2",
+                "rating": 4.7,
+                "popularity": 90,
+                "releaseDate": "2024-10-21T00:00:00Z",
+                "downloads": "18K+",
+                "downloadUrl": "https://candy-crush-soda-saga.apkrabi.com/download/",
+                "badge": "Unlimited"
+            },
+            {
+                "id": 4,
+                "name": "Minecraft MOD",
+                "description": "Unlocked skins, texture packs, and premium features for unlimited creativity.",
+                "category": "adventure",
+                "image": "assets/images/minecraft.png",
+                "size": "180 MB",
+                "version": "v1.20.15.01",
+                "rating": 4.9,
+                "popularity": 96,
+                "releaseDate": "2024-10-20T00:00:00Z",
+                "downloads": "15K+",
+                "downloadUrl": "#",
+                "badge": "Premium"
+            },
+            {
+                "id": 5,
+                "name": "FIFA Mobile MOD",
+                "description": "Unlimited coins, all players unlocked, and premium features for the ultimate football experience.",
+                "category": "sports",
+                "image": "assets/images/fifa-mobile.png",
+                "size": "1.2 GB",
+                "version": "v17.0.14",
+                "rating": 4.8,
+                "popularity": 88,
+                "releaseDate": "2024-10-19T00:00:00Z",
+                "downloads": "10K+",
+                "downloadUrl": "#",
+                "badge": "Enhanced"
+            },
+            {
+                "id": 6,
+                "name": "Call of Duty MOD",
+                "description": "Unlimited CP, all weapons unlocked, and premium battle pass for ultimate warfare.",
+                "category": "action",
+                "image": "assets/images/call-of-duty.png",
+                "size": "2.5 GB",
+                "version": "v1.0.39",
+                "rating": 4.9,
+                "popularity": 97,
+                "releaseDate": "2024-10-18T00:00:00Z",
+                "downloads": "20K+",
+                "downloadUrl": "#",
+                "badge": "Pro"
+            },
+            {
+                "id": 7,
+                "name": "Temple Run 2 MOD",
+                "description": "Unlimited coins, all characters unlocked, and infinite energy for endless running.",
+                "category": "adventure",
+                "image": "assets/images/temple-run.png",
+                "size": "80 MB",
+                "version": "v1.100.0",
+                "rating": 4.6,
+                "popularity": 85,
+                "releaseDate": "2024-10-17T00:00:00Z",
+                "downloads": "8K+",
+                "downloadUrl": "#",
+                "badge": "Unlimited"
+            },
+            {
+                "id": 8,
+                "name": "PUBG Mobile MOD",
+                "description": "Unlimited UC, aim assist, and all skins unlocked for battle royale dominance.",
+                "category": "action",
+                "image": "assets/images/pubg-mobile.png",
+                "size": "1.8 GB",
+                "version": "v3.0.0",
+                "rating": 4.9,
+                "popularity": 100,
+                "releaseDate": "2024-10-24T00:00:00Z",
+                "downloads": "30K+",
+                "downloadUrl": "#",
+                "badge": "Pro"
+            },
+            {
+                "id": 9,
+                "name": "Clash of Clans MOD",
+                "description": "Unlimited gems, gold, and elixir with all troops and buildings unlocked for epic battles.",
+                "category": "strategy",
+                "image": "assets/images/clash-of-clans.png",
+                "size": "150 MB",
+                "version": "v14.0.10",
+                "rating": 4.8,
+                "popularity": 93,
+                "releaseDate": "2024-10-25T00:00:00Z",
+                "downloads": "22K+",
+                "downloadUrl": "#",
+                "badge": "Enhanced"
+            }
         ];
 
         return { staticApps, staticGames };
@@ -491,7 +746,7 @@
 
         card.innerHTML = `
             <div class="card-image">
-                <img src="${app.image}" alt="${app.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=App+Image'">
+                <img src="${app.image}" alt="${app.name}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=App+Image'">
                 ${app.badge ? `<div class="card-badge">${app.badge}</div>` : ''}
             </div>
             <div class="card-content">
@@ -523,7 +778,7 @@
 
         card.innerHTML = `
             <div class="card-image">
-                <img src="${game.image}" alt="${game.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Game+Image'">
+                <img src="${game.image}" alt="${game.name}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Game+Image'">
                  ${game.badge ? `<div class="card-badge">${game.badge}</div>` : ''}
             </div>
             <div class="card-content">
@@ -552,7 +807,7 @@
 
         item.innerHTML = `
             <div class="featured-image">
-                <img src="${app.image}" alt="${app.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Featured+App'">
+                <img src="${app.image}" alt="${app.name}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Featured+App'">
                  ${app.badge ? `<div class="featured-badge">${app.badge}</div>` : ''}
             </div>
             <h3>${app.name}</h3>
@@ -1499,36 +1754,7 @@
 
 
     // Lazy loading for images with data-src
-    function initializeLazyLoading() {
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        if (img.dataset.src) {
-                            img.src = img.dataset.src;
-                            img.removeAttribute('data-src'); // Remove attribute after loading
-                             // Optional: Add a 'loaded' class for fade-in effect
-                             img.onload = () => img.classList.add('loaded');
-                        }
-                        observer.unobserve(img); // Stop observing once loaded
-                    }
-                });
-            }, { rootMargin: '0px 0px 150px 0px' }); // Load images 150px before they enter viewport
-
-            // Observe all images with data-src
-            document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
-        } else {
-             // Fallback for browsers without IntersectionObserver (Load all images immediately)
-             console.warn("IntersectionObserver not supported. Lazy loading disabled.");
-             document.querySelectorAll('img[data-src]').forEach(img => {
-                 img.src = img.dataset.src;
-                 img.removeAttribute('data-src');
-             });
-        }
-    }
-    // Call lazy loading initialization
-    initializeLazyLoading();
+    /* REMOVED initializeLazyLoading function and call */
 
 
     // Error handling for images - Improved placeholder
@@ -1578,8 +1804,8 @@
                 animation-play-state: paused !important; /* Force pause */
             }
              /* Style for lazy loaded images fade-in */
-            img:not(.loaded) { opacity: 0; transition: opacity 0.5s; }
-            img.loaded { opacity: 1; }
+            /* img:not(.loaded) { opacity: 0; transition: opacity 0.5s; } REMOVED */
+            /* img.loaded { opacity: 1; } REMOVED */
         `;
         document.head.appendChild(style);
     }
