@@ -1,317 +1,377 @@
-/* Team Section Animations */
-.team-card {
-    opacity: 0;
-    transform: translateY(30px);
-}
+/* --- Responsive Design --- */
 
-.team-card.animate {
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-.team-card.deepesh.animate {
-    animation-delay: 0.1s;
-}
-
-.team-card.nikhil.animate {
-    animation-delay: 0.2s;
-}
-
-.team-card.sandhya.animate {
-    animation-delay: 0.3s;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+/* Large desktops */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-.team-image {
-    overflow: hidden;
-    position: relative;
-}
+/* Tablets and smaller desktops */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .hero .container {
+        grid-template-columns: 1fr 1fr;
+        text-align: left;
+    }
 
-.team-image .initials {
-    animation: pulse 2s infinite ease-in-out;
-}
+    .hero-graphic {
+        order: 0;
+        margin-bottom: 0;
+    }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
-    50% {
-        transform: scale(1.05);
-        opacity: 0.9;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
 
-.team-card:hover .team-image .initials {
-    animation: bounce 0.5s ease;
-}
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-@keyframes bounce {
-    0%, 20%, 60%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    80% {
-        transform: translateY(-5px);
+    .filter-controls {
+        justify-content: space-between;
     }
 }
 
-.social-link {
-    opacity: 0;
-    transform: scale(0.8) rotate(-10deg);
-}
-
-.team-card.animate .social-link {
-    animation: fadeInRotate 0.5s ease forwards;
-}
-
-.team-card.animate .social-link:nth-child(1) {
-    animation-delay: 0.4s;
-}
-
-.team-card.animate .social-link:nth-child(2) {
-    animation-delay: 0.5s;
-}
-
-.team-card.animate .social-link:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes fadeInRotate {
-    from {
-        opacity: 0;
-        transform: scale(0.8) rotate(-10deg);
+/* Tablets */
+@media (max-width: 991px) and (min-width: 768px) {
+    .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
-    to {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
+
+    .hero-graphic {
+        order: -1;
+        margin-bottom: 2rem;
     }
-}
 
-/* Hover effects for team cards */
-.team-card:hover .team-image::before {
-    background: rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease;
-}
-
-.team-card:hover .team-name {
-    color: #6C63FF;
-    transition: color 0.3s ease;
-}
-
-/* Loading animation */
-@keyframes shimmer {
-    0% {
-        background-position: -468px 0;
+    .hero-content h1 {
+        font-size: 2.8rem;
     }
-    100% {
-        background-position: 468px 0;
+
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
-}
 
-.team-card.loading .team-image {
-    animation: shimmer 1.5s infinite linear;
-    background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
-    background-size: 800px 104px;
-}
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-/* Enhanced Pagination Styles */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 3rem;
-    flex-wrap: wrap;
-}
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-.page-btn {
-    padding: 0.8rem 1.2rem;
-    border: 2px solid #e0e0e0;
-    background: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-}
+    .footer-content {
+        flex-direction: row;
+        text-align: left;
+    }
 
-.page-btn:hover {
-    border-color: #667eea;
-    color: #667eea;
-    transform: translateY(-2px);
-}
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
 
-.page-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-color: #667eea;
-}
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 
-.page-btn.next {
-    padding: 0.8rem 1.5rem;
-}
+    .catalog-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
 
-.page-dots {
-    padding: 0.8rem 0.5rem;
-    color: #666;
-}
+    .catalog-link {
+        width: auto;
+        max-width: none;
+    }
 
-/* No Results Styling */
-.no-results {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: #666;
-    grid-column: 1 / -1;
-}
+    .filter-controls {
+        justify-content: center;
+        gap: 1.5rem;
+    }
 
-.no-results-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.no-results h3 {
-    color: #333;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-}
-
-.no-results p {
-    font-size: 1.1rem;
-    opacity: 0.8;
-}
-
-/* Loading State */
-.loading-message {
-    text-align: center;
-    padding: 3rem;
-    color: #666;
-    grid-column: 1 / -1;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #667eea;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Search Container Styles */
-.search-container {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-    padding: 1rem 0;
-    align-items: center;
-    justify-content: center;
-}
-
-#searchInput {
-    flex: 1;
-    max-width: 400px;
-    padding: 0.8rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-#searchInput:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-#searchButton {
-    padding: 0.8rem 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-#searchButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-/* Filter Controls */
-.filter-controls {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.filter-group label {
-    font-weight: 600;
-    color: #333;
-    white-space: nowrap;
-}
-
-.filter-group select,
-.filter-group input {
-    padding: 0.5rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-}
-
-.filter-group select:focus,
-.filter-group input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-/* Mobile Pagination Specific Styles */
-@media (max-width: 767px) {
     .pagination {
-        display: flex !important;
+        gap: 0.4rem;
+    }
+
+    .page-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 767px) {
+    .header-top {
+        justify-content: flex-start;
+        margin-bottom: 0.5rem;
+        padding: 0.3rem 0;
+    }
+
+    .top-links {
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .top-links a {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    /* Horizontal Navigation - Fixed for mobile */
+    nav {
+        padding: 0.6rem 0.8rem;
+        margin: 0 0.5rem;
+    }
+
+    nav ul {
+        gap: 0.5rem;
+        justify-content: flex-start;
+        padding: 0.3rem 0;
+    }
+
+    nav a {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 20px;
+    }
+
+    /* Keep hover styles consistent */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .nav-scroll-indicator {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+
+    /* Search container styles - Moved from responsive.css for clarity */
+    .search-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0.8rem 0;
+        padding: 0.8rem 0;
+        position: sticky;
+        top: 0; /* Adjust if header height changes */
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+    }
+
+    #searchInput {
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white; /* Make text visible on header bg */
+    }
+
+    #searchInput::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    #searchButton {
+        width: 100%;
+        max-width: 200px;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #searchButton:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .hero {
+        padding: 8rem 0 3rem; /* Adjusted for header */
+    }
+
+    .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-graphic {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        padding: 1.5rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .page-header {
+        padding: 7rem 0 2rem; /* Adjusted for header */
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn-download, .btn-details {
+        width: 100%;
+        text-align: center;
+    }
+
+    .contact-form-container {
+        padding: 1.5rem;
+    }
+
+    .contact-method {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+
+    .method-icon {
+        align-self: center;
+    }
+
+    .faq-question {
+        padding: 1.2rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 0 1.5rem 1.5rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .page-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        min-width: 40px;
+    }
+
+    .no-results {
+        padding: 2rem 1rem;
+    }
+
+    .no-results-icon {
+        font-size: 3rem;
+    }
+
+    .no-results h3 {
+        font-size: 1.3rem;
+    }
+
+    /* --- Mobile Pagination Specific --- */
+    /* These styles target pagination specifically on mobile, overriding general styles */
+    .pagination {
+        display: flex !important; /* Force display */
+        visibility: visible !important; /* Force visibility */
+        opacity: 1 !important; /* Force opacity */
         justify-content: center;
         align-items: center;
         gap: 0.3rem;
@@ -325,7 +385,7 @@
         font-size: 0.8rem;
         min-width: 36px;
         height: 36px;
-        display: flex !important;
+        display: flex !important; /* Force display */
         align-items: center;
         justify-content: center;
         border: 1px solid #e0e0e0;
@@ -349,13 +409,13 @@
     }
 
     /* Previous/Next buttons */
-    .page-btn:first-child,
-    .page-btn:last-child {
+    .page-btn:first-child, /* Targets Previous */
+    .page-btn.next /* Targets Next */ {
         padding: 0.6rem 1rem;
         font-size: 0.75rem;
     }
 
-    /* Ensure pagination is visible */
+    /* Ensure pagination container is visible even if JS tries to hide it */
     .pagination[style*="display: none"] {
         display: flex !important;
     }
@@ -365,33 +425,151 @@
         opacity: 0.6;
         pointer-events: none;
     }
-}
 
-/* Hide page numbers on very small screens, show only prev/next */
-@media (max-width: 480px) {
-    .page-btn:not(:first-child):not(:last-child) {
+    .pagination.hidden { /* Added class for explicit JS hiding */
         display: none !important;
     }
-    
-    .page-btn:first-child,
-    .page-btn:last-child {
-        min-width: 80px;
+     /* Ensure pagination is always visible when needed */
+     .content-section .container .pagination {
+        display: flex !important;
+        visibility: visible !important;
     }
-    
-    .pagination {
+
+    /* Fix for pagination hiding */
+    .pagination[style*="display: none"] {
+        display: flex !important;
+    }
+    /* --- End Mobile Pagination Specific --- */
+}
+
+/* Small mobile devices */
+@media (max-width: 575px) {
+    .container {
+        width: 95%;
+    }
+
+    .header-top {
+        margin-bottom: 0.3rem;
+        padding: 0.2rem 0;
+    }
+
+    .top-links {
+        gap: 0.8rem;
+    }
+
+    .top-links a {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    /* More Compact Navigation */
+    nav {
+        padding: 0.5rem 0.6rem;
+        margin: 0 0.3rem;
+    }
+
+    nav ul {
+        gap: 0.3rem;
+    }
+
+    nav a {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.85rem;
+        border-radius: 18px;
+    }
+
+    /* Keep hover consistent */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+    }
+
+    .nav-scroll-indicator {
+        width: 22px;
+        height: 22px;
+        font-size: 0.7rem;
+    }
+
+    .search-container {
+        margin: 0.6rem 0;
+        padding: 0.6rem 0;
+    }
+
+    #searchInput {
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+    }
+
+    #searchButton {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .featured, .catalog, .content-section {
+        padding: 2.5rem 0;
+    }
+
+    .featured h2, .catalog h2, .categories h2, .faq-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .about-content h2, .contact-content h2 {
+        font-size: 1.6rem;
+    }
+
+    .floating-apps {
+        width: 250px;
+        height: 250px;
+    }
+
+    .app-icon {
+        font-size: 3rem;
+        padding: 0.8rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
-}
 
-/* Show limited page numbers on small screens */
-@media (max-width: 575px) and (min-width: 481px) {
-    .page-btn:nth-child(n+4):nth-child(-n+7) {
-        display: none !important;
+    .stat-item {
+        padding: 1rem;
     }
-}
 
-/* Small mobile devices - Enhanced pagination */
-@media (max-width: 575px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .pagination {
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 36px;
+    }
+
+     /* Mobile Pagination Adjustments for 575px */
     .pagination {
         gap: 0.2rem;
     }
@@ -403,636 +581,14 @@
         height: 32px;
     }
 
-    .page-btn:first-child,
-    .page-btn:last-child {
+    .page-btn:first-child, /* Previous */
+    .page-btn.next /* Next */ {
         padding: 0.5rem 0.8rem;
         font-size: 0.7rem;
     }
-}
-
-/* Very small devices - Simplified pagination */
-@media (max-width: 375px) {
-    .pagination {
-        gap: 0.1rem;
-    }
-
-    .page-btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.7rem;
-        min-width: 28px;
-        height: 28px;
-    }
-
-    .page-btn:first-child,
-    .page-btn:last-child {
-        padding: 0.4rem 0.7rem;
-        font-size: 0.65rem;
-        min-width: 70px;
-    }
-}
-
-/* Extra small devices - Minimal pagination */
-@media (max-width: 320px) {
-    .pagination {
-        gap: 0.1rem;
-    }
-
-    .page-btn {
-        padding: 0.3rem 0.5rem;
-        font-size: 0.65rem;
-        min-width: 26px;
-        height: 26px;
-    }
-
-    .page-btn:first-child,
-    .page-btn:last-child {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.6rem;
-        min-width: 65px;
-    }
-}
-
-/* Landscape mode pagination */
-@media (max-height: 500px) and (orientation: landscape) {
-    .pagination {
-        margin-top: 1.5rem;
-        gap: 0.2rem;
-    }
-
-    .page-btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.75rem;
-        min-width: 30px;
-        height: 30px;
-    }
-}
-
-/* Touch device optimizations for pagination */
-@media (hover: none) and (pointer: coarse) {
-    .page-btn {
-        min-height: 44px;
-        min-width: 44px;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .page-btn:active {
-        background: #f0f0f0;
-        transform: scale(0.95);
-    }
-
-    .page-btn.active:active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        transform: scale(0.95);
-    }
-}
-
-/* Pagination visibility fixes */
-.pagination {
-    display: flex !important;
-}
-
-.pagination.hidden {
-    display: none !important;
-}
-
-/* Ensure pagination container is properly styled */
-.content-section .pagination {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Mobile-specific pagination enhancements */
-.mobile-pagination {
-    font-size: 0.8rem;
-}
-
-.mobile-pagination .page-btn {
-    margin: 0 0.1rem;
-}
-
-/* Ensure pagination is always visible when needed */
-@media (max-width: 767px) {
-    .content-section .container .pagination {
-        display: flex !important;
-        visibility: visible !important;
-    }
-    
-    /* Fix for pagination hiding */
-    .pagination[style*="display: none"] {
-        display: flex !important;
-    }
-}
-
-/* Pagination accessibility */
-.page-btn:focus {
-    outline: 2px solid #667eea;
-    outline-offset: 2px;
-}
-
-/* Loading state for better UX */
-.pagination.loading {
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-/* Large desktops */
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1140px;
-    }
-    
-    .hero-content h1 {
-        font-size: 3.5rem;
-    }
-    
-    .apps-grid, .games-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Tablets and smaller desktops */
-@media (max-width: 1199px) and (min-width: 992px) {
-    .hero .container {
-        grid-template-columns: 1fr 1fr;
-        text-align: left;
-    }
-    
-    .hero-graphic {
-        order: 0;
-        margin-bottom: 0;
-    }
-    
-    .featured-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .apps-grid, .games-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .filter-controls {
-        justify-content: space-between;
-    }
-}
-
-/* Tablets */
-@media (max-width: 991px) and (min-width: 768px) {
-    .hero .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-graphic {
-        order: -1;
-        margin-bottom: 2rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 2.8rem;
-    }
-    
-    .featured-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .apps-grid, .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .footer-content {
-        flex-direction: row;
-        text-align: left;
-    }
-    
-    .mission-vision {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .catalog-actions {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .catalog-link {
-        width: auto;
-        max-width: none;
-    }
-    
-    .filter-controls {
-        justify-content: center;
-        gap: 1.5rem;
-    }
-    
-    .pagination {
-        gap: 0.4rem;
-    }
-    
-    .page-btn {
-        padding: 0.7rem 1rem;
-        font-size: 0.85rem;
-    }
-}
-
-/* Mobile devices */
-@media (max-width: 767px) {
-    .header-top {
-        justify-content: flex-start;
-        margin-bottom: 0.5rem;
-        padding: 0.3rem 0;
-    }
-    
-    .top-links {
-        gap: 1rem;
-        padding: 0 0.5rem;
-    }
-    
-    .top-links a {
-        font-size: 0.8rem;
-        padding: 0.25rem 0.6rem;
-    }
-    
-    .logo {
-        font-size: 1.8rem;
-        margin-bottom: 0.8rem;
-    }
-    
-    /* Horizontal Navigation - Fixed for mobile */
-    nav {
-        padding: 0.6rem 0.8rem;
-        margin: 0 0.5rem;
-    }
-    
-    nav ul {
-        gap: 0.5rem;
-        justify-content: flex-start;
-        padding: 0.3rem 0;
-    }
-    
-    nav a {
-        padding: 0.4rem 1rem;
-        font-size: 0.9rem;
-        border-radius: 20px;
-    }
-    
-    /* FIXED: Navigation hover effect for mobile */
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
-        background: rgba(255, 255, 255, 0.2) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .nav-scroll-indicator {
-        width: 25px;
-        height: 25px;
-        font-size: 0.8rem;
-    }
-    
-    /* Search container styles */
-    .search-container {
-        flex-direction: column;
-        align-items: center;
-        margin: 0.8rem 0;
-        padding: 0.8rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 8px;
-    }
-    
-    #searchInput {
-        max-width: 100%;
-        margin-bottom: 0.5rem;
-        width: 100%;
-        font-size: 0.9rem;
-        padding: 0.7rem 0.9rem;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-    
-    #searchInput::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
-    
-    #searchButton {
-        width: 100%;
-        max-width: 200px;
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    #searchButton:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-1px);
-    }
-    
-    .hero {
-        padding: 8rem 0 3rem;
-    }
-    
-    .hero .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-graphic {
-        order: -1;
-        margin-bottom: 2rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-    
-    .hero-content p {
-        font-size: 1.1rem;
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .cta-button {
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-    }
-    
-    .featured-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-    
-    .stat-item {
-        padding: 1.5rem;
-    }
-    
-    .stat-number {
-        font-size: 2.5rem;
-    }
-    
-    .apps-grid, .games-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .categories-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer-content {
-        flex-direction: column;
-        gap: 1.5rem;
-        text-align: center;
-    }
-    
-    .footer-links {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .modal-content {
-        margin: 10% auto;
-        width: 95%;
-        padding: 1.5rem;
-    }
-    
-    .page-header {
-        padding: 7rem 0 2rem;
-    }
-    
-    .page-header h1 {
-        font-size: 2rem;
-    }
-    
-    .card-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .btn-download, .btn-details {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .contact-form-container {
-        padding: 1.5rem;
-    }
-    
-    .contact-method {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.8rem;
-    }
-    
-    .method-icon {
-        align-self: center;
-    }
-    
-    .faq-question {
-        padding: 1.2rem 1.5rem;
-        font-size: 1rem;
-    }
-    
-    .faq-item.active .faq-answer {
-        padding: 0 1.5rem 1.5rem;
-    }
-    
-    .values-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .filter-controls {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    
-    .filter-group {
-        justify-content: space-between;
-        width: 100%;
-    }
-    
-    .pagination {
-        flex-wrap: wrap;
-        gap: 0.3rem;
-    }
-    
-    .page-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-        min-width: 40px;
-    }
-    
-    .no-results {
-        padding: 2rem 1rem;
-    }
-    
-    .no-results-icon {
-        font-size: 3rem;
-    }
-    
-    .no-results h3 {
-        font-size: 1.3rem;
-    }
-}
-
-/* Small mobile devices */
-@media (max-width: 575px) {
-    .container {
-        width: 95%;
-    }
-    
-    .header-top {
-        margin-bottom: 0.3rem;
-        padding: 0.2rem 0;
-    }
-    
-    .top-links {
-        gap: 0.8rem;
-    }
-    
-    .top-links a {
-        font-size: 0.75rem;
-        padding: 0.2rem 0.5rem;
-    }
-    
-    .logo {
-        font-size: 1.6rem;
-        margin-bottom: 0.6rem;
-    }
-    
-    /* More Compact Navigation */
-    nav {
-        padding: 0.5rem 0.6rem;
-        margin: 0 0.3rem;
-    }
-    
-    nav ul {
-        gap: 0.3rem;
-    }
-    
-    nav a {
-        padding: 0.35rem 0.8rem;
-        font-size: 0.85rem;
-        border-radius: 18px;
-    }
-    
-    /* FIXED: Ensure hover works on small screens */
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
-        background: rgba(255, 255, 255, 0.2) !important;
-        transform: translateY(-1px);
-    }
-    
-    .nav-scroll-indicator {
-        width: 22px;
-        height: 22px;
-        font-size: 0.7rem;
-    }
-    
-    .search-container {
-        margin: 0.6rem 0;
-        padding: 0.6rem 0;
-    }
-    
-    #searchInput {
-        font-size: 0.9rem;
-        padding: 0.7rem 0.9rem;
-    }
-    
-    #searchButton {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 1.8rem;
-    }
-    
-    .hero-content p {
-        font-size: 1rem;
-    }
-    
-    .featured, .catalog, .content-section {
-        padding: 2.5rem 0;
-    }
-    
-    .featured h2, .catalog h2, .categories h2, .faq-section h2 {
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-    }
-    
-    .page-header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .about-content h2, .contact-content h2 {
-        font-size: 1.6rem;
-    }
-    
-    .floating-apps {
-        width: 250px;
-        height: 250px;
-    }
-    
-    .app-icon {
-        font-size: 3rem;
-        padding: 0.8rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .stat-item {
-        padding: 1rem;
-    }
-    
-    .stat-number {
-        font-size: 2rem;
-    }
-    
-    .pagination {
-        gap: 0.2rem;
-    }
-    
-    .page-btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.8rem;
-        min-width: 36px;
+     /* Show limited page numbers on small screens */
+     .page-btn:nth-child(n+4):nth-child(-n+7) { /* Adjust selector based on structure if needed */
+        display: none !important;
     }
 }
 
@@ -1041,104 +597,117 @@
     .header-top {
         padding: 0.15rem 0;
     }
-    
+
     .top-links {
         gap: 0.6rem;
     }
-    
+
     .top-links a {
         font-size: 0.7rem;
         padding: 0.15rem 0.4rem;
     }
-    
+
     .logo {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
     }
-    
+
     /* Ultra Compact Navigation */
     nav {
         padding: 0.4rem 0.5rem;
         margin: 0 0.2rem;
     }
-    
+
     nav ul {
         gap: 0.2rem;
     }
-    
+
     nav a {
         padding: 0.3rem 0.7rem;
         font-size: 0.8rem;
         border-radius: 15px;
     }
-    
-    /* FIXED: Hover effect for very small screens */
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
+
+    /* Keep hover consistent */
+    nav a:hover,
+    nav a.active {
         background: rgba(255, 255, 255, 0.2) !important;
         transform: translateY(-1px);
     }
-    
+
     .nav-scroll-indicator {
         width: 20px;
         height: 20px;
         font-size: 0.6rem;
         padding: 0.3rem;
     }
-    
+
     .search-container {
         margin: 0.5rem 0;
         padding: 0.5rem 0;
     }
-    
+
     #searchInput {
         font-size: 0.85rem;
         padding: 0.6rem 0.8rem;
     }
-    
+
     #searchButton {
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
     }
-    
+
     .hero-content h1 {
         font-size: 1.6rem;
     }
-    
+
     .featured-item, .app-card, .game-card {
         margin: 0 0.5rem;
     }
-    
+
     .card-content {
         padding: 1rem;
     }
-    
+
     .privacy-section h2, .terms-section h2 {
         font-size: 1.5rem;
     }
-    
+
     .stats-mini {
         grid-template-columns: 1fr;
     }
-    
+
     .mission, .vision {
         padding: 1.5rem;
     }
-    
+
     .value-item {
         padding: 1.5rem;
     }
-    
+
     .pagination {
         gap: 0.1rem;
     }
-    
+
     .page-btn {
         padding: 0.4rem 0.6rem;
         font-size: 0.75rem;
         min-width: 32px;
+    }
+
+    /* Mobile Pagination Adjustments for 375px */
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+        min-width: 28px;
+        height: 28px;
+    }
+
+    .page-btn:first-child, /* Previous */
+    .page-btn.next /* Next */ {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.65rem;
+        min-width: 70px;
     }
 }
 
@@ -1147,89 +716,102 @@
     .header-top {
         padding: 0.1rem 0;
     }
-    
+
     .top-links {
         gap: 0.4rem;
     }
-    
+
     .top-links a {
         font-size: 0.65rem;
         padding: 0.1rem 0.3rem;
     }
-    
+
     .logo {
         font-size: 1.4rem;
         margin-bottom: 0.4rem;
     }
-    
+
     /* Super Compact Navigation */
     nav {
         padding: 0.3rem 0.4rem;
         margin: 0 0.15rem;
     }
-    
+
     nav ul {
         gap: 0.15rem;
     }
-    
+
     nav a {
         padding: 0.25rem 0.6rem;
         font-size: 0.75rem;
         border-radius: 12px;
     }
-    
-    /* FIXED: Hover effect for extra small screens */
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
+
+    /* Keep hover consistent */
+    nav a:hover,
+    nav a.active {
         background: rgba(255, 255, 255, 0.2) !important;
         transform: translateY(-1px);
     }
-    
+
     .nav-scroll-indicator {
         width: 18px;
         height: 18px;
         font-size: 0.5rem;
         padding: 0.2rem;
     }
-    
+
     .search-container {
         margin: 0.4rem 0;
         padding: 0.4rem 0;
     }
-    
+
     #searchInput {
         font-size: 0.8rem;
         padding: 0.5rem 0.7rem;
     }
-    
+
     #searchButton {
         padding: 0.5rem 0.8rem;
         font-size: 0.8rem;
     }
-    
+
     .hero-content h1 {
         font-size: 1.5rem;
     }
-    
+
     .hero-content p {
         font-size: 0.9rem;
     }
-    
+
     .cta-button {
         padding: 0.8rem 1.5rem;
         font-size: 1rem;
     }
-    
+
     .pagination {
         gap: 0.1rem;
     }
-    
+
     .page-btn {
         padding: 0.3rem 0.5rem;
         font-size: 0.7rem;
         min-width: 28px;
+    }
+
+    /* Mobile Pagination Adjustments for 320px */
+    .page-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        min-width: 26px;
+        height: 26px;
+    }
+
+    .page-btn:first-child, /* Previous */
+    .page-btn.next /* Next */ {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6rem;
+        min-width: 65px;
     }
 }
 
@@ -1239,74 +821,84 @@
         padding: 7rem 0 2rem;
         min-height: auto;
     }
-    
+
     .hero-content h1 {
         font-size: 2rem;
     }
-    
+
     .hero-content p {
         font-size: 1rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .modal-content {
         margin: 2% auto;
         max-height: 90vh;
         overflow-y: auto;
     }
-    
+
     .page-header {
-        padding: 6rem 0 1.5rem;
+        padding: 6rem 0 1.5rem; /* Adjusted for header */
     }
-    
+
     /* Compact header in landscape */
     .header {
         padding: 0.4rem 0;
     }
-    
+
     .header.compact {
         padding: 0.2rem 0;
     }
-    
+
     .header-top {
         margin-bottom: 0.2rem;
         padding: 0.1rem 0;
     }
-    
+
     .logo {
         font-size: 1.4rem;
         margin-bottom: 0.3rem;
     }
-    
+
     nav {
         padding: 0.3rem 0.5rem;
     }
-    
+
     nav a {
         padding: 0.3rem 0.8rem;
         font-size: 0.8rem;
     }
-    
-    /* FIXED: Hover effect in landscape */
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
+
+    /* Keep hover consistent */
+    nav a:hover,
+    nav a.active {
         background: rgba(255, 255, 255, 0.2) !important;
         transform: translateY(-1px);
     }
-    
+
     .search-container {
         margin: 0.3rem 0;
         padding: 0.3rem 0;
     }
-    
+
     .featured, .categories, .catalog, .content-section {
         padding: 2rem 0;
     }
-    
+
     .pagination {
-        margin-top: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    /* Landscape pagination */
+    .pagination {
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        min-width: 30px;
+        height: 30px;
     }
 }
 
@@ -1324,34 +916,55 @@
     nav a {
         padding: 0.5rem 1.2rem;
     }
-    
-    .cta-button, 
-    .download-btn, 
-    .btn-download, 
+
+    .cta-button,
+    .download-btn,
+    .btn-download,
     .catalog-link,
     .page-btn {
-        min-height: 44px;
-        display: flex;
+        min-height: 44px; /* Touch target size */
+        display: flex; /* Ensure centering if needed */
         align-items: center;
         justify-content: center;
     }
-    
+
     /* Reduce hover effects on touch devices */
     nav a:hover::before {
-        animation: none;
+        display: none; /* Disable shimmer */
     }
-    
+    nav a:hover { /* Disable background/transform on hover */
+        background: transparent !important;
+        transform: none;
+        box-shadow: none;
+    }
+    nav a.active { /* Keep active style */
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
     .page-btn:hover {
         transform: none;
+    }
+
+    /* Touch active state */
+    .page-btn:active {
+        background: #f0f0f0;
+        transform: scale(0.95);
+    }
+
+    .page-btn.active:active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transform: scale(0.95);
     }
 }
 
 /* Print styles */
 @media print {
-    .header, 
-    .footer, 
-    .cta-buttons, 
-    .download-btn, 
+    .header,
+    .footer,
+    .cta-buttons,
+    .download-btn,
     .btn-download,
     .nav-scroll-indicator,
     .search-container,
@@ -1360,37 +973,37 @@
     .filter-controls {
         display: none !important;
     }
-    
+
     body {
         background: white !important;
         color: black !important;
         font-size: 12pt;
         line-height: 1.4;
     }
-    
+
     .container {
         width: 100% !important;
         max-width: none !important;
         margin: 0 !important;
         padding: 0 !important;
     }
-    
+
     .hero {
         background: white !important;
         color: black !important;
         padding: 1cm 0 !important;
     }
-    
+
     .hero-content h1 {
         color: black !important;
         font-size: 18pt !important;
     }
-    
+
     .hero-content p {
         color: black !important;
         font-size: 12pt !important;
     }
-    
+
     .featured-item,
     .app-card,
     .game-card,
@@ -1399,12 +1012,12 @@
         box-shadow: none !important;
         border: 1px solid #ccc !important;
     }
-    
+
     a {
         color: black !important;
         text-decoration: underline !important;
     }
-    
+
     .btn-details {
         display: none !important;
     }
@@ -1413,35 +1026,32 @@
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        /* Animation properties removed */
     }
-    
+
     .hero::before,
     .page-header::before {
-        animation: none;
+       /* Animation removed */
     }
-    
-    /* Remove hover animations for reduced motion */
+
+    /* Remove hover transitions for reduced motion */
     nav a::before {
         display: none;
     }
-    
-    nav a:hover, 
-    nav a.active,
-    nav ul li a:hover,
-    .header nav ul li a:hover {
+
+    nav a:hover,
+    nav a.active {
         transform: none;
         box-shadow: none;
     }
-    
+
     .page-btn:hover {
         transform: none;
     }
-    
+
     .loading-spinner {
-        animation: none;
+       /* Animation removed */
     }
 }
 
@@ -1449,4 +1059,12 @@
 @media (prefers-color-scheme: dark) {
     /* Dark mode styles can be added here when needed */
     /* This is just a placeholder for future implementation */
+}
+/* Force pagination visibility on mobile */
+@media (max-width: 767px) {
+    .pagination {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
 }

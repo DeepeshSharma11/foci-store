@@ -310,6 +310,11 @@
     width: 300px;
     height: 300px;
 }
+/* Apply ripple animation */
+.ripple-effect {
+    animation: ripple 0.6s linear;
+}
+
 
 /* Card hover animations */
 .card-hover {
@@ -382,6 +387,8 @@
 .stagger-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
 .stagger-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
 .stagger-fade-in > *:nth-child(6) { animation-delay: 0.6s; }
+/* Add more if needed */
+
 
 /* Typewriter effect */
 .typewriter {
@@ -465,7 +472,7 @@
         opacity: 1;
     }
 }
-
+/* slideInRight was defined earlier, reusing */
 @keyframes slideInTop {
     from {
         transform: translateY(-50px);
@@ -516,7 +523,7 @@
 
 /* Background pattern animations */
 .moving-pattern {
-    background-image: 
+    background-image:
         radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
         radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px);
     background-size: 50px 50px;
@@ -534,7 +541,7 @@
 
 /* Navigation scroll animations */
 .nav-scroll-smooth {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; /* Note: This is a property, not an animation */
 }
 
 .nav-item-slide-in {
@@ -563,10 +570,10 @@
 
 @keyframes logoShrink {
     from {
-        font-size: 2rem;
+        font-size: 2rem; /* Make sure this matches original size */
     }
     to {
-        font-size: 1.5rem;
+        font-size: 1.5rem; /* Make sure this matches compact size */
     }
 }
 
@@ -576,10 +583,10 @@
 
 @keyframes navCompact {
     from {
-        padding: 0.5rem 0.8rem;
+        padding: 0.5rem 0.8rem; /* Make sure this matches original size */
     }
     to {
-        padding: 0.3rem;
+        padding: 0.3rem; /* Make sure this matches compact size */
     }
 }
 
@@ -598,12 +605,12 @@
 
 /* Loading spinner for buttons */
 .btn-loading .loading-spinner {
-    animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite; /* Reuse spin animation */
 }
 
 /* Progress animation for downloads */
 .download-progress .progress {
-    animation: progress 2s ease-in-out;
+    /* Already has transition, animation might override. Use JS to update width */
 }
 
 /* Notification animations */
@@ -612,7 +619,7 @@
 }
 
 .notification-slide-out {
-    animation: slideOutRight 0.3s ease;
+    animation: slideOutRight 0.3s ease forwards; /* Added forwards */
 }
 
 /* Search bar focus animation */
@@ -631,7 +638,7 @@
     }
 }
 
-/* Mobile menu animations */
+/* Mobile menu animations (Placeholder - Add classes to elements) */
 .mobile-menu-enter {
     transform: translateX(-100%);
 }
@@ -650,7 +657,7 @@
     transition: transform 0.3s ease;
 }
 
-/* Filter dropdown animations */
+/* Filter dropdown animations (Placeholder - Add classes to elements) */
 .filter-dropdown-enter {
     opacity: 0;
     transform: translateY(-10px);
@@ -695,41 +702,37 @@
     transform: scale(0.8);
     transition: opacity 0.3s, transform 0.3s;
 }
-
-/* FAQ accordion animations */
-.faq-answer {
-    transition: all 0.3s ease;
+/* Modal Content Animation */
+.modal-content.aos-animate { /* Example using AOS class */
+    animation: modalSlideIn 0.3s ease;
 }
 
-.faq-item.active .faq-answer {
-    animation: faqSlideDown 0.3s ease;
-}
-
-@keyframes faqSlideDown {
+@keyframes modalSlideIn {
     from {
         opacity: 0;
-        max-height: 0;
+        transform: translateY(-50px);
     }
     to {
         opacity: 1;
-        max-height: 500px;
+        transform: translateY(0);
     }
 }
+
+
+/* FAQ accordion animations */
+.faq-answer {
+    transition: all 0.3s ease; /* Ensure transition exists */
+}
+
+/* .faq-item.active .faq-answer animation is handled by JS max-height change */
+
 
 /* Form input animations */
 .form-group input:focus,
 .form-group textarea:focus {
-    animation: inputFocus 0.3s ease;
+    /* Focus styles already defined in style.css */
 }
 
-@keyframes inputFocus {
-    from {
-        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.1);
-    }
-    to {
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-}
 
 /* Page load animations */
 .page-load {
@@ -748,104 +751,51 @@
 }
 
 /* Hero section animations */
-.hero-content {
-    animation: heroContentSlide 0.8s ease-out;
-}
+/* .hero-content & .hero-graphic animations handled by AOS data attributes */
 
-@keyframes heroContentSlide {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-graphic {
-    animation: heroGraphicSlide 0.8s ease-out 0.2s both;
-}
-
-@keyframes heroGraphicSlide {
-    from {
-        opacity: 0;
-        transform: translateX(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
 
 /* Stats counter animation */
-.stat-number {
-    animation: countUp 2s ease-out;
-}
+/* Counter effect is handled by JS, not pure CSS animation */
 
-@keyframes countUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 /* Team Section Animations */
+/* These styles are specific to Team Card elements */
+
 .team-card {
-    opacity: 0;
-    transform: translateY(30px);
+    /* Initial state set for AOS */
 }
 
-.team-card.animate {
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-.team-card.deepesh.animate {
-    animation-delay: 0.1s;
-}
-
-.team-card.nikhil.animate {
-    animation-delay: 0.2s;
-}
-
-.team-card.sandhya.animate {
-    animation-delay: 0.3s;
-}
+/* AOS handles the main entrance animation:
+   Use data-aos="fade-up" or similar on the .team-card elements
+   The .animate class might be redundant if using AOS correctly.
+   If keeping .animate class, ensure JS adds it when element is visible.
+*/
 
 .team-image .initials {
-    animation: pulse 2s infinite ease-in-out;
+    animation: pulse 2s infinite ease-in-out; /* Keep pulse */
 }
 
 .team-card:hover .team-image .initials {
-    animation: bounce 0.5s ease;
+    animation: bounce 0.5s ease; /* Keep hover bounce */
 }
 
 .social-link {
-    opacity: 0;
-    transform: scale(0.8) rotate(-10deg);
+     /* Initial state set for AOS or staggered animation */
+     opacity: 0;
+     transform: scale(0.8) rotate(-10deg);
 }
 
-.team-card.animate .social-link {
+/* Trigger animation using AOS or stagger class */
+.team-card [data-aos="zoom-in"] .social-link { /* Example using AOS on parent */
     animation: fadeInRotate 0.5s ease forwards;
 }
 
-.team-card.animate .social-link:nth-child(1) {
-    animation-delay: 0.4s;
-}
+.team-card [data-aos="zoom-in"] .social-link:nth-child(1) { animation-delay: 0.4s; }
+.team-card [data-aos="zoom-in"] .social-link:nth-child(2) { animation-delay: 0.5s; }
+.team-card [data-aos="zoom-in"] .social-link:nth-child(3) { animation-delay: 0.6s; }
 
-.team-card.animate .social-link:nth-child(2) {
-    animation-delay: 0.5s;
-}
 
-.team-card.animate .social-link:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes fadeInRotate {
+@keyframes fadeInRotate { /* Definition is fine */
     from {
         opacity: 0;
         transform: scale(0.8) rotate(-10deg);
@@ -878,8 +828,11 @@
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        /* Keep transition for non-animation effects if needed */
+        transition-property: background-color, border-color, color, box-shadow, opacity;
     }
-    
+
+    /* Selectively disable animations */
     .pulse,
     .bounce,
     .float,
@@ -888,48 +841,66 @@
     .typewriter,
     .wobble,
     .tada,
-    .moving-pattern {
+    .moving-pattern,
+    .loading-spinner,
+    .ripple-effect,
+    .modal-content, /* Disable modal entrance */
+    .notification, /* Disable notification entrance/exit */
+    .team-image .initials, /* Disable team initials pulse */
+    .team-card.loading .team-image /* Disable shimmer */
+    {
         animation: none !important;
     }
-    
+
+    /* Disable hover transforms */
     .hover-lift:hover,
     .hover-scale:hover,
     .hover-rotate:hover,
     .card-hover:hover,
-    .btn-animate:hover::before {
+    .team-card:hover,
+    .social-link:hover
+     {
         transform: none !important;
     }
+    /* Disable hover animation triggers */
+     .btn-animate:hover::before {
+        left: -100%; /* Reset shimmer */
+    }
+    .team-card:hover .team-image .initials {
+        animation: none !important; /* Disable hover bounce */
+    }
+
+     /* Disable AOS transforms */
+    [data-aos] {
+        transform: none !important;
+        opacity: 1 !important; /* Make elements visible immediately */
+        transition: none !important;
+    }
+
 }
 
 /* Mobile optimizations for animations */
 @media (max-width: 767px) {
     /* Reduce animation intensity on mobile */
-    [data-aos="fade-up"] {
+    [data-aos="fade-up"],
+    [data-aos="fade-down"] {
         transform: translateY(15px);
     }
-    
-    [data-aos="fade-down"] {
-        transform: translateY(-15px);
-    }
-    
-    [data-aos="fade-left"] {
-        transform: translateX(-15px);
-    }
-    
+    [data-aos="fade-left"],
     [data-aos="fade-right"] {
-        transform: translateX(15px);
+         transform: translateX(15px);
     }
-    
+     [data-aos].aos-animate { /* Ensure end state is correct */
+        transform: none;
+    }
+
     /* Simpler animations for mobile */
     .float {
         animation: float 4s ease-in-out infinite;
     }
-    
-    .hero-content {
-        animation-duration: 0.6s;
-    }
-    
-    .hero-graphic {
+
+    /* Reduce duration for hero */
+    .slide-in-left, .slide-in-right, .slide-in-top, .slide-in-bottom {
         animation-duration: 0.6s;
     }
 }
@@ -940,17 +911,57 @@
     .hover-lift:hover,
     .hover-scale:hover,
     .hover-rotate:hover,
-    .card-hover:hover {
+    .card-hover:hover,
+    .team-card:hover,
+    .social-link:hover
+     {
         transform: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Reset to default shadow */
     }
-    
+    .team-card:hover {
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .social-link:hover {
+        background: #f8f9fa; /* Reset hover background */
+        color: #6C63FF; /* Reset hover color */
+        border-color: transparent;
+    }
+
+
     /* Use active state instead of hover for touch */
     .hover-lift:active,
     .hover-scale:active,
     .hover-rotate:active,
-    .card-hover:active {
+    .card-hover:active,
+    .team-card:active,
+    .social-link:active
+     {
         transform: scale(0.98);
     }
+    .social-link:active {
+        background: #e0e0e0; /* Example active state */
+    }
+
+     /* Disable shimmer on hover for buttons */
+     .btn-animate:hover::before {
+        left: -100%;
+    }
+    .download-btn:hover::before {
+         left: -100%;
+    }
+    .category-item a:hover::before {
+        left: -100%;
+    }
+     .catalog-link:hover::before {
+        left: -100%;
+    }
+    nav a:hover::before {
+        left: -100%;
+    }
+    .cta-button:hover::before {
+         left: -100%;
+    }
+
 }
 
 /* Performance optimizations */
