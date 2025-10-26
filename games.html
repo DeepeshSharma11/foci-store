@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="animations.css">
-    <!-- Add AOS CSS if you want to use its library -->
-    <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
 </head>
 <body>
     <!-- Header Section -->
@@ -40,7 +38,7 @@
     <!-- Games Section -->
     <section class="content-section">
         <div class="container">
-            <div class="filter-controls" data-aos="fade-down"> <!-- Changed animation -->
+            <div class="filter-controls" data-aos="fade-down">
                 <div class="filter-group">
                     <label for="categoryFilter">Category:</label>
                     <select id="categoryFilter">
@@ -63,7 +61,7 @@
                 </div>
             </div>
 
-            <div class="games-grid"> <!-- Changed class to games-grid -->
+            <div class="games-grid">
                 <!-- Games will be loaded dynamically from apps.json -->
                 <div class="loading-message" id="loadingMessage">
                     <div class="loading-spinner"></div>
@@ -71,8 +69,8 @@
                 </div>
             </div>
 
-             <!-- Pagination Container -->
-             <div class="pagination-container" data-aos="fade-up">
+            <!-- Pagination Container -->
+            <div class="pagination-container" data-aos="fade-up">
                 <div class="pagination" id="pagination">
                     <!-- Pagination buttons will be generated dynamically -->
                 </div>
@@ -98,11 +96,11 @@
         </div>
     </footer>
 
-     <!-- Download Modal -->
-     <div id="downloadModal" class="modal">
+    <!-- Download Modal -->
+    <div id="downloadModal" class="modal">
         <div class="modal-content" data-aos="zoom-in">
-             <!-- Added Main Content Wrapper -->
-             <div class="modal-main-content">
+            <!-- Main Content Wrapper -->
+            <div class="modal-main-content">
                 <span class="close">&times;</span>
                 <h2>Download <span id="appName">Game Name</span></h2>
                 <p>Your download will begin shortly...</p>
@@ -129,10 +127,6 @@
     </div>
 
     <script src="script.js"></script>
-    <!-- Add AOS JS if you want to use its library -->
-    <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init();
-    </script> -->
+    <script src="data.js"></script>
 </body>
 </html>

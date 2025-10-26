@@ -77,50 +77,54 @@
     // --- NEW APP LOADING AND RENDERING FUNCTIONS ---
 
     /**
-     * Fetches app/game data from apps.json
+     * Fetches app/game data from data.js (Updated for GitHub Pages compatibility)
      */
     async function loadData(pageType) {
-        let allApps = [];
-        let allGames = [];
-
         try {
-            const response = await fetch('apps.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            // Use data.js object directly - 100% reliable on GitHub Pages
+            const data = typeof appData !== 'undefined' ? appData : loadStaticData();
+            
+            const allApps = data.apps || [];
+            const allGames = data.games || [];
+
+            // Set the correct data in the state
+            if (pageType === 'apps') {
+                state.allData = allApps;
+            } else if (pageType === 'games') {
+                state.allData = allGames;
+            } else if (pageType === 'featured') {
+                populateFeaturedApps(allApps); // Special case for homepage
+                return; // Don't need to do the rest
             }
-            const data = await response.json();
-            allApps = data.apps || [];
-            allGames = data.games || [];
+
+            state.filteredData = state.allData;
+
+            // Once data is loaded, populate categories
+            populateCategories();
+
+            // Apply filters from URL parameters
+            applyUrlFilters();
+
+            // Render the grid with potentially pre-filtered data
+            applyFiltersAndRender();
+            
         } catch (error) {
-            console.error('Error loading data from apps.json:', error);
+            console.error('Error loading data from data.js:', error);
             showNotification('Could not load data. Using fallback.', 'warning');
-            // Fallback to static data if JSON fails
+            // Fallback to static data if data.js fails
             const staticData = loadStaticData();
-            allApps = staticData.staticApps;
-            allGames = staticData.staticGames;
+            if (pageType === 'apps') {
+                state.allData = staticData.staticApps;
+            } else if (pageType === 'games') {
+                state.allData = staticData.staticGames;
+            } else if (pageType === 'featured') {
+                populateFeaturedApps(staticData.staticApps.slice(0, 3));
+                return;
+            }
+            state.filteredData = state.allData;
+            populateCategories();
+            applyFiltersAndRender();
         }
-
-        // Set the correct data in the state
-        if (pageType === 'apps') {
-            state.allData = allApps;
-        } else if (pageType === 'games') {
-            state.allData = allGames;
-        } else if (pageType === 'featured') {
-            populateFeaturedApps(allApps); // Special case for homepage
-            return; // Don't need to do the rest
-        }
-
-        state.filteredData = state.allData;
-
-        // Once data is loaded, populate categories
-        populateCategories();
-
-        // --- NEW: Apply filters from URL parameters ---
-        applyUrlFilters();
-        // --- END NEW ---
-
-        // Render the grid with potentially pre-filtered data
-        applyFiltersAndRender();
     }
 
      // --- NEW FUNCTION to apply filters from URL ---
@@ -143,286 +147,285 @@
      }
      // --- END NEW FUNCTION ---
 
-
     // Fallback static data (UPDATED with user's JSON)
     function loadStaticData() {
-        const staticApps = [
-            {
-                "id": 1,
-                "name": "WhatsApp MOD",
-                "description": "Enhanced version with extra features like theme customization, privacy options, and more",
-                "category": "social",
-                "image": "assets/images/fmwhatsapp.png",
-                "size": "95 MB",
-                "version": "v2.23.5.76",
-                "rating": 4.7,
-                "popularity": 95,
-                "releaseDate": "2024-10-20T00:00:00Z",
-                "downloads": "10K+",
-                "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
-                "badge": "Trending"
-            },
-            {
-                "id": 2,
-                "name": "Instagram MOD",
-                "description": "Download photos, videos, stories with enhanced privacy and customization options.",
-                "category": "social",
-                "image": "assets/images/Insta-Pro-APK.png",
-                "size": "143 MB",
-                "version": "v289.0.0.18.109",
-                "rating": 4.7,
-                "popularity": 92,
-                "releaseDate": "2024-10-19T00:00:00Z",
-                "downloads": "8K+",
-                "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
-                "badge": "New"
-            },
-            {
-                "id": 3,
-                "name": "YouTube MOD",
-                "description": "Ad-free YouTube experience with background play and video download capabilities.",
-                "category": "media",
-                "image": "assets/images/app.revanced.android.youtube.200.png", // Updated image name
-                "size": "85 MB",
-                "version": "v18.45.43",
-                "rating": 4.8,
-                "popularity": 98,
-                "releaseDate": "2024-10-22T00:00:00Z",
-                "downloads": "15K+",
-                "downloadUrl": "https://vanced.to/",
-                "badge": "Popular"
-            },
-            {
-                "id": 4,
-                "name": "File Manager MOD",
-                "description": "Advanced file management with root access, cloud integration, and premium themes.",
-                "category": "tools",
-                "image": "assets/images/video-player-all-format-1 mobile.png", // Updated image name
-                "size": "8 MB",
-                "version": "v4.2.1",
-                "rating": 4.8,
-                "popularity": 80,
-                "releaseDate": "2024-10-18T00:00:00Z",
-                "downloads": "5K+",
-                "downloadUrl": "https://liteapks.com/download/file-manager-77834",
-                "badge": "Pro"
-            },
-            {
-                "id": 5,
-                "name": "XPlayer",
-                "description": "XPlayer Mod APK is an impressive video player tool and gives you the best experience.", // Updated description
-                "category": "media",
-                "image": "assets/images/xplayer.png",
-                "size": "38 MB",
-                "version": "v2.4.8.2",
-                "rating": 4.5,
-                "popularity": 82,
-                "releaseDate": "2024-10-17T00:00:00Z",
-                "downloads": "7K+",
-                "downloadUrl": "https://liteapks.com/download/xplayer-5858",
-                "badge": "Enhanced"
-            },
-            {
-                "id": 6,
-                "name": "Office Suite MOD",
-                "description": "Complete office suite with PDF editing, cloud sync, and all premium features unlocked.",
-                "category": "productivity",
-                "image": "assets/images/office-suite.png",
-                "size": "120 MB",
-                "version": "v14.8.4",
-                "rating": 4.7,
-                "popularity": 85,
-                "releaseDate": "2024-10-16T00:00:00Z",
-                "downloads": "6K+",
-                "downloadUrl": "#",
-                "badge": "Premium"
-            },
-            {
-                "id": 7,
-                "name": "TikTok MOD",
-                "description": "Download videos without watermark, unlimited features and enhanced privacy options.",
-                "category": "social",
-                "image": "assets/images/tiktok-mod.png",
-                "size": "120 MB",
-                "version": "v30.5.4",
-                "rating": 4.6,
-                "popularity": 96,
-                "releaseDate": "2024-10-21T00:00:00Z",
-                "downloads": "15K+",
-                "downloadUrl": "https://example.com/tiktok",
-                "badge": "Popular"
-            },
-            {
-                "id": 8,
-                "name": "Spotify MOD",
-                "description": "Ad-free music, unlimited skips, and premium features unlocked.",
-                "category": "media",
-                "image": "assets/images/spotify-mod.png",
-                "size": "85 MB",
-                "version": "v8.8.96",
-                "rating": 4.9,
-                "popularity": 99,
-                "releaseDate": "2024-10-23T00:00:00Z",
-                "downloads": "20K+",
-                "downloadUrl": "https://example.com/spotify",
-                "badge": "Premium"
-            },
-            {
-                "id": 9,
-                "name": "Snapchat MOD",
-                "description": "Save snaps, view stories anonymously, and access premium filters.",
-                "category": "social",
-                "image": "assets/images/snapchat-mod.png",
-                "size": "95 MB",
-                "version": "v12.1.0.30",
-                "rating": 4.5,
-                "popularity": 90,
-                "releaseDate": "2024-10-15T00:00:00Z",
-                "downloads": "9K+",
-                "downloadUrl": "#",
-                "badge": "New"
-            }
-        ];
-
-        const staticGames = [
-            {
-                "id": 1,
-                "name": "Subway Surfers MOD",
-                "description": "Unlimited coins, keys, and all characters unlocked. Run endlessly without restrictions.",
-                "category": "action",
-                "image": "assets/images/subway-surfers.png",
-                "size": "150 MB",
-                "version": "v3.12.1",
-                "rating": 4.8,
-                "popularity": 98,
-                "releaseDate": "2024-10-23T00:00:00Z",
-                "downloads": "25K+",
-                "downloadUrl": "https://an1.com/file_4683-dw.html",
-                "badge": "Unlimited"
-            },
-            {
-                "id": 2,
-                "name": "Asphalt 9 MOD",
-                "description": "Unlimited credits, all cars unlocked, and premium features for the ultimate racing experience.",
-                "category": "racing",
-                "image": "assets/images/asphalt-9.png",
-                "size": "2.1 GB",
-                "version": "v3.9.4",
-                "rating": 4.9,
-                "popularity": 95,
-                "releaseDate": "2024-10-22T00:00:00Z",
-                "downloads": "12K+",
-                "downloadUrl": "https://asphalt-9-legends-mod.apkresult.io/download",
-                "badge": "Premium"
-            },
-            {
-                "id": 3,
-                "name": "Candy Crush MOD",
-                "description": "Unlimited lives, boosters, and all levels unlocked. Sweet gaming without limits.",
-                "category": "puzzle",
-                "image": "assets/images/candy-crush.png",
-                "size": "95 MB",
-                "version": "v1.260.1.2",
-                "rating": 4.7,
-                "popularity": 90,
-                "releaseDate": "2024-10-21T00:00:00Z",
-                "downloads": "18K+",
-                "downloadUrl": "https://candy-crush-soda-saga.apkrabi.com/download/",
-                "badge": "Unlimited"
-            },
-            {
-                "id": 4,
-                "name": "Minecraft MOD",
-                "description": "Unlocked skins, texture packs, and premium features for unlimited creativity.",
-                "category": "adventure",
-                "image": "assets/images/minecraft.png",
-                "size": "180 MB",
-                "version": "v1.20.15.01",
-                "rating": 4.9,
-                "popularity": 96,
-                "releaseDate": "2024-10-20T00:00:00Z",
-                "downloads": "15K+",
-                "downloadUrl": "#",
-                "badge": "Premium"
-            },
-            {
-                "id": 5,
-                "name": "FIFA Mobile MOD",
-                "description": "Unlimited coins, all players unlocked, and premium features for the ultimate football experience.",
-                "category": "sports",
-                "image": "assets/images/fifa-mobile.png",
-                "size": "1.2 GB",
-                "version": "v17.0.14",
-                "rating": 4.8,
-                "popularity": 88,
-                "releaseDate": "2024-10-19T00:00:00Z",
-                "downloads": "10K+",
-                "downloadUrl": "#",
-                "badge": "Enhanced"
-            },
-            {
-                "id": 6,
-                "name": "Call of Duty MOD",
-                "description": "Unlimited CP, all weapons unlocked, and premium battle pass for ultimate warfare.",
-                "category": "action",
-                "image": "assets/images/call-of-duty.png",
-                "size": "2.5 GB",
-                "version": "v1.0.39",
-                "rating": 4.9,
-                "popularity": 97,
-                "releaseDate": "2024-10-18T00:00:00Z",
-                "downloads": "20K+",
-                "downloadUrl": "#",
-                "badge": "Pro"
-            },
-            {
-                "id": 7,
-                "name": "Temple Run 2 MOD",
-                "description": "Unlimited coins, all characters unlocked, and infinite energy for endless running.",
-                "category": "adventure",
-                "image": "assets/images/temple-run.png",
-                "size": "80 MB",
-                "version": "v1.100.0",
-                "rating": 4.6,
-                "popularity": 85,
-                "releaseDate": "2024-10-17T00:00:00Z",
-                "downloads": "8K+",
-                "downloadUrl": "#",
-                "badge": "Unlimited"
-            },
-            {
-                "id": 8,
-                "name": "PUBG Mobile MOD",
-                "description": "Unlimited UC, aim assist, and all skins unlocked for battle royale dominance.",
-                "category": "action",
-                "image": "assets/images/pubg-mobile.png",
-                "size": "1.8 GB",
-                "version": "v3.0.0",
-                "rating": 4.9,
-                "popularity": 100,
-                "releaseDate": "2024-10-24T00:00:00Z",
-                "downloads": "30K+",
-                "downloadUrl": "#",
-                "badge": "Pro"
-            },
-            {
-                "id": 9,
-                "name": "Clash of Clans MOD",
-                "description": "Unlimited gems, gold, and elixir with all troops and buildings unlocked for epic battles.",
-                "category": "strategy",
-                "image": "assets/images/clash-of-clans.png",
-                "size": "150 MB",
-                "version": "v14.0.10",
-                "rating": 4.8,
-                "popularity": 93,
-                "releaseDate": "2024-10-25T00:00:00Z",
-                "downloads": "22K+",
-                "downloadUrl": "#",
-                "badge": "Enhanced"
-            }
-        ];
-
-        return { staticApps, staticGames };
+        // This is now used as fallback if data.js is not available
+        return {
+            staticApps: [
+                {
+                    "id": 1,
+                    "name": "WhatsApp MOD",
+                    "description": "Enhanced version with extra features like theme customization, privacy options, and more",
+                    "category": "social",
+                    "image": "assets/images/fmwhatsapp.png",
+                    "size": "95 MB",
+                    "version": "v2.23.5.76",
+                    "rating": 4.7,
+                    "popularity": 95,
+                    "releaseDate": "2024-10-20T00:00:00Z",
+                    "downloads": "10K+",
+                    "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
+                    "badge": "Trending"
+                },
+                {
+                    "id": 2,
+                    "name": "Instagram MOD",
+                    "description": "Download photos, videos, stories with enhanced privacy and customization options.",
+                    "category": "social",
+                    "image": "assets/images/Insta-Pro-APK.png",
+                    "size": "143 MB",
+                    "version": "v289.0.0.18.109",
+                    "rating": 4.7,
+                    "popularity": 92,
+                    "releaseDate": "2024-10-19T00:00:00Z",
+                    "downloads": "8K+",
+                    "downloadUrl": "https://getkukuymun.site/url/2A8QZ54HRrD",
+                    "badge": "New"
+                },
+                {
+                    "id": 3,
+                    "name": "YouTube MOD",
+                    "description": "Ad-free YouTube experience with background play and video download capabilities.",
+                    "category": "media",
+                    "image": "assets/images/app.revanced.android.youtube.200.png",
+                    "size": "85 MB",
+                    "version": "v18.45.43",
+                    "rating": 4.8,
+                    "popularity": 98,
+                    "releaseDate": "2024-10-22T00:00:00Z",
+                    "downloads": "15K+",
+                    "downloadUrl": "https://vanced.to/",
+                    "badge": "Popular"
+                },
+                {
+                    "id": 4,
+                    "name": "File Manager MOD",
+                    "description": "Advanced file management with root access, cloud integration, and premium themes.",
+                    "category": "tools",
+                    "image": "assets/images/video-player-all-format-1 mobile.png",
+                    "size": "8 MB",
+                    "version": "v4.2.1",
+                    "rating": 4.8,
+                    "popularity": 80,
+                    "releaseDate": "2024-10-18T00:00:00Z",
+                    "downloads": "5K+",
+                    "downloadUrl": "https://liteapks.com/download/file-manager-77834",
+                    "badge": "Pro"
+                },
+                {
+                    "id": 5,
+                    "name": "XPlayer",
+                    "description": "XPlayer Mod APK is an impressive video player tool and gives you the best experience.",
+                    "category": "media",
+                    "image": "assets/images/xplayer.png",
+                    "size": "38 MB",
+                    "version": "v2.4.8.2",
+                    "rating": 4.5,
+                    "popularity": 82,
+                    "releaseDate": "2024-10-17T00:00:00Z",
+                    "downloads": "7K+",
+                    "downloadUrl": "https://liteapks.com/download/xplayer-5858",
+                    "badge": "Enhanced"
+                },
+                {
+                    "id": 6,
+                    "name": "Office Suite MOD",
+                    "description": "Complete office suite with PDF editing, cloud sync, and all premium features unlocked.",
+                    "category": "productivity",
+                    "image": "assets/images/office-suite.png",
+                    "size": "120 MB",
+                    "version": "v14.8.4",
+                    "rating": 4.7,
+                    "popularity": 85,
+                    "releaseDate": "2024-10-16T00:00:00Z",
+                    "downloads": "6K+",
+                    "downloadUrl": "#",
+                    "badge": "Premium"
+                },
+                {
+                    "id": 7,
+                    "name": "TikTok MOD",
+                    "description": "Download videos without watermark, unlimited features and enhanced privacy options.",
+                    "category": "social",
+                    "image": "assets/images/tiktok-mod.png",
+                    "size": "120 MB",
+                    "version": "v30.5.4",
+                    "rating": 4.6,
+                    "popularity": 96,
+                    "releaseDate": "2024-10-21T00:00:00Z",
+                    "downloads": "15K+",
+                    "downloadUrl": "https://example.com/tiktok",
+                    "badge": "Popular"
+                },
+                {
+                    "id": 8,
+                    "name": "Spotify MOD",
+                    "description": "Ad-free music, unlimited skips, and premium features unlocked.",
+                    "category": "media",
+                    "image": "assets/images/spotify-mod.png",
+                    "size": "85 MB",
+                    "version": "v8.8.96",
+                    "rating": 4.9,
+                    "popularity": 99,
+                    "releaseDate": "2024-10-23T00:00:00Z",
+                    "downloads": "20K+",
+                    "downloadUrl": "https://example.com/spotify",
+                    "badge": "Premium"
+                },
+                {
+                    "id": 9,
+                    "name": "Snapchat MOD",
+                    "description": "Save snaps, view stories anonymously, and access premium filters.",
+                    "category": "social",
+                    "image": "assets/images/snapchat-mod.png",
+                    "size": "95 MB",
+                    "version": "v12.1.0.30",
+                    "rating": 4.5,
+                    "popularity": 90,
+                    "releaseDate": "2024-10-15T00:00:00Z",
+                    "downloads": "9K+",
+                    "downloadUrl": "#",
+                    "badge": "New"
+                }
+            ],
+            staticGames: [
+                {
+                    "id": 1,
+                    "name": "Subway Surfers MOD",
+                    "description": "Unlimited coins, keys, and all characters unlocked. Run endlessly without restrictions.",
+                    "category": "action",
+                    "image": "assets/images/subway-surfers.png",
+                    "size": "150 MB",
+                    "version": "v3.12.1",
+                    "rating": 4.8,
+                    "popularity": 98,
+                    "releaseDate": "2024-10-23T00:00:00Z",
+                    "downloads": "25K+",
+                    "downloadUrl": "https://an1.com/file_4683-dw.html",
+                    "badge": "Unlimited"
+                },
+                {
+                    "id": 2,
+                    "name": "Asphalt 9 MOD",
+                    "description": "Unlimited credits, all cars unlocked, and premium features for the ultimate racing experience.",
+                    "category": "racing",
+                    "image": "assets/images/asphalt-9.png",
+                    "size": "2.1 GB",
+                    "version": "v3.9.4",
+                    "rating": 4.9,
+                    "popularity": 95,
+                    "releaseDate": "2024-10-22T00:00:00Z",
+                    "downloads": "12K+",
+                    "downloadUrl": "https://asphalt-9-legends-mod.apkresult.io/download",
+                    "badge": "Premium"
+                },
+                {
+                    "id": 3,
+                    "name": "Candy Crush MOD",
+                    "description": "Unlimited lives, boosters, and all levels unlocked. Sweet gaming without limits.",
+                    "category": "puzzle",
+                    "image": "assets/images/candy-crush.png",
+                    "size": "95 MB",
+                    "version": "v1.260.1.2",
+                    "rating": 4.7,
+                    "popularity": 90,
+                    "releaseDate": "2024-10-21T00:00:00Z",
+                    "downloads": "18K+",
+                    "downloadUrl": "https://candy-crush-soda-saga.apkrabi.com/download/",
+                    "badge": "Unlimited"
+                },
+                {
+                    "id": 4,
+                    "name": "Minecraft MOD",
+                    "description": "Unlocked skins, texture packs, and premium features for unlimited creativity.",
+                    "category": "adventure",
+                    "image": "assets/images/minecraft.png",
+                    "size": "180 MB",
+                    "version": "v1.20.15.01",
+                    "rating": 4.9,
+                    "popularity": 96,
+                    "releaseDate": "2024-10-20T00:00:00Z",
+                    "downloads": "15K+",
+                    "downloadUrl": "#",
+                    "badge": "Premium"
+                },
+                {
+                    "id": 5,
+                    "name": "FIFA Mobile MOD",
+                    "description": "Unlimited coins, all players unlocked, and premium features for the ultimate football experience.",
+                    "category": "sports",
+                    "image": "assets/images/fifa-mobile.png",
+                    "size": "1.2 GB",
+                    "version": "v17.0.14",
+                    "rating": 4.8,
+                    "popularity": 88,
+                    "releaseDate": "2024-10-19T00:00:00Z",
+                    "downloads": "10K+",
+                    "downloadUrl": "#",
+                    "badge": "Enhanced"
+                },
+                {
+                    "id": 6,
+                    "name": "Call of Duty MOD",
+                    "description": "Unlimited CP, all weapons unlocked, and premium battle pass for ultimate warfare.",
+                    "category": "action",
+                    "image": "assets/images/call-of-duty.png",
+                    "size": "2.5 GB",
+                    "version": "v1.0.39",
+                    "rating": 4.9,
+                    "popularity": 97,
+                    "releaseDate": "2024-10-18T00:00:00Z",
+                    "downloads": "20K+",
+                    "downloadUrl": "#",
+                    "badge": "Pro"
+                },
+                {
+                    "id": 7,
+                    "name": "Temple Run 2 MOD",
+                    "description": "Unlimited coins, all characters unlocked, and infinite energy for endless running.",
+                    "category": "adventure",
+                    "image": "assets/images/temple-run.png",
+                    "size": "80 MB",
+                    "version": "v1.100.0",
+                    "rating": 4.6,
+                    "popularity": 85,
+                    "releaseDate": "2024-10-17T00:00:00Z",
+                    "downloads": "8K+",
+                    "downloadUrl": "#",
+                    "badge": "Unlimited"
+                },
+                {
+                    "id": 8,
+                    "name": "PUBG Mobile MOD",
+                    "description": "Unlimited UC, aim assist, and all skins unlocked for battle royale dominance.",
+                    "category": "action",
+                    "image": "assets/images/pubg-mobile.png",
+                    "size": "1.8 GB",
+                    "version": "v3.0.0",
+                    "rating": 4.9,
+                    "popularity": 100,
+                    "releaseDate": "2024-10-24T00:00:00Z",
+                    "downloads": "30K+",
+                    "downloadUrl": "#",
+                    "badge": "Pro"
+                },
+                {
+                    "id": 9,
+                    "name": "Clash of Clans MOD",
+                    "description": "Unlimited gems, gold, and elixir with all troops and buildings unlocked for epic battles.",
+                    "category": "strategy",
+                    "image": "assets/images/clash-of-clans.png",
+                    "size": "150 MB",
+                    "version": "v14.0.10",
+                    "rating": 4.8,
+                    "popularity": 93,
+                    "releaseDate": "2024-10-25T00:00:00Z",
+                    "downloads": "22K+",
+                    "downloadUrl": "#",
+                    "badge": "Enhanced"
+                }
+            ]
+        };
     }
 
     /**
@@ -467,7 +470,6 @@
         initializeAnimations();
     }
 
-
     /**
      * Applies all filters and sorting, then triggers rendering
      * This function is for *filter changes*, so it resets the page to 1.
@@ -510,16 +512,10 @@
                 break;
         }
 
-
         state.filteredData = result;
         if(resetPage) {
              state.currentPage = 1; // Reset to first page after filtering
         }
-
-        // Show notification only on explicit search
-        // if (search.length > 0 && resetPage) { // Only show on new search/filter action
-        //     showNotification(`Found ${result.length} results`, 'info');
-        // }
 
         renderGrid();
         renderPagination();
@@ -548,7 +544,6 @@
                  grid.innerHTML = ''; // Clear anyway if message not found
             }
 
-
             if (state.filteredData.length === 0) {
                 grid.innerHTML = `
                     <div class="no-results">
@@ -574,7 +569,6 @@
                 return;
             }
 
-
             // Create and append app cards
             pageData.forEach((item, index) => {
                 const card = (state.pageType === 'games') ? createGameCard(item, index) : createAppCard(item, index);
@@ -595,10 +589,10 @@
      * This is based on your new, more advanced logic
      */
     function renderPagination() {
-        let paginationContainer = document.getElementById('pagination'); // Use the specific ID
+        let paginationContainer = document.getElementById('pagination');
         if (!paginationContainer) {
             console.warn("Pagination container with ID 'pagination' not found.");
-            // Fallback to class if ID not found (though ID is better)
+            // Fallback to class if ID not found
             paginationContainer = document.querySelector('.pagination');
             if(!paginationContainer) return;
         }
@@ -626,10 +620,9 @@
         }
         paginationContainer.appendChild(prevBtn);
 
-
         // Page numbers logic
-        const maxVisiblePages = 5; // Total buttons including ellipsis potentially
-        const halfVisible = Math.floor((maxVisiblePages - 2) / 2); // Buttons around current page
+        const maxVisiblePages = 5;
+        const halfVisible = Math.floor((maxVisiblePages - 2) / 2);
 
         let startPage = 1;
         let endPage = totalPages;
@@ -655,8 +648,7 @@
             }
         }
 
-
-         // Always show page 1
+        // Always show page 1
         paginationContainer.appendChild(createPageButton(1, 1));
 
         // Start ellipsis
@@ -665,8 +657,8 @@
         }
 
         // Middle page numbers
-         for (let i = startPage; i <= endPage; i++) {
-             if (i > 1 && i < totalPages) { // Don't repeat page 1 or last page
+        for (let i = startPage; i <= endPage; i++) {
+            if (i > 1 && i < totalPages) {
                 paginationContainer.appendChild(createPageButton(i, i));
             }
         }
@@ -676,7 +668,7 @@
             paginationContainer.appendChild(createPageDots());
         }
 
-         // Always show last page if more than 1 page
+        // Always show last page if more than 1 page
         if (totalPages > 1) {
             paginationContainer.appendChild(createPageButton(totalPages, totalPages));
         }
@@ -684,7 +676,7 @@
         // Next button
         const nextBtn = createPageButton('Next ›', state.currentPage < totalPages ? state.currentPage + 1 : null);
         nextBtn.classList.add('next');
-         if (state.currentPage === totalPages) {
+        if (state.currentPage === totalPages) {
              nextBtn.disabled = true;
         }
         paginationContainer.appendChild(nextBtn);
@@ -700,7 +692,7 @@
         pageBtn.textContent = text;
 
         if (pageNum !== null) {
-            pageBtn.dataset.page = pageNum; // Store page number in data attribute
+            pageBtn.dataset.page = pageNum;
             if (pageNum === state.currentPage) {
                 pageBtn.classList.add('active');
             }
@@ -709,7 +701,7 @@
                 if (e.target.classList.contains('active') || e.target.disabled) return;
 
                  state.currentPage = pageNum;
-                 renderGrid(); // Only render grid + pagination
+                 renderGrid();
                  renderPagination();
                  // Scroll to top of grid smoothly
                  const gridElement = document.querySelector('.apps-grid, .games-grid');
@@ -718,13 +710,11 @@
                  }
             });
         } else {
-            // This is for Prev/Next text buttons without a direct page number link initially
-            pageBtn.disabled = true; // Disabled unless pageNum provided later
+            pageBtn.disabled = true;
         }
 
         return pageBtn;
     }
-
 
     // Helper for pagination dots
     function createPageDots() {
@@ -734,13 +724,12 @@
          return dots;
     }
 
-    // Create app card HTML (from your new code)
+    // Create app card HTML
     function createAppCard(app, index) {
         const card = document.createElement('div');
-        card.className = 'app-card card-hover'; // Added card-hover
+        card.className = 'app-card card-hover';
         card.setAttribute('data-aos', 'zoom-in');
-        // Calculate delay based on index within the current page view
-        const delay = (index % state.itemsPerPage) * 50; // Smaller delay
+        const delay = (index % state.itemsPerPage) * 50;
         card.setAttribute('data-aos-delay', delay.toString());
         card.setAttribute('data-category', app.category);
 
@@ -766,13 +755,12 @@
         return card;
     }
 
-    // Create game card HTML (from your new code)
+    // Create game card HTML
     function createGameCard(game, index) {
         const card = document.createElement('div');
-        card.className = 'game-card card-hover'; // Added card-hover
+        card.className = 'game-card card-hover';
         card.setAttribute('data-aos', 'zoom-in');
-        // Calculate delay based on index within the current page view
-        const delay = (index % state.itemsPerPage) * 50; // Smaller delay
+        const delay = (index % state.itemsPerPage) * 50;
         card.setAttribute('data-aos-delay', delay.toString());
         card.setAttribute('data-category', game.category);
 
@@ -798,10 +786,10 @@
         return card;
     }
 
-    // Create featured item HTML (from your new code)
+    // Create featured item HTML
     function createFeaturedItem(app, index) {
         const item = document.createElement('div');
-        item.className = 'featured-item card-hover'; // Added card-hover
+        item.className = 'featured-item card-hover';
         item.setAttribute('data-aos', 'zoom-in');
         item.setAttribute('data-aos-delay', ((index + 1) * 100).toString());
 
@@ -827,14 +815,13 @@
     function initializeAnimations() {
         if (typeof AOS !== 'undefined') {
             AOS.init({
-                duration: 600, // Default duration
-                once: true, // Only animate once
-                offset: 50, // Trigger animations a bit sooner
+                duration: 600,
+                once: true,
+                offset: 50,
             });
         } else {
              console.warn("AOS library not found. Falling back to basic Intersection Observer.");
-             // Fallback Observer (Simplified)
-            const needsScrollAnimations = document.querySelectorAll('[data-aos]');
+             const needsScrollAnimations = document.querySelectorAll('[data-aos]');
             if (needsScrollAnimations.length === 0) return;
 
             const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
@@ -842,7 +829,7 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const element = entry.target;
-                        element.classList.add('aos-animate'); // Use AOS class for compatibility
+                        element.classList.add('aos-animate');
                         const delay = element.getAttribute('data-aos-delay') || 0;
                         element.style.transitionDelay = `${delay}ms`;
                         obs.unobserve(element);
@@ -853,20 +840,14 @@
         }
     }
 
-
     // Hero section animations for homepage
     function initializeHeroAnimations() {
-        // Using AOS data attributes now, JS might not be needed
-        // const heroContent = document.querySelector('.hero-content');
-        // const heroGraphic = document.querySelector('.hero-graphic');
-        // if (heroContent) heroContent.classList.add('slide-in-left'); // Or use data-aos="fade-right"
-        // if (heroGraphic) heroGraphic.classList.add('slide-in-right'); // Or use data-aos="fade-left"
+        // Using AOS data attributes
     }
 
     // Team animations for about page
     function initializeTeamAnimations() {
         // Can use AOS data attributes + delays on team cards and social links
-        // Example: <div class="team-card" data-aos="fade-up" data-aos-delay="100">
     }
 
     // Contact page animations
@@ -891,7 +872,6 @@
         });
     }
 
-
     // Enhanced filter functionality
     function initializeFilters() {
         const categoryFilter = document.getElementById('categoryFilter');
@@ -899,21 +879,20 @@
 
         if (categoryFilter) {
             categoryFilter.addEventListener('change', () => {
-                debounce(applyFiltersAndRender, 300)(true); // Pass true to reset page
+                debounce(applyFiltersAndRender, 300)(true);
             });
         }
 
         if (sortFilter) {
             sortFilter.addEventListener('change', () => {
-                debounce(applyFiltersAndRender, 300)(true); // Pass true to reset page
+                debounce(applyFiltersAndRender, 300)(true);
             });
         }
     }
 
     // Advanced filters for apps/games pages
     function initializeAdvancedFilters() {
-        // const filterControls = document.querySelector('.filter-controls');
-        // if (filterControls) filterControls.classList.add('slide-in-top'); // Use data-aos="fade-down" instead
+        // Additional filter functionality can be added here
     }
 
     // Enhanced search functionality
@@ -922,17 +901,16 @@
         const searchButton = document.getElementById('searchButton');
 
         if (searchInput && searchButton) {
-            searchButton.addEventListener('click', () => applyFiltersAndRender(true)); // Pass true to reset page
+            searchButton.addEventListener('click', () => applyFiltersAndRender(true));
             searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') applyFiltersAndRender(true); // Pass true to reset page
+                if (e.key === 'Enter') applyFiltersAndRender(true);
             });
             // Real-time search with debounce
-            searchInput.addEventListener('input', debounce(() => applyFiltersAndRender(true), 500)); // Pass true
+            searchInput.addEventListener('input', debounce(() => applyFiltersAndRender(true), 500));
         }
     }
 
-
-    // Download functionality with CRITICAL `confirm()` FIX
+    // Download functionality
     function initializeDownloadSystem() {
         let downloadInProgress = false;
         let progressInterval;
@@ -960,7 +938,6 @@
             if (!modal) {
                 console.error("Download modal (#downloadModal) not found in the HTML.");
                 showNotification('Error: Download interface missing.', 'error');
-                // modal = createDownloadModal(); // Fallback creation removed, rely on HTML
                 return;
             }
 
@@ -968,14 +945,13 @@
             const progressBar = modal.querySelector('.progress');
             const progressText = modal.querySelector('.progress-text');
             const confirmView = modal.querySelector('.modal-confirm-cancel');
-            const mainContentView = modal.querySelector('.modal-main-content'); // Assuming main content area needs hiding
-
+            const mainContentView = modal.querySelector('.modal-main-content');
 
             if (appNameSpan) appNameSpan.textContent = appName;
 
             // Ensure confirm view is hidden and main view is visible initially
             if (confirmView) confirmView.style.display = 'none';
-            if (mainContentView) mainContentView.style.display = 'block'; // Or 'flex' etc.
+            if (mainContentView) mainContentView.style.display = 'block';
 
             let downloadProgress = 0;
             if (progressBar) progressBar.style.width = '0%';
@@ -986,10 +962,10 @@
 
             downloadInProgress = true;
             progressInterval = setInterval(() => {
-                downloadProgress += Math.random() * 15 + 5; // Slightly faster progress
+                downloadProgress += Math.random() * 15 + 5;
                 if (downloadProgress > 100) downloadProgress = 100;
                 updateProgress(downloadProgress, progressBar, progressText, downloadUrl, modal);
-            }, 300); // Slower interval
+            }, 300);
 
             trackDownload(appName);
         }
@@ -1006,7 +982,7 @@
             } else {
                 clearInterval(progressInterval);
                  if (progressText) progressText.textContent = 'Download complete!';
-                 if (progressBar) progressBar.style.width = '100%'; // Ensure it visually completes
+                 if (progressBar) progressBar.style.width = '100%';
 
                 setTimeout(() => {
                     if (modal) modal.style.display = 'none';
@@ -1014,15 +990,13 @@
                     downloadInProgress = false;
 
                     if (downloadUrl && downloadUrl !== '#') {
-                         // Simulate download trigger for files not directly linked (like #)
                         if (downloadUrl === '#') {
                              showNotification('Download simulation complete (no URL provided).', 'info');
                         } else {
-                            // Create a temporary link and click it
                             const tempLink = document.createElement('a');
                             tempLink.href = downloadUrl;
-                            tempLink.setAttribute('download', ''); // Optional: Suggests a filename if possible
-                            tempLink.setAttribute('target', '_blank'); // Open in new tab/window
+                            tempLink.setAttribute('download', '');
+                            tempLink.setAttribute('target', '_blank');
                             document.body.appendChild(tempLink);
                             tempLink.click();
                             document.body.removeChild(tempLink);
@@ -1031,10 +1005,9 @@
                     } else {
                          showNotification('No download URL specified.', 'warning');
                     }
-                }, 1200); // Slightly longer delay
+                }, 1200);
             }
         }
-
 
         function closeModal(modal) {
             if (!modal) return;
@@ -1043,23 +1016,16 @@
 
             if (downloadInProgress) {
                  if (confirmView) {
-                     confirmView.style.display = 'flex'; // Show confirm dialog
-                     if(mainContentView) mainContentView.style.display = 'none'; // Hide main content
+                     confirmView.style.display = 'flex';
+                     if(mainContentView) mainContentView.style.display = 'none';
                  } else {
-                     // Fallback if confirm view doesn't exist (should not happen with correct HTML)
                      console.warn("Cancel confirmation view not found.");
-                     // Simple close without confirm - potential to interrupt download
-                     // clearInterval(progressInterval);
-                     // modal.style.display = 'none';
-                     // document.body.style.overflow = 'auto';
-                     // downloadInProgress = false;
                  }
             } else {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
-                 if (confirmView) confirmView.style.display = 'none'; // Ensure confirm is hidden
-                 if (mainContentView) mainContentView.style.display = 'block'; // Ensure main content is visible next time
-
+                 if (confirmView) confirmView.style.display = 'none';
+                 if (mainContentView) mainContentView.style.display = 'block';
             }
         }
 
@@ -1080,16 +1046,15 @@
                 if (modal) modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
                 downloadInProgress = false;
-                if (confirmView) confirmView.style.display = 'none'; // Hide confirm view
-                if (mainContentView) mainContentView.style.display = 'block'; // Show main view for next time
+                if (confirmView) confirmView.style.display = 'none';
+                if (mainContentView) mainContentView.style.display = 'block';
                 showNotification('Download cancelled.', 'info');
             });
 
             // "No, Resume" button inside confirm dialog
             modal.querySelector('#resumeDownload')?.addEventListener('click', () => {
-                if (confirmView) confirmView.style.display = 'none'; // Hide confirm view
-                 if (mainContentView) mainContentView.style.display = 'block'; // Show main view again
-
+                if (confirmView) confirmView.style.display = 'none';
+                 if (mainContentView) mainContentView.style.display = 'block';
             });
         }
 
@@ -1097,12 +1062,9 @@
         addModalListeners(document.getElementById('downloadModal'));
 
         function trackDownload(appName) {
-            // Placeholder for analytics
             console.log(`Download started: ${appName}`);
-            // Example: if (typeof gtag === 'function') { gtag('event', 'download', {'app_name': appName}); }
         }
     }
-
 
     // Scroll effects
     function initializeScrollEffects() {
@@ -1117,17 +1079,15 @@
                     window.requestAnimationFrame(function() {
                         if (currentScrollY > 100) {
                             header.classList.add('scrolled');
-                            // Add compact based on scrolling down past a threshold
                             if (currentScrollY > lastScrollY && currentScrollY > 200) {
                                 header.classList.add('compact');
                             } else if (currentScrollY < lastScrollY || currentScrollY <= 200) {
-                                // Remove compact if scrolling up or near the top
                                 header.classList.remove('compact');
                             }
                         } else {
                             header.classList.remove('scrolled', 'compact');
                         }
-                        lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY; // Update last scroll position
+                        lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
                         ticking = false;
                     });
                     ticking = true;
@@ -1136,10 +1096,9 @@
         }
     }
 
-
     // Counter animations
     function initializeCounters() {
-        const counters = document.querySelectorAll('.stat-number[data-count]'); // Only select those with data-count
+        const counters = document.querySelectorAll('.stat-number[data-count]');
         if (counters.length === 0) return;
 
         const observer = new IntersectionObserver((entries, obs) => {
@@ -1147,30 +1106,29 @@
                 if (entry.isIntersecting) {
                     const counter = entry.target;
                     const target = parseInt(counter.dataset.count, 10);
-                    const duration = 2000; // ms
+                    const duration = 2000;
                     let startTime = null;
 
                     const animateCount = (timestamp) => {
                         if (!startTime) startTime = timestamp;
                         const progress = Math.min((timestamp - startTime) / duration, 1);
                         const currentVal = Math.floor(progress * target);
-                        counter.textContent = currentVal.toLocaleString(); // Format with commas
+                        counter.textContent = currentVal.toLocaleString();
 
                         if (progress < 1) {
                             requestAnimationFrame(animateCount);
                         } else {
-                            counter.textContent = target.toLocaleString(); // Ensure final value is exact
+                            counter.textContent = target.toLocaleString();
                         }
                     };
 
                     requestAnimationFrame(animateCount);
-                    obs.unobserve(counter); // Animate only once
+                    obs.unobserve(counter);
                 }
             });
-        }, { threshold: 0.5 }); // Trigger when 50% visible
+        }, { threshold: 0.5 });
 
         counters.forEach(counter => {
-             // Initialize text content to 0 before observing
             counter.textContent = '0';
             observer.observe(counter);
         });
@@ -1184,7 +1142,7 @@
         // Use event delegation on the list container
         faqList.addEventListener('click', (e) => {
              const question = e.target.closest('.faq-question');
-             if (!question) return; // Clicked outside a question
+             if (!question) return;
 
              const faqItem = question.closest('.faq-item');
              if (!faqItem) return;
@@ -1216,10 +1174,9 @@
 
              if (e.key === 'Enter' || e.key === ' ') {
                  e.preventDefault();
-                 question.click(); // Trigger the click handler
+                 question.click();
              }
          });
-
 
         function setupFAQItem(item) {
              const question = item.querySelector('.faq-question');
@@ -1238,14 +1195,12 @@
         // Initial setup for accessibility attributes
         faqList.querySelectorAll('.faq-item').forEach(setupFAQItem);
 
-
         function openFAQItem(item) {
             const q = item.querySelector('.faq-question');
             const a = item.querySelector('.faq-answer');
             if (!q || !a) return;
             item.classList.add('active');
             q.setAttribute('aria-expanded', 'true');
-            // Animate max-height
             a.style.maxHeight = a.scrollHeight + 'px';
         }
 
@@ -1255,11 +1210,9 @@
             if (!q || !a) return;
             item.classList.remove('active');
             q.setAttribute('aria-expanded', 'false');
-             // Animate max-height back to 0
             a.style.maxHeight = '0';
         }
     }
-
 
     // Contact form handling
     function initializeContactForm() {
@@ -1271,12 +1224,10 @@
         const btnText = submitBtn?.querySelector('.btn-text');
         const btnLoading = submitBtn?.querySelector('.btn-loading');
 
-
         if (successMessage) successMessage.style.display = 'none';
 
         const inputs = contactForm.querySelectorAll('input[required], textarea[required]');
         inputs.forEach(input => {
-            // Validate on blur and input for immediate feedback
             input.addEventListener('input', () => validateField(input));
             input.addEventListener('blur', () => validateField(input));
         });
@@ -1284,21 +1235,17 @@
         contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             let isValid = true;
-            // Validate all required fields on submit
             inputs.forEach(input => {
                 if (!validateField(input)) isValid = false;
             });
 
-             // Validate email specifically if present but not required initially
             const emailInput = contactForm.querySelector('input[type="email"]');
             if (emailInput && !validateField(emailInput)) {
                  isValid = false;
             }
 
-
             if (!isValid) {
                 showNotification('Please fix the errors in the form.', 'error');
-                 // Focus the first invalid field
                 const firstError = contactForm.querySelector('.error');
                 if (firstError) firstError.focus();
                 return;
@@ -1314,28 +1261,25 @@
 
             try {
                 const responseData = await submitContactForm(contactForm);
-                console.log("FormSubmit Response:", responseData); // Log success response
+                console.log("FormSubmit Response:", responseData);
 
-                // Use the success message div from HTML
-                 if (successMessage) {
-                    contactForm.style.display = 'none'; // Hide form
+                if (successMessage) {
+                    contactForm.style.display = 'none';
                     successMessage.style.display = 'block';
                     successMessage.classList.add('show');
                 } else {
-                     // Fallback notification if success div is missing
                     showNotification('Message sent successfully!', 'success');
-                    contactForm.reset(); // Reset form fields
+                    contactForm.reset();
                  }
 
             } catch (error) {
                 console.error('Form submission error:', error);
                 showNotification(`Error: ${error.message || 'Could not send message. Please try again.'}`, 'error');
             } finally {
-                 // Hide loading state
                 if (submitBtn) {
                     submitBtn.classList.remove('loading');
                     submitBtn.disabled = false;
-                     if(btnText) btnText.style.display = 'inline'; // Or 'block'
+                     if(btnText) btnText.style.display = 'inline';
                      if(btnLoading) btnLoading.style.display = 'none';
                 }
             }
@@ -1343,89 +1287,73 @@
 
         async function submitContactForm(form) {
             const formData = new FormData(form);
-            const formAction = form.action || 'https://formsubmit.co/ajax/focistore@gmail.com'; // Use action from form or default
+            const formAction = form.action || 'https://formsubmit.co/ajax/focistore@gmail.com';
 
-            // Use URLSearchParams for simple forms, or keep FormData for file uploads
             const params = new URLSearchParams();
             formData.forEach((value, key) => {
                 params.append(key, value);
             });
-             // Add FormSubmit specific hidden fields if not in HTML
+            
             if(!formData.has('_subject')) params.append('_subject', 'New Contact Form Submission - FociStore');
             if(!formData.has('_template')) params.append('_template', 'table');
-             // Consider adding honey pot or captcha fields here if needed
-
 
             const response = await fetch(formAction, {
                 method: 'POST',
-                headers: { /* 'Content-Type': 'application/x-www-form-urlencoded', */ 'Accept': 'application/json' }, // Let browser set Content-Type for FormData, or set explicitly for URLSearchParams
-                body: params // Use params for x-www-form-urlencoded
-                // body: formData // Use formData if sending multipart/form-data (e.g., file uploads)
+                headers: { 'Accept': 'application/json' },
+                body: params
             });
 
-            const responseText = await response.text(); // Get raw response text
+            const responseText = await response.text();
             console.log("Raw FormSubmit Response Text:", responseText);
 
+            if (!response.ok) {
+                let errorMsg = `Network error: ${response.status} ${response.statusText}`;
+                try {
+                    const errorJson = JSON.parse(responseText);
+                    errorMsg = errorJson.message || errorMsg;
+                } catch (parseError) { }
+                throw new Error(errorMsg);
+            }
 
-             if (!response.ok) {
-                 // Try to parse error if JSON, otherwise use status text
-                 let errorMsg = `Network error: ${response.status} ${response.statusText}`;
-                 try {
-                     const errorJson = JSON.parse(responseText);
-                     errorMsg = errorJson.message || errorMsg;
-                 } catch (parseError) { /* Ignore if not JSON */ }
-                 throw new Error(errorMsg);
-             }
-
-             // Try parsing response as JSON
-             try {
+            try {
                 const data = JSON.parse(responseText);
-                 // FormSubmit success is often just { success: "true" } as string
                 if (data.success !== 'true' && data.success !== true) {
                     throw new Error(data.message || 'Form submission failed');
                 }
-                return data; // Return parsed data on success
-             } catch(e) {
-                 console.error("Failed to parse FormSubmit response as JSON:", e);
-                 // Consider success even if response is not JSON, if status is OK
-                 if (response.ok) {
-                     return { success: true, message: "Submitted (non-JSON response)" };
-                 } else {
+                return data;
+            } catch(e) {
+                console.error("Failed to parse FormSubmit response as JSON:", e);
+                if (response.ok) {
+                    return { success: true, message: "Submitted (non-JSON response)" };
+                } else {
                     throw new Error("Form submission failed (invalid response).");
-                 }
-             }
+                }
+            }
         }
     }
 
-
-    // Field validation - More robust
+    // Field validation
     function validateField(field) {
-        if (!field) return true; // Shouldn't happen, but safety check
+        if (!field) return true;
 
         const value = field.value.trim();
-        const fieldName = field.name || field.type; // Use name or fallback to type
+        const fieldName = field.name || field.type;
         let isValid = true;
         let errorMessage = '';
 
-        // Find or create error message container
         let errorContainer = field.parentNode.querySelector(`.field-error[data-for="${field.id || fieldName}"]`);
         if (!errorContainer) {
             errorContainer = document.createElement('div');
             errorContainer.className = 'field-error';
-            errorContainer.dataset.for = field.id || fieldName; // Link error to field
-             // Insert after the field
-             field.parentNode.insertBefore(errorContainer, field.nextSibling);
-             // Ensure it's visually hidden initially
-             errorContainer.style.display = 'none';
+            errorContainer.dataset.for = field.id || fieldName;
+            field.parentNode.insertBefore(errorContainer, field.nextSibling);
+            errorContainer.style.display = 'none';
         }
 
-
-        // Basic required check
         if (field.required && !value) {
             isValid = false;
             errorMessage = 'This field is required';
         }
-        // Type-specific checks ONLY IF value is present or field is required
         else if (value || field.required) {
             switch (fieldName) {
                 case 'name':
@@ -1440,160 +1368,142 @@
                 case 'message':
                     if (value.length < 10 && field.required) { isValid = false; errorMessage = 'Message must be at least 10 characters'; }
                     break;
-                // Add more cases for other field names or types (e.g., phone, url)
             }
         }
 
-        // Apply styles and show/hide error message
         if (!isValid) {
             field.classList.add('error');
             field.setAttribute('aria-invalid', 'true');
             errorContainer.textContent = errorMessage;
-            errorContainer.style.display = 'block'; // Show error
+            errorContainer.style.display = 'block';
         } else {
             field.classList.remove('error');
             field.setAttribute('aria-invalid', 'false');
             errorContainer.textContent = '';
-            errorContainer.style.display = 'none'; // Hide error
+            errorContainer.style.display = 'none';
         }
         return isValid;
     }
 
-
     // Email validation
     function isValidEmail(email) {
-        // More robust regex
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         return emailRegex.test(email);
     }
 
-    // Navigation initialization
+    // Navigation initialization - FIXED for GitHub Pages
     function initializeNavigation() {
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const navLinks = document.querySelectorAll('nav a[href]');
 
         navLinks.forEach(link => {
-            const linkHref = link.getAttribute('href').split('?')[0]; // Ignore query parameters for matching
-
-             // Remove active class initially
+            const linkHref = link.getAttribute('href').split('?')[0];
+            
+            // Remove active class initially
             link.classList.remove('active');
 
-            if ((currentPage === '' || currentPage === 'index.html') && (linkHref === '' || linkHref === 'index.html')) {
-                link.classList.add('active');
-            } else if (linkHref !== '' && linkHref !== 'index.html' && currentPage === linkHref) {
-                link.classList.add('active');
+            // Handle GitHub Pages path structure
+            if (currentPage === 'index.html' || currentPage === '' || currentPage === '/') {
+                if (linkHref === 'index.html' || linkHref === '' || linkHref === './') {
+                    link.classList.add('active');
+                }
+            } else {
+                // For other pages, match exact filename
+                if (linkHref === currentPage) {
+                    link.classList.add('active');
+                }
             }
         });
     }
 
-
     // Page transitions
     function initializePageTransitions() {
-        // Simple fade-in on load
         document.body.style.opacity = '0';
-        requestAnimationFrame(() => { // Ensure styles are applied before transition starts
+        requestAnimationFrame(() => {
             document.body.style.transition = 'opacity 0.5s ease';
             document.body.style.opacity = '1';
         });
-
-         // Add transition out effect (optional)
-        // window.addEventListener('beforeunload', () => {
-        //     document.body.style.transition = 'opacity 0.3s ease';
-        //     document.body.style.opacity = '0';
-        // });
     }
 
     // Navigation scroll
     function initializeNavScroll() {
         const nav = document.querySelector('nav ul');
         if (!nav) return;
-        const navContainer = nav.closest('nav'); // Get parent nav element
+        const navContainer = nav.closest('nav');
         if (!navContainer) return;
 
         let leftBtn = navContainer.querySelector('.nav-scroll-left');
         let rightBtn = navContainer.querySelector('.nav-scroll-right');
 
-        // Only create buttons if they don't exist
         if (!leftBtn) {
             leftBtn = document.createElement('button');
             leftBtn.className = 'nav-scroll-indicator nav-scroll-left';
             leftBtn.innerHTML = '‹';
             leftBtn.setAttribute('aria-label', 'Scroll left');
-            leftBtn.style.display = 'none'; // Hide initially
+            leftBtn.style.display = 'none';
             navContainer.appendChild(leftBtn);
-             leftBtn.addEventListener('click', () => nav.scrollBy({ left: -200, behavior: 'smooth' }));
-
+            leftBtn.addEventListener('click', () => nav.scrollBy({ left: -200, behavior: 'smooth' }));
         }
+
         if (!rightBtn) {
             rightBtn = document.createElement('button');
             rightBtn.className = 'nav-scroll-indicator nav-scroll-right';
             rightBtn.innerHTML = '›';
             rightBtn.setAttribute('aria-label', 'Scroll right');
-            rightBtn.style.display = 'none'; // Hide initially
+            rightBtn.style.display = 'none';
             navContainer.appendChild(rightBtn);
-             rightBtn.addEventListener('click', () => nav.scrollBy({ left: 200, behavior: 'smooth' }));
+            rightBtn.addEventListener('click', () => nav.scrollBy({ left: 200, behavior: 'smooth' }));
         }
 
-        // Ensure nav container allows positioning
         if (window.getComputedStyle(navContainer).position === 'static') {
-             navContainer.style.position = 'relative';
+            navContainer.style.position = 'relative';
         }
-
 
         let scrollTimeout;
         function updateScrollButtons() {
-             clearTimeout(scrollTimeout);
-             scrollTimeout = setTimeout(() => { // Debounce resize/scroll check
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
                 const scrollLeft = nav.scrollLeft;
                 const scrollWidth = nav.scrollWidth;
                 const clientWidth = nav.clientWidth;
                 const maxScrollLeft = scrollWidth - clientWidth;
 
-                // Show buttons only if content overflows
                 const showButtons = scrollWidth > clientWidth;
 
                 if(leftBtn) {
                     leftBtn.style.display = showButtons && scrollLeft > 1 ? 'flex' : 'none';
-                    leftBtn.classList.toggle('visible', showButtons && scrollLeft > 1); // For CSS transitions
+                    leftBtn.classList.toggle('visible', showButtons && scrollLeft > 1);
                 }
-                 if(rightBtn) {
+                if(rightBtn) {
                     rightBtn.style.display = showButtons && scrollLeft < maxScrollLeft - 1 ? 'flex' : 'none';
-                    rightBtn.classList.toggle('visible', showButtons && scrollLeft < maxScrollLeft - 1); // For CSS transitions
-                 }
-             }, 50); // Adjust debounce delay as needed
+                    rightBtn.classList.toggle('visible', showButtons && scrollLeft < maxScrollLeft - 1);
+                }
+            }, 50);
         }
 
-        // Listeners
         nav.addEventListener('scroll', updateScrollButtons, { passive: true });
         window.addEventListener('resize', updateScrollButtons);
-
-        // Initial check after a short delay to allow layout calculation
         setTimeout(updateScrollButtons, 200);
-         // Also check on load in case content loads dynamically later
-         window.addEventListener('load', () => setTimeout(updateScrollButtons, 300));
+        window.addEventListener('load', () => setTimeout(updateScrollButtons, 300));
     }
-
 
     // Ripple effects
     function initializeRippleEffects() {
-        // Use event delegation on the document body
         document.body.addEventListener('click', function(e) {
-            // Check if the clicked element or its ancestor matches the buttons
             const button = e.target.closest('.cta-button, .download-btn, .btn-download, .submit-btn, .btn-details, .catalog-link, .page-btn, .cancel-btn, .btn-confirm-cancel, .btn-resume-cancel');
-            if (button && !button.disabled) { // Check if button is not disabled
+            if (button && !button.disabled) {
                 createRippleEffect(e, button);
             }
         });
     }
 
     function createRippleEffect(event, button) {
-        // Ensure button allows positioning
         const buttonStyles = window.getComputedStyle(button);
         if (buttonStyles.position === 'static') {
-            button.style.position = 'relative'; // Temporarily set if static
+            button.style.position = 'relative';
         }
         if (buttonStyles.overflow !== 'hidden') {
-            button.style.overflow = 'hidden'; // Temporarily set if not hidden
+            button.style.overflow = 'hidden';
         }
 
         const ripple = document.createElement('span');
@@ -1601,13 +1511,11 @@
         const radius = diameter / 2;
 
         ripple.style.width = ripple.style.height = `${diameter}px`;
-        // Calculate position relative to the button, not viewport
         const rect = button.getBoundingClientRect();
         ripple.style.left = `${event.clientX - rect.left - radius}px`;
         ripple.style.top = `${event.clientY - rect.top - radius}px`;
-        ripple.classList.add('ripple-effect'); // Use class for animation
+        ripple.classList.add('ripple-effect');
 
-        // Remove any previous ripple to prevent buildup if clicked rapidly
         const existingRipple = button.querySelector('.ripple-effect');
         if (existingRipple) {
             existingRipple.remove();
@@ -1615,77 +1523,56 @@
 
         button.appendChild(ripple);
 
-        // Remove the ripple element after the animation completes
         ripple.addEventListener('animationend', () => {
             ripple.remove();
-             // Reset temporary styles if they were added
-             if (buttonStyles.position === 'static') button.style.position = '';
-             if (buttonStyles.overflow !== 'hidden') button.style.overflow = '';
+            if (buttonStyles.position === 'static') button.style.position = '';
+            if (buttonStyles.overflow !== 'hidden') button.style.overflow = '';
         });
     }
 
-
     // Details button
     function initializeDetailsButtons() {
-        // Use event delegation
         document.body.addEventListener('click', function(e) {
             if (e.target.matches('.btn-details')) {
                 const card = e.target.closest('.app-card, .game-card');
                 const appName = card?.querySelector('h3')?.textContent || 'Item';
-                 // Placeholder action: Show notification
-                 // In a real app, this would likely open a modal or navigate to a details page
                 showNotification(`Details for ${appName} (placeholder).`, 'info');
-
-                // Example: Open a details modal
-                // const detailsModal = document.getElementById('detailsModal');
-                // if(detailsModal) {
-                //     populateDetailsModal(appName, card); // Function to fill modal content
-                //     detailsModal.style.display = 'block';
-                //     document.body.style.overflow = 'hidden';
-                // }
             }
         });
     }
 
-    // Modal system initialization (Fixed)
+    // Modal system initialization
     function initializeModalSystem() {
-         // Close modals by clicking outside the modal-content
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal')) {
                 const modal = e.target;
-                 // Special handling for download modal cancellation
                 if (modal.id === 'downloadModal') {
-                    const cancelBtn = modal.querySelector('#cancelDownload'); // Find the specific cancel button
+                    const cancelBtn = modal.querySelector('#cancelDownload');
                     if (cancelBtn) {
-                         cancelBtn.click(); // Trigger the cancel logic (which includes confirmation)
-                         return; // Prevent default closing
+                        cancelBtn.click();
+                        return;
                     }
                 }
-                 // Default close for other modals or if download cancel button not found
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         });
 
-        // Close modals with escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                 // Find the topmost visible modal
-                 const visibleModals = Array.from(document.querySelectorAll('.modal')).filter(m => m.style.display === 'block');
-                 if (visibleModals.length > 0) {
-                     const topModal = visibleModals[visibleModals.length - 1]; // Get the last one (likely topmost)
-
-                     if (topModal.id === 'downloadModal') {
-                         const cancelBtn = topModal.querySelector('#cancelDownload');
-                         if (cancelBtn) {
-                             cancelBtn.click(); // Trigger cancel logic
-                             return; // Prevent default closing
-                         }
-                     }
-                      // Default close
-                     topModal.style.display = 'none';
-                     document.body.style.overflow = 'auto';
-                 }
+                const visibleModals = Array.from(document.querySelectorAll('.modal')).filter(m => m.style.display === 'block');
+                if (visibleModals.length > 0) {
+                    const topModal = visibleModals[visibleModals.length - 1];
+                    if (topModal.id === 'downloadModal') {
+                        const cancelBtn = topModal.querySelector('#cancelDownload');
+                        if (cancelBtn) {
+                            cancelBtn.click();
+                            return;
+                        }
+                    }
+                    topModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
             }
         });
     }
@@ -1703,21 +1590,19 @@
         };
     }
 
-    // Notification system - Improved
+    // Notification system
     function showNotification(message, type = 'info') {
         let container = document.getElementById('notification-container');
         if (!container) {
             container = document.createElement('div');
             container.id = 'notification-container';
-            // Basic container styles (positioning) - should be in CSS ideally
             container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; max-width: 350px;';
             document.body.appendChild(container);
         }
 
         const notification = document.createElement('div');
-         // Apply base and type-specific classes for styling via CSS
         notification.className = `notification notification-${type}`;
-        notification.setAttribute('role', 'alert'); // Accessibility
+        notification.setAttribute('role', 'alert');
 
         notification.innerHTML = `
             <div class="notification-content">
@@ -1726,104 +1611,62 @@
             </div>
         `;
 
-         // Add animation class for entrance
-         notification.classList.add('notification-slide-in');
-
-        // Prepend to show newest at the top
+        notification.classList.add('notification-slide-in');
         container.prepend(notification);
 
         const close = () => {
-             // Add animation class for exit
-             notification.classList.remove('notification-slide-in');
-             notification.classList.add('notification-slide-out');
-             // Remove element after animation finishes
-             notification.addEventListener('animationend', () => {
+            notification.classList.remove('notification-slide-in');
+            notification.classList.add('notification-slide-out');
+            notification.addEventListener('animationend', () => {
                 notification.remove();
-                // Remove container if empty? Optional.
-                // if (container.children.length === 0) container.remove();
-             });
+            });
         };
 
-        const autoRemoveTimeout = setTimeout(close, 5000); // Auto-close after 5 seconds
+        const autoRemoveTimeout = setTimeout(close, 5000);
 
         notification.querySelector('.notification-close').addEventListener('click', () => {
-            clearTimeout(autoRemoveTimeout); // Clear auto-close if manually closed
+            clearTimeout(autoRemoveTimeout);
             close();
         });
     }
 
-
-    // Lazy loading for images with data-src
-    /* REMOVED initializeLazyLoading function and call */
-
-
-    // Error handling for images - Improved placeholder
+    // Error handling for images
     document.addEventListener('error', function(e) {
         if (e.target.tagName === 'IMG') {
             const img = e.target;
-             // Prevent infinite loop if placeholder itself fails
-             if (img.src.includes('placehold.co')) return;
+            if (img.src.includes('placehold.co')) return;
 
-             // Get dimensions if possible, otherwise default
-             const width = img.clientWidth > 0 ? img.clientWidth : 300;
-             const height = img.clientHeight > 0 ? img.clientHeight : (img.classList.contains('card-image') || img.classList.contains('featured-image') ? 200 : width * 0.66); // Guess height based on context
-             const text = img.alt || 'Image Error';
+            const width = img.clientWidth > 0 ? img.clientWidth : 300;
+            const height = img.clientHeight > 0 ? img.clientHeight : (img.classList.contains('card-image') || img.classList.contains('featured-image') ? 200 : width * 0.66);
+            const text = img.alt || 'Image Error';
 
-             img.src = `https://placehold.co/${width}x${Math.round(height)}/667eea/ffffff?text=${encodeURIComponent(text)}`;
-             img.alt = text; // Ensure alt text is set
-             console.warn(`Image failed to load: ${e.target.src}. Replaced with placeholder.`);
+            img.src = `https://placehold.co/${width}x${Math.round(height)}/667eea/ffffff?text=${encodeURIComponent(text)}`;
+            img.alt = text;
+            console.warn(`Image failed to load: ${e.target.src}. Replaced with placeholder.`);
         }
-    }, true); // Use capture phase to catch errors early
-
+    }, true);
 
     // Handle page visibility changes for performance
     document.addEventListener('visibilitychange', function() {
-        // Toggle class on body for CSS to pause animations
         document.body.classList.toggle('page-hidden', document.hidden);
-
-        // Optional: More complex logic, e.g., pausing videos or timers
-        if (document.hidden) {
-            // console.log("Page hidden - pausing activities");
-        } else {
-            // console.log("Page visible - resuming activities");
-        }
     });
 
-    // Add CSS for page visibility state (Keep this minimal CSS in JS)
+    // Add CSS for page visibility state
     const style = document.createElement('style');
-    style.id = 'dynamic-styles'; // Give it an ID to prevent duplicates if run again
-    if (!document.getElementById(style.id)) { // Check if already added
+    style.id = 'dynamic-styles';
+    if (!document.getElementById(style.id)) {
         style.textContent = `
             .page-hidden .animated-gradient,
             .page-hidden .loading-spinner,
-            .page-hidden [data-aos], /* Attempt to pause AOS animations */
-            .page-hidden .float, /* Pause custom animations */
+            .page-hidden [data-aos],
+            .page-hidden .float,
             .page-hidden .pulse,
             .page-hidden .bounce
              {
-                animation-play-state: paused !important; /* Force pause */
+                animation-play-state: paused !important;
             }
-             /* Style for lazy loaded images fade-in */
-            /* img:not(.loaded) { opacity: 0; transition: opacity 0.5s; } REMOVED */
-            /* img.loaded { opacity: 1; } REMOVED */
         `;
         document.head.appendChild(style);
     }
-
-
-    // Reset to first page when page initially loads (for apps/games pages)
-     // This needs to run *after* filters might be set by URL
-    // window.addEventListener('load', function() {
-    //      if (state.pageType === 'apps' || state.pageType === 'games') {
-    //          // Only reset if no URL parameter forced a different state
-    //          const urlParams = new URLSearchParams(window.location.search);
-    //          if (!urlParams.has('category') && !urlParams.has('search')) { // Add other potential params
-    //              state.currentPage = 1;
-    //              // Re-render if necessary, though initial render should handle page 1
-    //              // applyFiltersAndRender(false); // Render without resetting filters
-    //          }
-    //      }
-    // });
-
 
 })(); // End of IIFE
