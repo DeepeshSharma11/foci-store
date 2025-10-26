@@ -38,6 +38,22 @@
     .filter-controls {
         justify-content: space-between;
     }
+
+    /* About page fixes */
+    .mission-vision {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Contact page fixes */
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }
 
 /* Tablets */
@@ -105,6 +121,15 @@
         padding: 0.7rem 1rem;
         font-size: 0.85rem;
     }
+
+    /* About page fixes */
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Mobile devices */
@@ -169,7 +194,7 @@
         align-items: center;
         margin: 0.8rem 0;
         padding: 0.8rem 0;
-        position: relative; /* Changed from sticky for better mobile behavior */
+        position: relative;
         z-index: 100;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
@@ -342,7 +367,7 @@
         width: 100%;
     }
 
-    /* FIXED: Clean pagination styles - removed conflicting !important declarations */
+    /* FIXED: Clean pagination styles */
     .pagination {
         display: flex;
         visibility: visible;
@@ -410,6 +435,124 @@
 
     .no-results h3 {
         font-size: 1.3rem;
+    }
+
+    /* About Page Mobile Fixes */
+    .mission-vision {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .mission, .vision {
+        padding: 1.5rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .team-card {
+        padding: 1.5rem;
+    }
+
+    .team-image {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1rem;
+    }
+
+    .team-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .team-info .role {
+        font-size: 0.9rem;
+    }
+
+    .social-links {
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .social-link {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .value-item {
+        padding: 1.5rem;
+    }
+
+    .value-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Contact Page Mobile Fixes */
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-info {
+        order: 2;
+    }
+
+    .contact-form-container {
+        order: 1;
+    }
+
+    .contact-methods {
+        gap: 1rem;
+    }
+
+    .contact-method {
+        padding: 1rem;
+    }
+
+    .method-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    /* Success Message Fix */
+    .success-message {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    .success-message h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .success-message p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
     }
 }
 
@@ -546,6 +689,31 @@
         padding: 0.5rem 0.8rem;
         font-size: 0.7rem;
     }
+
+    /* About Page Small Mobile Fixes */
+    .team-card {
+        padding: 1rem;
+    }
+
+    .team-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .value-item {
+        padding: 1rem;
+    }
+
+    /* Contact Page Small Mobile Fixes */
+    .contact-method {
+        padding: 0.8rem;
+    }
+
+    .method-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
 }
 
 /* Very small devices */
@@ -658,6 +826,26 @@
         font-size: 0.65rem;
         min-width: 70px;
     }
+
+    /* About Page Very Small Fixes */
+    .team-card {
+        padding: 0.8rem;
+    }
+
+    .team-info h3 {
+        font-size: 1.1rem;
+    }
+
+    /* Contact Page Very Small Fixes */
+    .contact-form-container {
+        padding: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
 }
 
 /* Extra small devices */
@@ -755,6 +943,29 @@
         font-size: 0.6rem;
         min-width: 65px;
     }
+
+    /* About Page Extra Small Fixes */
+    .team-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .social-link {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    /* Contact Page Extra Small Fixes */
+    .contact-method {
+        padding: 0.7rem;
+    }
+
+    .method-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
 }
 
 /* Landscape mode for mobile */
@@ -838,6 +1049,20 @@
         min-width: 30px;
         height: 30px;
     }
+
+    /* About Page Landscape Fixes */
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .team-card {
+        padding: 1rem;
+    }
+
+    /* Contact Page Landscape Fixes */
+    .contact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 /* High DPI screens */
@@ -892,6 +1117,24 @@
     .page-btn.active:active {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         transform: scale(0.95);
+    }
+
+    /* About Page Touch Fixes */
+    .team-card:active {
+        transform: scale(0.98);
+    }
+
+    .social-link:active {
+        transform: scale(0.9);
+    }
+
+    /* Contact Page Touch Fixes */
+    .contact-method:active {
+        transform: scale(0.98);
+    }
+
+    .submit-btn:active {
+        transform: scale(0.98);
     }
 }
 
@@ -957,6 +1200,27 @@
     .btn-details {
         display: none !important;
     }
+
+    /* About Page Print Fixes */
+    .team-card {
+        break-inside: avoid;
+        border: 1px solid #ccc !important;
+        margin-bottom: 1cm !important;
+    }
+
+    .value-item {
+        break-inside: avoid;
+        border: 1px solid #ccc !important;
+    }
+
+    /* Contact Page Print Fixes */
+    .contact-info {
+        break-inside: avoid;
+    }
+
+    .contact-form-container {
+        display: none !important;
+    }
 }
 
 /* Reduced motion support */
@@ -990,9 +1254,38 @@
     .loading-spinner {
         animation: none !important;
     }
+
+    /* About Page Reduced Motion */
+    .team-card:hover,
+    .value-item:hover {
+        transform: none !important;
+    }
+
+    /* Contact Page Reduced Motion */
+    .contact-method:hover {
+        transform: none !important;
+    }
 }
 
 /* Dark mode support placeholder */
 @media (prefers-color-scheme: dark) {
     /* Dark mode styles can be added here when needed */
+    
+    /* About Page Dark Mode */
+    .team-card {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .value-item {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Contact Page Dark Mode */
+    .contact-method {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .contact-form-container {
+        background: rgba(255, 255, 255, 0.05);
+    }
 }
