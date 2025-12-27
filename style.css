@@ -102,6 +102,7 @@ body {
     margin-bottom: 0.6rem;
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
@@ -510,6 +511,7 @@ nav a.active {
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .stat-label {
@@ -804,6 +806,7 @@ footer {
     font-weight: bold;
     background: linear-gradient(45deg, #fff, #e0e7ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     white-space: nowrap;
 }
