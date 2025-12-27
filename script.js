@@ -8,7 +8,7 @@
         filteredData: [],
         currentPage: 1,
         itemsPerPage: 8,
-        pageType: 'apps', // Default
+        pageType: 'featured', // Default fallback
     };
 
     // Cache DOM elements that are frequently accessed
@@ -45,52 +45,55 @@
     // --- PAGE INITIALIZATION & DATA LOADING ---
 
     function initializePageSpecificFeatures() {
-        // Robust path detection
-        const path = window.location.pathname;
-        let page = path.split("/").pop();
-        if (page === '' || page === '/') page = 'index.html';
+        // PRIORITY 1: Robust detection using data-page attribute on body (Fix for preview environments)
+        const pageAttribute = document.body.getAttribute('data-page');
         
-        // Remove potential query strings or hashes from filename if present
-        page = page.split('?')[0].split('#')[0];
+        // PRIORITY 2: Fallback to URL detection
+        const path = window.location.pathname;
+        let filename = path.split("/").pop().split('?')[0].split('#')[0];
+        
+        // Determine Page Type Logic
+        let pageType = null;
 
-        switch(page) {
-            case 'index.html':
-                state.pageType = 'featured';
-                loadData('featured');
-                initializeHeroAnimations();
-                break;
-            case 'apps.html':
+        if (pageAttribute === 'apps' || filename === 'apps.html') {
+            pageType = 'apps';
+        } else if (pageAttribute === 'games' || filename === 'games.html') {
+            pageType = 'games';
+        } else if (pageAttribute === 'home' || filename === 'index.html' || filename === '') {
+            pageType = 'featured';
+        }
+
+        // Apply logic based on identified page type
+        switch(pageType) {
+            case 'apps':
                 state.pageType = 'apps';
                 elements.grid = document.querySelector('.apps-grid');
                 elements.pagination = document.getElementById('pagination') || document.querySelector('.pagination');
                 loadData('apps');
                 initializeSearchAndFilters();
                 break;
-            case 'games.html':
+                
+            case 'games':
                 state.pageType = 'games';
                 elements.grid = document.querySelector('.games-grid');
                 elements.pagination = document.getElementById('pagination') || document.querySelector('.pagination');
                 loadData('games');
                 initializeSearchAndFilters();
                 break;
-            case 'about.html':
-                initializeTeamAnimations();
-                break;
-            case 'contact.html':
-                initializeContactAnimations();
-                break;
-            case 'privacy.html':
-            case 'terms.html':
-                initializeLegalPage();
-                break;
+
+            case 'featured':
             default:
-                // Fallback for homepage if path is weird
-                if (!page || page === 'focistore') { 
-                    state.pageType = 'featured';
-                    loadData('featured');
-                }
+                // Default handling (Homepage)
+                state.pageType = 'featured';
+                loadData('featured');
+                initializeHeroAnimations();
                 break;
         }
+
+        // Additional initialization for specific pages
+        if (filename === 'about.html') initializeTeamAnimations();
+        if (filename === 'contact.html') initializeContactAnimations();
+        if (filename === 'privacy.html' || filename === 'terms.html') initializeLegalPage();
     }
 
     function initializeSearchAndFilters() {
@@ -100,7 +103,7 @@
 
     async function loadData(pageType) {
         try {
-            // Check global variable first, then fallback
+            // Check global variable first (defined in data.js), then fallback
             const data = typeof appData !== 'undefined' ? appData : loadStaticData();
             
             if (pageType === 'featured') {
@@ -165,7 +168,7 @@
         result.sort((a, b) => {
             switch(sort) {
                 case 'newest':
-                    // Optimization: String comparison for ISO dates is faster than new Date()
+                    // Optimization: String comparison for ISO dates
                     return (b.releaseDate || '').localeCompare(a.releaseDate || '');
                 case 'name':
                     return a.name.localeCompare(b.name);
@@ -211,7 +214,7 @@
             const endIndex = startIndex + state.itemsPerPage;
             const pageData = state.filteredData.slice(startIndex, endIndex);
 
-            // Optimization: Use DocumentFragment to minimize reflows
+            // Optimization: Use DocumentFragment
             const fragment = document.createDocumentFragment();
 
             pageData.forEach((item, index) => {
@@ -341,15 +344,14 @@
         fragment.appendChild(prevBtn);
 
         // Logic for "..." pagination
-        const maxVisible = 5; // e.g., 1 ... 4 5 6 ... 10
+        const maxVisible = 5; 
         let startPage = 1, endPage = totalPages;
         
         if (totalPages > maxVisible) {
-            // Complex logic logic simplified for readability
             if (state.currentPage <= 3) {
-                endPage = 4; // Show 1, 2, 3, 4 ... Last
+                endPage = 4;
             } else if (state.currentPage >= totalPages - 2) {
-                startPage = totalPages - 3; // Show 1 ... 7, 8, 9, 10
+                startPage = totalPages - 3;
             } else {
                 startPage = state.currentPage - 1;
                 endPage = state.currentPage + 1;
@@ -364,9 +366,6 @@
 
         // Middle Pages
         for (let i = startPage; i <= endPage; i++) {
-            // If total pages is small, we loop 1 to total. 
-            // If total pages is large, we loop filtered range.
-            // We must handle the overlap with Page 1/Last to avoid duplicates if logic isn't perfect
             if (totalPages > maxVisible && (i === 1 || i === totalPages)) continue;
             fragment.appendChild(createPageButton(i, i));
         }
@@ -427,10 +426,8 @@
     function initializeSearch() {
         if (!elements.searchInput) return;
 
-        // Debounced search
         elements.searchInput.addEventListener('input', debounce(() => applyFiltersAndRender(true), 400));
         
-        // Enter key
         elements.searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') applyFiltersAndRender(true);
         });
@@ -456,7 +453,6 @@
         let progressInterval;
         const modal = document.getElementById('downloadModal');
 
-        // Delegation for download buttons
         document.body.addEventListener('click', (e) => {
             const btn = e.target.closest('.download-btn, .btn-download');
             if (btn) {
@@ -467,10 +463,8 @@
             }
         });
 
-        // Initialize modal logic only if modal exists
         if (!modal) return;
 
-        // UI References
         const ui = {
             appName: modal.querySelector('#appName'),
             progressBar: modal.querySelector('.progress'),
@@ -522,7 +516,7 @@
                     const link = document.createElement('a');
                     link.href = url;
                     link.setAttribute('download', '');
-                    link.target = '_blank'; // Safer for external links
+                    link.target = '_blank';
                     document.body.appendChild(link);
                     link.click();
                     link.remove();
@@ -540,16 +534,14 @@
             clearInterval(progressInterval);
         }
 
-        // Modal Close Logic
         ui.closeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (downloadInProgress) {
-                    // Show confirmation if downloading
                     if (ui.confirmView) {
                         ui.confirmView.style.display = 'flex';
                         ui.mainView.style.display = 'none';
                     } else {
-                        resetModal(); // Fallback if no confirm view
+                        resetModal();
                     }
                 } else {
                     resetModal();
@@ -557,7 +549,6 @@
             });
         });
 
-        // Cancel Confirmation
         modal.querySelector('#confirmCancel')?.addEventListener('click', () => {
             resetModal();
             showNotification('Download cancelled.', 'info');
@@ -567,8 +558,6 @@
             if (ui.confirmView) ui.confirmView.style.display = 'none';
             if (ui.mainView) ui.mainView.style.display = 'block';
         });
-
-        // Escape key handler logic is in initializeModalSystem
     }
 
     // --- UTILITIES & VISUALS ---
@@ -577,7 +566,6 @@
         if (typeof AOS !== 'undefined') {
             AOS.init({ duration: 600, once: true, offset: 50 });
         } else {
-            // Optimized Fallback: IntersectionObserver
             const els = document.querySelectorAll('[data-aos]:not(.aos-animate)');
             if (!els.length) return;
 
@@ -595,18 +583,24 @@
     }
 
     function initializeNavigation() {
+        // Robust Navigation Highlight
+        const pageAttribute = document.body.getAttribute('data-page');
         const path = window.location.pathname.split('/').pop() || 'index.html';
         const cleanPath = path.split('?')[0].split('#')[0];
         
         document.querySelectorAll('nav a').forEach(link => {
             const href = link.getAttribute('href');
             if (!href) return;
-            // Strict check
-            if (href === cleanPath || (cleanPath === 'index.html' && (href === './' || href === '/'))) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            
+            // Logic: if body data-page matches expected filename OR strict filename match
+            let isActive = false;
+            if (pageAttribute === 'home' && (href === 'index.html' || href === './')) isActive = true;
+            else if (pageAttribute === 'apps' && href === 'apps.html') isActive = true;
+            else if (pageAttribute === 'games' && href === 'games.html') isActive = true;
+            else if (href === cleanPath) isActive = true;
+
+            if (isActive) link.classList.add('active');
+            else link.classList.remove('active');
         });
     }
 
@@ -620,7 +614,6 @@
             requestAnimationFrame(() => {
                 if (y > 100) {
                     header.classList.add('scrolled');
-                    // Toggle compact mode based on scroll direction
                     header.classList.toggle('compact', y > lastY && y > 200);
                 } else {
                     header.classList.remove('scrolled', 'compact');
@@ -644,7 +637,6 @@
             circle.style.top = `${e.clientY - r.top - d/2}px`;
             circle.classList.add('ripple-effect');
             
-            // Remove old ripples to prevent DOM buildup
             const old = target.querySelector('.ripple-effect');
             if (old) old.remove();
             
@@ -658,14 +650,13 @@
         if (!container) {
             container = document.createElement('div');
             container.id = 'notification-container';
-            // Added CSS class for container styling usually found in CSS file, explicitly set here just in case
             container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;';
             document.body.appendChild(container);
         }
 
         const notif = document.createElement('div');
         notif.className = `notification notification-${type} notification-slide-in`;
-        notif.style.pointerEvents = 'auto'; // Enable clicking on the notification itself
+        notif.style.pointerEvents = 'auto';
         notif.innerHTML = `
             <div class="notification-content">
                 <span>${msg}</span>
@@ -674,7 +665,6 @@
         
         container.prepend(notif);
 
-        // Auto remove
         const timer = setTimeout(remove, 5000);
         
         function remove() {
@@ -695,7 +685,6 @@
             const btn = form.querySelector('.submit-btn');
             const originalText = btn.textContent;
             
-            // Simple validation
             const inputs = form.querySelectorAll('input[required], textarea[required]');
             let valid = true;
             inputs.forEach(i => {
@@ -704,12 +693,10 @@
             });
             if (!valid) return showNotification('Please fill all required fields', 'error');
 
-            // Simulate sending (or use FormSubmit if configured)
             btn.disabled = true;
             btn.textContent = 'Sending...';
             
             try {
-                // Using fetch to formsubmit
                 const formData = new FormData(form);
                 const response = await fetch(form.action || 'https://formsubmit.co/ajax/focistore@gmail.com', {
                     method: 'POST',
@@ -734,7 +721,6 @@
         });
     }
 
-    // Placeholders for other init functions to prevent errors if features aren't used on current page
     function initializeHeroAnimations() {}
     function initializeTeamAnimations() {}
     function initializeContactAnimations() {}
@@ -743,13 +729,11 @@
     function initializeNavScroll() {}
     
     function initializeModalSystem() {
-        // Global modal closer for Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modals = document.querySelectorAll('.modal');
                 modals.forEach(m => {
                     if (m.style.display === 'block') {
-                        // Check if it's download modal and invoke cancel click
                         if (m.id === 'downloadModal') {
                             const cancel = m.querySelector('#cancelDownload');
                             if (cancel) cancel.click();
@@ -774,7 +758,7 @@
                     const el = entry.target;
                     const target = parseInt(el.dataset.count);
                     let start = 0;
-                    const increment = target / 50; // 50 frames
+                    const increment = target / 50; 
                     
                     const timer = setInterval(() => {
                         start += increment;
@@ -802,7 +786,6 @@
             const item = question.parentElement;
             const isActive = item.classList.contains('active');
             
-            // Close others
             faq.querySelectorAll('.faq-item.active').forEach(i => {
                 i.classList.remove('active');
                 i.querySelector('.faq-answer').style.maxHeight = null;
@@ -816,8 +799,6 @@
         });
     }
 
-    // --- STATIC DATA FALLBACK ---
-    // Kept at bottom to keep logic clean. Only used if data.js fails or is missing.
     function loadStaticData() {
         return {
             staticApps: [
@@ -826,24 +807,6 @@
                     "category": "social", "image": "assets/images/fmwhatsapp.png", "size": "95 MB",
                     "version": "v9.82", "rating": 4.7, "popularity": 95, "releaseDate": "2024-10-20",
                     "downloadUrl": "#", "badge": "Trending"
-                },
-                {
-                    "id": 2, "name": "Instagram MOD", "description": "Download media & privacy features.",
-                    "category": "social", "image": "assets/images/Insta-Pro-APK.png", "size": "60 MB",
-                    "version": "v10.0", "rating": 4.6, "popularity": 92, "releaseDate": "2024-10-19",
-                    "downloadUrl": "#", "badge": "New"
-                },
-                {
-                    "id": 3, "name": "Spotify Premium", "description": "Ad-free music & unlimited skips.",
-                    "category": "media", "image": "assets/images/spotify-mod.png", "size": "85 MB",
-                    "version": "v8.8", "rating": 4.9, "popularity": 99, "releaseDate": "2024-10-23",
-                    "downloadUrl": "#", "badge": "Premium"
-                },
-                {
-                    "id": 4, "name": "YouTube ReVanced", "description": "Ad-free background play.",
-                    "category": "media", "image": "assets/images/app.revanced.android.youtube.200.png", "size": "120 MB",
-                    "version": "v18.45", "rating": 4.8, "popularity": 98, "releaseDate": "2024-10-22",
-                    "downloadUrl": "#", "badge": "Popular"
                 }
             ],
             staticGames: [
@@ -852,18 +815,6 @@
                     "category": "action", "image": "assets/images/subway-surfers.png", "size": "150 MB",
                     "version": "v3.12", "rating": 4.8, "popularity": 98, "releaseDate": "2024-10-23",
                     "downloadUrl": "#", "badge": "Unlimited"
-                },
-                {
-                    "id": 2, "name": "Minecraft PE", "description": "Full unlocked game.",
-                    "category": "adventure", "image": "assets/images/minecraft.png", "size": "180 MB",
-                    "version": "v1.20", "rating": 4.9, "popularity": 96, "releaseDate": "2024-10-20",
-                    "downloadUrl": "#", "badge": "Premium"
-                },
-                {
-                    "id": 3, "name": "PUBG Mobile", "description": "No recoil & aim assist.",
-                    "category": "action", "image": "assets/images/pubg-mobile.png", "size": "1.8 GB",
-                    "version": "v3.0", "rating": 4.9, "popularity": 100, "releaseDate": "2024-10-24",
-                    "downloadUrl": "#", "badge": "Pro"
                 }
             ]
         };
