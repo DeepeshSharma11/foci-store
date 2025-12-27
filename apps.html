@@ -4,10 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applications - FociStore</title>
-    <meta name="description" content="Download modified applications with premium features unlocked">
+    <meta name="description" content="Download modified applications with premium features unlocked safely and quickly.">
+    <meta name="keywords" content="mod apps, premium apk, android mods, focistore, unlocked applications, pro versions">
+    <meta name="author" content="FociStore">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Applications - FociStore">
+    <meta property="og:description" content="Download modified versions of popular applications with enhanced features and premium unlocked.">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="animations.css">
+
+    <!-- Scripts: Loaded with 'defer' for better performance -->
+    <!-- CRITICAL: data.js must be loaded BEFORE script.js -->
+    <script src="data.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -99,8 +113,8 @@
     <!-- Download Modal -->
     <div id="downloadModal" class="modal">
         <div class="modal-content" data-aos="zoom-in">
-            <!-- Main Content Wrapper -->
-            <div class="modal-main-content">
+             <!-- Main Content Wrapper -->
+             <div class="modal-main-content">
                 <span class="close">&times;</span>
                 <h2>Download <span id="appName">App Name</span></h2>
                 <p>Your download will begin shortly...</p>
@@ -125,8 +139,5 @@
             </div>
         </div>
     </div>
-
-    <script src="data.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
