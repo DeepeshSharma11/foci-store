@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FociStore - MOD Games and Applications</title>
-    <meta name="description" content="Download the latest MOD games and applications with premium features unlocked">
+    <meta name="description" content="Download the latest MOD games and applications with premium features unlocked safely and quickly.">
+    <meta name="keywords" content="mod apk, mod games, premium apps, android mods, focistore, unlocked apps">
+    <meta name="author" content="FociStore">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FociStore - MOD Games and Applications">
+    <meta property="og:description" content="Get access to the latest modified apps and games with premium features unlocked.">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="animations.css">
-    <!-- Add AOS CSS if you want to use its library -->
-    <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
+    
+    <!-- Scripts: Loaded with 'defer' for better performance -->
+    <!-- CRITICAL: data.js must be loaded BEFORE script.js -->
+    <script src="data.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -54,8 +66,8 @@
     <section class="featured">
         <div class="container">
             <h2 data-aos="fade-up">Featured Content</h2>
+            <!-- Featured apps will be loaded dynamically by script.js -->
             <div class="featured-grid">
-                <!-- Featured apps will be loaded dynamically by script.js -->
                  <div class="loading-message" id="loadingFeatured">
                     <div class="loading-spinner"></div>
                     <p>Loading featured apps...</p>
@@ -73,11 +85,11 @@
                     <div class="stat-label">Downloads</div>
                 </div>
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-number" data-count="500">0</div> <!-- Adjust count as needed -->
+                    <div class="stat-number" data-count="500">0</div>
                     <div class="stat-label">Apps & Games</div>
                 </div>
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-number" data-count="50">0</div> <!-- Adjust count as needed -->
+                    <div class="stat-number" data-count="50">0</div>
                     <div class="stat-label">Countries</div>
                 </div>
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
@@ -190,7 +202,6 @@
     <!-- Download Modal -->
     <div id="downloadModal" class="modal">
         <div class="modal-content" data-aos="zoom-in">
-             <!-- Added Main Content Wrapper -->
              <div class="modal-main-content">
                 <span class="close">&times;</span>
                 <h2>Download <span id="appName">App Name</span></h2>
@@ -216,13 +227,5 @@
             </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
-    <script src="data.js"></script>
-    <!-- Add AOS JS if you want to use its library -->
-    <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init();
-    </script> -->
 </body>
 </html>
