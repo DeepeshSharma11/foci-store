@@ -1,0 +1,1291 @@
+/* --- Responsive Design --- */
+
+/* Large desktops */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Tablets and smaller desktops */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .hero .container {
+        grid-template-columns: 1fr 1fr;
+        text-align: left;
+    }
+
+    .hero-graphic {
+        order: 0;
+        margin-bottom: 0;
+    }
+
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .filter-controls {
+        justify-content: space-between;
+    }
+
+    /* About page fixes */
+    .mission-vision {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Contact page fixes */
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Tablets */
+@media (max-width: 991px) and (min-width: 768px) {
+    .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-graphic {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.8rem;
+    }
+
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-content {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .catalog-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .catalog-link {
+        width: auto;
+        max-width: none;
+    }
+
+    .filter-controls {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .pagination {
+        gap: 0.4rem;
+    }
+
+    .page-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* About page fixes */
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 767px) {
+    .header-top {
+        justify-content: flex-start;
+        margin-bottom: 0.5rem;
+        padding: 0.3rem 0;
+    }
+
+    .top-links {
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .top-links a {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    /* Horizontal Navigation - Fixed for mobile */
+    nav {
+        padding: 0.6rem 0.8rem;
+        margin: 0 0.5rem;
+    }
+
+    nav ul {
+        gap: 0.5rem;
+        justify-content: flex-start;
+        padding: 0.3rem 0;
+    }
+
+    nav a {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 20px;
+    }
+
+    /* Fixed: Consistent hover/active states */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .nav-scroll-indicator {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+
+    /* Search container styles */
+    .search-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0.8rem 0;
+        padding: 0.8rem 0;
+        position: relative;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+    }
+
+    #searchInput {
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    #searchInput::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    #searchButton {
+        width: 100%;
+        max-width: 200px;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #searchButton:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .hero {
+        padding: 8rem 0 3rem;
+    }
+
+    .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-graphic {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        padding: 1.5rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .apps-grid, .games-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .page-header {
+        padding: 7rem 0 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn-download, .btn-details {
+        width: 100%;
+        text-align: center;
+    }
+
+    .contact-form-container {
+        padding: 1.5rem;
+    }
+
+    .contact-method {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+
+    .method-icon {
+        align-self: center;
+    }
+
+    .faq-question {
+        padding: 1.2rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 0 1.5rem 1.5rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* FIXED: Clean pagination styles */
+    .pagination {
+        display: flex;
+        visibility: visible;
+        opacity: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        padding: 0 1rem;
+    }
+
+    .page-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e0e0e0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+    }
+
+    .page-btn:not(.active):hover {
+        border-color: #667eea;
+        color: #667eea;
+    }
+
+    /* Previous/Next buttons */
+    .page-btn:first-child,
+    .page-btn.next {
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    /* Loading state for pagination */
+    .pagination.loading .page-btn {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .pagination.hidden {
+        display: none;
+    }
+
+    .no-results {
+        padding: 2rem 1rem;
+    }
+
+    .no-results-icon {
+        font-size: 3rem;
+    }
+
+    .no-results h3 {
+        font-size: 1.3rem;
+    }
+
+    /* About Page Mobile Fixes */
+    .mission-vision {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .mission, .vision {
+        padding: 1.5rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .team-card {
+        padding: 1.5rem;
+    }
+
+    .team-image {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1rem;
+    }
+
+    .team-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .team-info .role {
+        font-size: 0.9rem;
+    }
+
+    .social-links {
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .social-link {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .value-item {
+        padding: 1.5rem;
+    }
+
+    .value-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Contact Page Mobile Fixes */
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-info {
+        order: 2;
+    }
+
+    .contact-form-container {
+        order: 1;
+    }
+
+    .contact-methods {
+        gap: 1rem;
+    }
+
+    .contact-method {
+        padding: 1rem;
+    }
+
+    .method-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    /* Success Message Fix */
+    .success-message {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    .success-message h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .success-message p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 575px) {
+    .container {
+        width: 95%;
+    }
+
+    .header-top {
+        margin-bottom: 0.3rem;
+        padding: 0.2rem 0;
+    }
+
+    .top-links {
+        gap: 0.8rem;
+    }
+
+    .top-links a {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    /* More Compact Navigation */
+    nav {
+        padding: 0.5rem 0.6rem;
+        margin: 0 0.3rem;
+    }
+
+    nav ul {
+        gap: 0.3rem;
+    }
+
+    nav a {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.85rem;
+        border-radius: 18px;
+    }
+
+    /* Fixed: Consistent hover states */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .nav-scroll-indicator {
+        width: 22px;
+        height: 22px;
+        font-size: 0.7rem;
+    }
+
+    .search-container {
+        margin: 0.6rem 0;
+        padding: 0.6rem 0;
+    }
+
+    #searchInput {
+        font-size: 0.9rem;
+        padding: 0.7rem 0.9rem;
+    }
+
+    #searchButton {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .featured, .catalog, .content-section {
+        padding: 2.5rem 0;
+    }
+
+    .featured h2, .catalog h2, .categories h2, .faq-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .about-content h2, .contact-content h2 {
+        font-size: 1.6rem;
+    }
+
+    .floating-apps {
+        width: 250px;
+        height: 250px;
+    }
+
+    .app-icon {
+        font-size: 3rem;
+        padding: 0.8rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stat-item {
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .pagination {
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 36px;
+    }
+
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.7rem;
+    }
+
+    /* About Page Small Mobile Fixes */
+    .team-card {
+        padding: 1rem;
+    }
+
+    .team-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .value-item {
+        padding: 1rem;
+    }
+
+    /* Contact Page Small Mobile Fixes */
+    .contact-method {
+        padding: 0.8rem;
+    }
+
+    .method-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Very small devices */
+@media (max-width: 375px) {
+    .header-top {
+        padding: 0.15rem 0;
+    }
+
+    .top-links {
+        gap: 0.6rem;
+    }
+
+    .top-links a {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ultra Compact Navigation */
+    nav {
+        padding: 0.4rem 0.5rem;
+        margin: 0 0.2rem;
+    }
+
+    nav ul {
+        gap: 0.2rem;
+    }
+
+    nav a {
+        padding: 0.3rem 0.7rem;
+        font-size: 0.8rem;
+        border-radius: 15px;
+    }
+
+    /* Fixed: Consistent hover states */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .nav-scroll-indicator {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+        padding: 0.3rem;
+    }
+
+    .search-container {
+        margin: 0.5rem 0;
+        padding: 0.5rem 0;
+    }
+
+    #searchInput {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+    }
+
+    #searchButton {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.6rem;
+    }
+
+    .featured-item, .app-card, .game-card {
+        margin: 0 0.5rem;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .privacy-section h2, .terms-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .stats-mini {
+        grid-template-columns: 1fr;
+    }
+
+    .mission, .vision {
+        padding: 1.5rem;
+    }
+
+    .value-item {
+        padding: 1.5rem;
+    }
+
+    .pagination {
+        gap: 0.1rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        min-width: 32px;
+    }
+
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.65rem;
+        min-width: 70px;
+    }
+
+    /* About Page Very Small Fixes */
+    .team-card {
+        padding: 0.8rem;
+    }
+
+    .team-info h3 {
+        font-size: 1.1rem;
+    }
+
+    /* Contact Page Very Small Fixes */
+    .contact-form-container {
+        padding: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+    .header-top {
+        padding: 0.1rem 0;
+    }
+
+    .top-links {
+        gap: 0.4rem;
+    }
+
+    .top-links a {
+        font-size: 0.65rem;
+        padding: 0.1rem 0.3rem;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Super Compact Navigation */
+    nav {
+        padding: 0.3rem 0.4rem;
+        margin: 0 0.15rem;
+    }
+
+    nav ul {
+        gap: 0.15rem;
+    }
+
+    nav a {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.75rem;
+        border-radius: 12px;
+    }
+
+    /* Fixed: Consistent hover states */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .nav-scroll-indicator {
+        width: 18px;
+        height: 18px;
+        font-size: 0.5rem;
+        padding: 0.2rem;
+    }
+
+    .search-container {
+        margin: 0.4rem 0;
+        padding: 0.4rem 0;
+    }
+
+    #searchInput {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.7rem;
+    }
+
+    #searchButton {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .pagination {
+        gap: 0.1rem;
+    }
+
+    .page-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+        min-width: 28px;
+    }
+
+    /* Mobile Pagination Adjustments */
+    .page-btn:first-child,
+    .page-btn.next {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6rem;
+        min-width: 65px;
+    }
+
+    /* About Page Extra Small Fixes */
+    .team-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .social-link {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    /* Contact Page Extra Small Fixes */
+    .contact-method {
+        padding: 0.7rem;
+    }
+
+    .method-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* Landscape mode for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 7rem 0 2rem;
+        min-height: auto;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-content {
+        margin: 2% auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .page-header {
+        padding: 6rem 0 1.5rem;
+    }
+
+    /* Compact header in landscape */
+    .header {
+        padding: 0.4rem 0;
+    }
+
+    .header.compact {
+        padding: 0.2rem 0;
+    }
+
+    .header-top {
+        margin-bottom: 0.2rem;
+        padding: 0.1rem 0;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+
+    nav {
+        padding: 0.3rem 0.5rem;
+    }
+
+    nav a {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    /* Fixed: Consistent hover states */
+    nav a:hover,
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .search-container {
+        margin: 0.3rem 0;
+        padding: 0.3rem 0;
+    }
+
+    .featured, .categories, .catalog, .content-section {
+        padding: 2rem 0;
+    }
+
+    .pagination {
+        margin-top: 1.5rem;
+        gap: 0.2rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        min-width: 30px;
+        height: 30px;
+    }
+
+    /* About Page Landscape Fixes */
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .team-card {
+        padding: 1rem;
+    }
+
+    /* Contact Page Landscape Fixes */
+    .contact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo, .footer-logo {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Improve touch experience */
+    nav a {
+        padding: 0.5rem 1.2rem;
+    }
+
+    .cta-button,
+    .download-btn,
+    .btn-download,
+    .catalog-link,
+    .page-btn {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Fixed: Remove hover effects on touch devices */
+    nav a:hover {
+        background: transparent;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .page-btn:hover {
+        transform: none;
+    }
+
+    /* Touch active state */
+    .page-btn:active {
+        background: #f0f0f0;
+        transform: scale(0.95);
+    }
+
+    .page-btn.active:active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transform: scale(0.95);
+    }
+
+    /* About Page Touch Fixes */
+    .team-card:active {
+        transform: scale(0.98);
+    }
+
+    .social-link:active {
+        transform: scale(0.9);
+    }
+
+    /* Contact Page Touch Fixes */
+    .contact-method:active {
+        transform: scale(0.98);
+    }
+
+    .submit-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Print styles */
+@media print {
+    .header,
+    .footer,
+    .cta-buttons,
+    .download-btn,
+    .btn-download,
+    .nav-scroll-indicator,
+    .search-container,
+    nav,
+    .pagination,
+    .filter-controls {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .hero {
+        background: white !important;
+        color: black !important;
+        padding: 1cm 0 !important;
+    }
+
+    .hero-content h1 {
+        color: black !important;
+        font-size: 18pt !important;
+    }
+
+    .hero-content p {
+        color: black !important;
+        font-size: 12pt !important;
+    }
+
+    .featured-item,
+    .app-card,
+    .game-card,
+    .category-item {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+
+    .btn-details {
+        display: none !important;
+    }
+
+    /* About Page Print Fixes */
+    .team-card {
+        break-inside: avoid;
+        border: 1px solid #ccc !important;
+        margin-bottom: 1cm !important;
+    }
+
+    .value-item {
+        break-inside: avoid;
+        border: 1px solid #ccc !important;
+    }
+
+    /* Contact Page Print Fixes */
+    .contact-info {
+        break-inside: avoid;
+    }
+
+    .contact-form-container {
+        display: none !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    .hero::before,
+    .page-header::before {
+        animation: none !important;
+    }
+
+    /* Remove hover transitions for reduced motion */
+    nav a::before {
+        display: none;
+    }
+
+    nav a:hover,
+    nav a.active {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .page-btn:hover {
+        transform: none;
+    }
+
+    .loading-spinner {
+        animation: none !important;
+    }
+
+    /* About Page Reduced Motion */
+    .team-card:hover,
+    .value-item:hover {
+        transform: none !important;
+    }
+
+    /* Contact Page Reduced Motion */
+    .contact-method:hover {
+        transform: none !important;
+    }
+}
+
+/* Dark mode support placeholder */
+@media (prefers-color-scheme: dark) {
+    /* Dark mode styles can be added here when needed */
+    
+    /* About Page Dark Mode */
+    .team-card {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .value-item {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Contact Page Dark Mode */
+    .contact-method {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .contact-form-container {
+        background: rgba(255, 255, 255, 0.05);
+    }
+}

@@ -277,3 +277,5 @@ const appData = {
         }
     ]
 };
+
+window.appData = appData;

@@ -21,8 +21,12 @@
         loadingMessage: document.getElementById('loadingMessage')
     };
 
-    // Initialize when DOM is loaded
-    document.addEventListener('DOMContentLoaded', initializeAllFeatures);
+    // Initialize when DOM is ready, including Next.js client-side script loading.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeAllFeatures);
+    } else {
+        initializeAllFeatures();
+    }
 
     function initializeAllFeatures() {
         initializePageSpecificFeatures();
@@ -104,7 +108,7 @@
     async function loadData(pageType) {
         try {
             // Check global variable first (defined in data.js), then fallback
-            const data = typeof appData !== 'undefined' ? appData : loadStaticData();
+            const data = window.appData || (typeof appData !== 'undefined' ? appData : loadStaticData());
             
             if (pageType === 'featured') {
                 populateFeaturedApps(data.apps || []);
@@ -135,9 +139,9 @@
             
             const staticFallback = loadStaticData();
             if (pageType === 'featured') {
-                populateFeaturedApps(staticFallback.staticApps.slice(0, 3));
+                populateFeaturedApps(staticFallback.apps.slice(0, 3));
             } else {
-                state.allData = (pageType === 'apps') ? staticFallback.staticApps : staticFallback.staticGames;
+                state.allData = (pageType === 'apps') ? staticFallback.apps : staticFallback.games;
                 state.filteredData = [...state.allData];
                 populateCategories();
                 applyFiltersAndRender();
@@ -727,6 +731,10 @@
     function initializeLegalPage() {}
     function initializeDetailsButtons() {}
     function initializeNavScroll() {}
+
+    function initializePageTransitions() {
+        document.body.classList.add('page-ready');
+    }
     
     function initializeModalSystem() {
         document.addEventListener('keydown', (e) => {
@@ -801,7 +809,7 @@
 
     function loadStaticData() {
         return {
-            staticApps: [
+            apps: [
                 {
                     "id": 1, "name": "WhatsApp MOD", "description": "Enhanced version with themes & privacy.",
                     "category": "social", "image": "assets/images/fmwhatsapp.png", "size": "95 MB",
@@ -809,7 +817,7 @@
                     "downloadUrl": "#", "badge": "Trending"
                 }
             ],
-            staticGames: [
+            games: [
                 {
                     "id": 1, "name": "Subway Surfers MOD", "description": "Unlimited coins & keys.",
                     "category": "action", "image": "assets/images/subway-surfers.png", "size": "150 MB",

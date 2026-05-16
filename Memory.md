@@ -1,0 +1,20 @@
+# Memory
+
+- 2026-05-17: Added `pages/index.js` so Next.js serves `public/pages/index.html` at `/` instead of returning 404; excluded `index.html` from the catch-all static paths to avoid duplicate `/` generation.
+- 2026-05-17: Added `AGENTS.md` with instruction to read `Memory.md` before code changes.
+- 2026-05-17: Updated the catch-all route to serve both clean paths like `/apps` and legacy `.html` paths like `/apps.html`; added `public/sw.js` to stop service worker 404 logs.
+- 2026-05-17: Added a Next.js rewrite so legacy `/index.html` serves `/` without creating conflicting build artifacts.
+- 2026-05-17: Split the project into `frontend/` and `backend/`, removed unused Firebase/empty legacy files, and added Supabase `.env.example` files plus v2 client scaffolding.
+- 2026-05-17: Added `ws` transport for the backend Supabase client so `npm start` works on Node.js 20.
+- 2026-05-17: Fixed static HTML rendering so scripts from `<head>` (`data.js` before `script.js`) load in Next and featured/app data renders.
+- 2026-05-17: Updated frontend initialization so `script.js` runs even when loaded after `DOMContentLoaded` by Next.js.
+- 2026-05-17: Exposed `appData` on `window` and normalized fallback data keys to prevent empty renders if script timing changes.
+- 2026-05-17: Added missing `initializePageTransitions()` function to prevent runtime startup errors.
+- 2026-05-17: Added `supabase/admin-panel/` with admin apps schema SQL and setup notes.
+- 2026-05-17: Updated admin panel schema to drop existing `is_admin` overloads and avoid ambiguous RLS policy function calls.
+- 2026-05-17: Added working Supabase Auth pages for login, signup, forgot password, reset password, and account/logout.
+- 2026-05-17: Added protected `/admin` panel after login for admin users to add apps/games and categories.
+- 2026-05-17: Updated admin panel access check to use `rpc('is_admin')` and show the logged-in Auth UID on denial.
+- 2026-05-17: Clarified login as admin-only, added `/login?next=/admin` redirect flow, and added default category seeding in SQL/admin panel.
+- 2026-05-17: Added login page session detection so already logged-in users redirect to `/admin` instead of seeing the login form.
+- 2026-05-17: Added Vercel-compatible Next.js API routes for backend health/Supabase status plus Dockerfiles and Compose for local/container hosting.
