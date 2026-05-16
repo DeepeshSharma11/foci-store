@@ -40,6 +40,7 @@ Deploy the repo root on Vercel. Root `vercel.json` defines:
 Backend endpoints:
 
 - `/api/health`
+- `/api/catalog`
 - `/api/supabase/status`
 - `/_/backend/health`
 - `/_/backend/api/supabase/status`
@@ -98,3 +99,5 @@ If an admin session already exists, `/login` redirects to `/admin`.
 - `data.js` exposes `window.appData` for reliable browser access.
 - `script.js` includes all startup initializer functions used by the static site wrapper.
 - Auth/admin styles live in `frontend/styles/app.css`; generated static-site CSS lives in `frontend/styles/globals.css`.
+- Admin panel supports add, edit/update, cancel edit, and delete for apps/games.
+- Public apps/games pages read published catalog items from `/api/catalog` with anon Supabase env and static data fallback.

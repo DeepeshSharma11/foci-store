@@ -20,3 +20,5 @@
 - 2026-05-17: Added Vercel-compatible Next.js API routes for backend health/Supabase status plus Dockerfiles and Compose for local/container hosting.
 - 2026-05-17: Added root `vercel.json` with `experimentalServices` for frontend `/` and backend `/_/backend` deployment.
 - 2026-05-17: Moved auth/admin CSS into `frontend/styles/app.css` so `npm prepare` cannot overwrite those styles.
+- 2026-05-17: Added admin edit, update, cancel edit, and delete actions for apps/games.
+- 2026-05-17: Added `/api/catalog` using anon Supabase env and connected public app/game pages to published catalog data with static fallback.

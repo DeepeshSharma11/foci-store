@@ -51,6 +51,7 @@ export default function AdminPage() {
   const [categories, setCategories] = useState([])
   const [apps, setApps] = useState([])
   const [form, setForm] = useState(initialForm)
+  const [editingId, setEditingId] = useState(null)
   const [status, setStatus] = useState({ type: 'info', text: 'Checking admin access...' })
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -114,7 +115,7 @@ export default function AdminPage() {
   async function loadApps() {
     const { data, error } = await supabase
       .from('apps')
-      .select('id,type,name,slug,is_published,is_featured,created_at')
+      .select('id,type,name,slug,description,category_id,image_url,file_url,external_download_url,size,version,rating,popularity,downloads,badge,is_published,is_featured,release_date,created_at')
       .order('created_at', { ascending: false })
       .limit(20)
 
@@ -187,7 +188,11 @@ export default function AdminPage() {
       slug: form.slug || slugify(form.name),
     }
 
-    const { error } = await supabase.from('apps').insert(payload)
+    const query = editingId
+      ? supabase.from('apps').update(payload).eq('id', editingId)
+      : supabase.from('apps').insert(payload)
+
+    const { error } = await query
     setSaving(false)
 
     if (error) {
@@ -196,8 +201,56 @@ export default function AdminPage() {
     }
 
     setForm(initialForm)
+    setEditingId(null)
     await loadApps()
-    setStatus({ type: 'success', text: 'App/game added successfully.' })
+    setStatus({ type: 'success', text: editingId ? 'App/game updated successfully.' : 'App/game added successfully.' })
+  }
+
+  function handleEdit(item) {
+    setEditingId(item.id)
+    setForm({
+      type: item.type || 'app',
+      name: item.name || '',
+      slug: item.slug || '',
+      description: item.description || '',
+      category_id: item.category_id || '',
+      image_url: item.image_url || '',
+      file_url: item.file_url || '',
+      external_download_url: item.external_download_url || '',
+      size: item.size || '',
+      version: item.version || '',
+      rating: String(item.rating ?? 0),
+      popularity: String(item.popularity ?? 0),
+      downloads: item.downloads || '0',
+      badge: item.badge || '',
+      is_featured: Boolean(item.is_featured),
+      is_published: Boolean(item.is_published),
+      release_date: item.release_date || '',
+    })
+    setStatus({ type: 'info', text: `Editing ${item.name}.` })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  function handleCancelEdit() {
+    setEditingId(null)
+    setForm(initialForm)
+    setStatus({ type: '', text: '' })
+  }
+
+  async function handleDelete(item) {
+    const ok = window.confirm(`Delete ${item.name}?`)
+    if (!ok) return
+
+    const { error } = await supabase.from('apps').delete().eq('id', item.id)
+
+    if (error) {
+      setStatus({ type: 'error', text: error.message })
+      return
+    }
+
+    if (editingId === item.id) handleCancelEdit()
+    await loadApps()
+    setStatus({ type: 'success', text: 'App/game deleted successfully.' })
   }
 
   async function handleLogout() {
@@ -325,7 +378,16 @@ export default function AdminPage() {
                 <label><input type="checkbox" checked={form.is_published} onChange={e => updateField('is_published', e.target.checked)} /> Published</label>
               </div>
 
-              <button className="admin-submit" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Add App/Game'}</button>
+              <div className="admin-actions">
+                <button className="admin-submit" type="submit" disabled={saving}>
+                  {saving ? 'Saving...' : editingId ? 'Update App/Game' : 'Add App/Game'}
+                </button>
+                {editingId ? (
+                  <button className="admin-secondary" type="button" onClick={handleCancelEdit}>
+                    Cancel Edit
+                  </button>
+                ) : null}
+              </div>
             </form>
 
             <section className="admin-panel">
@@ -337,6 +399,10 @@ export default function AdminPage() {
                     <span>{item.type}</span>
                     <span>{item.is_published ? 'Published' : 'Draft'}</span>
                     <span>{item.is_featured ? 'Featured' : '-'}</span>
+                    <div className="admin-row-actions">
+                      <button type="button" onClick={() => handleEdit(item)}>Edit</button>
+                      <button className="danger" type="button" onClick={() => handleDelete(item)}>Delete</button>
+                    </div>
                   </div>
                 ))}
                 {!apps.length ? <p>No items found.</p> : null}

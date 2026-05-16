@@ -108,7 +108,7 @@
     async function loadData(pageType) {
         try {
             // Check global variable first (defined in data.js), then fallback
-            const data = window.appData || (typeof appData !== 'undefined' ? appData : loadStaticData());
+            const data = await loadCatalogData();
             
             if (pageType === 'featured') {
                 populateFeaturedApps(data.apps || []);
@@ -147,6 +147,22 @@
                 applyFiltersAndRender();
             }
         }
+    }
+
+    async function loadCatalogData() {
+        try {
+            const response = await fetch('/api/catalog', { headers: { Accept: 'application/json' } });
+            if (response.ok) {
+                const catalog = await response.json();
+                if (catalog.ok && ((catalog.apps || []).length || (catalog.games || []).length)) {
+                    return { apps: catalog.apps || [], games: catalog.games || [] };
+                }
+            }
+        } catch (error) {
+            console.warn('Supabase catalog unavailable, using static data.', error);
+        }
+
+        return window.appData || (typeof appData !== 'undefined' ? appData : loadStaticData());
     }
 
     // --- RENDERING LOGIC ---

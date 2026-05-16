@@ -260,6 +260,7 @@
 
 .admin-inline button,
 .admin-submit,
+.admin-secondary,
 .admin-link-button {
     border: 0;
     border-radius: 6px;
@@ -269,6 +270,18 @@
     color: #fff;
     background: #667eea;
     cursor: pointer;
+}
+
+.admin-secondary {
+    color: #344054;
+    background: #f2f4f7;
+    border: 1px solid #d0d5dd;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .admin-link-button {
@@ -332,7 +345,7 @@
 
 .admin-row {
     display: grid;
-    grid-template-columns: 1fr 90px 110px 100px;
+    grid-template-columns: 1fr 90px 110px 100px 160px;
     gap: 0.75rem;
     align-items: center;
     padding: 0.8rem;
@@ -343,6 +356,27 @@
 
 .admin-row span {
     color: #667085;
+}
+
+.admin-row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.admin-row-actions button {
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    padding: 0.48rem 0.7rem;
+    color: #344054;
+    background: #fff;
+    cursor: pointer;
+}
+
+.admin-row-actions .danger {
+    color: #b42318;
+    border-color: #fecdca;
+    background: #fff7f5;
 }
 
 @media (max-width: 820px) {
