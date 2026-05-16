@@ -149,20 +149,40 @@
         }
     }
 
+    function mergeCatalogItems(dynamicItems = [], staticItems = []) {
+        const seen = new Set();
+        const merged = [];
+
+        [...dynamicItems, ...staticItems].forEach(item => {
+            if (!item) return;
+            const key = (item.slug || item.name || '').toLowerCase().trim();
+            if (!key || seen.has(key)) return;
+            seen.add(key);
+            merged.push(item);
+        });
+
+        return merged;
+    }
+
     async function loadCatalogData() {
+        const staticData = window.appData || (typeof appData !== 'undefined' ? appData : loadStaticData());
+
         try {
             const response = await fetch('/api/catalog', { headers: { Accept: 'application/json' } });
             if (response.ok) {
                 const catalog = await response.json();
-                if (catalog.ok && ((catalog.apps || []).length || (catalog.games || []).length)) {
-                    return { apps: catalog.apps || [], games: catalog.games || [] };
+                if (catalog.ok) {
+                    return {
+                        apps: mergeCatalogItems(catalog.apps || [], staticData.apps || []),
+                        games: mergeCatalogItems(catalog.games || [], staticData.games || [])
+                    };
                 }
             }
         } catch (error) {
             console.warn('Supabase catalog unavailable, using static data.', error);
         }
 
-        return window.appData || (typeof appData !== 'undefined' ? appData : loadStaticData());
+        return staticData;
     }
 
     // --- RENDERING LOGIC ---
@@ -255,29 +275,30 @@
 
     function createItemCard(item, index, type) {
         const card = document.createElement('div');
+        const itemKey = getItemKey(item);
         // Combined class logic
         card.className = `${type === 'games' ? 'game-card' : 'app-card'} card-hover`;
         card.setAttribute('data-aos', 'zoom-in');
         card.setAttribute('data-aos-delay', ((index % state.itemsPerPage) * 50).toString());
-        card.setAttribute('data-category', item.category);
+        card.setAttribute('data-category', item.category || '');
 
         // Native lazy loading added
         card.innerHTML = `
             <div class="card-image">
-                <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Image+N/A'">
-                ${item.badge ? `<div class="card-badge">${item.badge}</div>` : ''}
+                <img src="${escapeAttribute(item.image)}" alt="${escapeAttribute(item.name)}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Image+N/A'">
+                ${item.badge ? `<div class="card-badge">${escapeHtml(item.badge)}</div>` : ''}
             </div>
             <div class="card-content">
-                <h3>${item.name}</h3>
-                <p>${item.description}</p>
+                <h3>${escapeHtml(item.name)}</h3>
+                <p class="card-description">${escapeHtml(item.description)}</p>
                 <div class="card-meta">
-                    ${item.size ? `<span class="app-size">${item.size}</span>` : ''}
-                    ${item.version ? `<span class="app-version">${item.version}</span>` : ''}
-                    ${item.rating ? `<span class="app-rating">⭐ ${item.rating}</span>` : ''}
+                    ${item.size ? `<span class="app-size">${escapeHtml(item.size)}</span>` : ''}
+                    ${item.version ? `<span class="app-version">${escapeHtml(item.version)}</span>` : ''}
+                    ${item.rating ? `<span class="app-rating">⭐ ${escapeHtml(item.rating)}</span>` : ''}
                 </div>
                 <div class="card-actions">
-                    <button class="btn-download btn-animate" data-name="${item.name}" data-url="${item.downloadUrl}">Download</button>
-                    <button class="btn-details btn-animate" data-name="${item.name}">Details</button>
+                    <button class="btn-download btn-animate" data-name="${escapeAttribute(item.name)}" data-url="${escapeAttribute(item.downloadUrl)}">Download</button>
+                    <button class="btn-details btn-animate" data-key="${escapeAttribute(itemKey)}">More Details</button>
                 </div>
             </div>
         `;
@@ -286,22 +307,26 @@
 
     function createFeaturedItem(app, index) {
         const item = document.createElement('div');
+        const itemKey = getItemKey(app);
         item.className = 'featured-item card-hover';
         item.setAttribute('data-aos', 'zoom-in');
         item.setAttribute('data-aos-delay', ((index + 1) * 100).toString());
 
         item.innerHTML = `
             <div class="featured-image">
-                <img src="${app.image}" alt="${app.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Featured'">
-                ${app.badge ? `<div class="featured-badge">${app.badge}</div>` : ''}
+                <img src="${escapeAttribute(app.image)}" alt="${escapeAttribute(app.name)}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x200/667eea/ffffff?text=Featured'">
+                ${app.badge ? `<div class="featured-badge">${escapeHtml(app.badge)}</div>` : ''}
             </div>
-            <h3>${app.name}</h3>
-            <p>${app.description}</p>
+            <h3>${escapeHtml(app.name)}</h3>
+            <p class="featured-description">${escapeHtml(app.description)}</p>
             <div class="app-info">
-                ${app.size ? `<span class="app-size">${app.size}</span>` : ''}
-                ${app.version ? `<span class="app-version">${app.version}</span>` : ''}
+                ${app.size ? `<span class="app-size">${escapeHtml(app.size)}</span>` : ''}
+                ${app.version ? `<span class="app-version">${escapeHtml(app.version)}</span>` : ''}
             </div>
-            <button class="download-btn btn-animate" data-name="${app.name}" data-url="${app.downloadUrl}">Download Now</button>
+            <div class="featured-actions">
+                <button class="download-btn btn-animate" data-name="${escapeAttribute(app.name)}" data-url="${escapeAttribute(app.downloadUrl)}">Download Now</button>
+                <button class="btn-details btn-animate" data-key="${escapeAttribute(itemKey)}">More Details</button>
+            </div>
         `;
         return item;
     }
@@ -745,8 +770,114 @@
     function initializeTeamAnimations() {}
     function initializeContactAnimations() {}
     function initializeLegalPage() {}
-    function initializeDetailsButtons() {}
+    function initializeDetailsButtons() {
+        let modal = document.getElementById('detailsModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'detailsModal';
+            modal.className = 'modal details-modal';
+            modal.innerHTML = `
+                <div class="modal-content details-modal-content">
+                    <button class="close details-close" type="button" aria-label="Close details">&times;</button>
+                    <div class="details-modal-header">
+                        <img class="details-image" src="" alt="">
+                        <div>
+                            <span class="details-type"></span>
+                            <h3 class="details-title"></h3>
+                            <div class="details-meta"></div>
+                        </div>
+                    </div>
+                    <div class="details-description"></div>
+                    <div class="details-actions">
+                        <button class="btn-download btn-animate" type="button">Download</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        document.body.addEventListener('click', (event) => {
+            const button = event.target.closest('.btn-details');
+            if (!button) return;
+
+            event.preventDefault();
+            const item = findCatalogItem(button.dataset.key);
+            if (!item) {
+                showNotification('Details are not available for this item.', 'warning');
+                return;
+            }
+
+            openDetailsModal(modal, item);
+        });
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal || event.target.closest('.details-close')) {
+                closeDetailsModal(modal);
+            }
+        });
+    }
     function initializeNavScroll() {}
+
+    function getItemKey(item) {
+        return (item?.slug || item?.name || '').toLowerCase().trim();
+    }
+
+    function findCatalogItem(key) {
+        const normalizedKey = (key || '').toLowerCase().trim();
+        return state.allData.find(item => getItemKey(item) === normalizedKey);
+    }
+
+    function openDetailsModal(modal, item) {
+        const image = modal.querySelector('.details-image');
+        const title = modal.querySelector('.details-title');
+        const type = modal.querySelector('.details-type');
+        const meta = modal.querySelector('.details-meta');
+        const description = modal.querySelector('.details-description');
+        const download = modal.querySelector('.details-actions .btn-download');
+
+        if (image) {
+            image.src = item.image || 'https://placehold.co/300x200/667eea/ffffff?text=Image+N/A';
+            image.alt = item.name || 'App image';
+        }
+        if (title) title.textContent = item.name || 'Application';
+        if (type) type.textContent = item.category || state.pageType;
+        if (description) description.textContent = item.description || 'No description available.';
+        if (download) {
+            download.dataset.name = item.name || 'Application';
+            download.dataset.url = item.downloadUrl || '#';
+        }
+
+        if (meta) {
+            const parts = [
+                item.size ? `Size: ${item.size}` : '',
+                item.version ? `Version: ${item.version}` : '',
+                item.rating ? `Rating: ${item.rating}` : '',
+                item.downloads ? `Downloads: ${item.downloads}` : ''
+            ].filter(Boolean);
+            meta.textContent = parts.join(' | ');
+        }
+
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailsModal(modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function escapeHtml(value = '') {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttribute(value = '') {
+        return escapeHtml(value);
+    }
 
     function initializePageTransitions() {
         document.body.classList.add('page-ready');

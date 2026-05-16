@@ -4,6 +4,7 @@ function mapItem(item) {
   return {
     id: item.id,
     name: item.name,
+    slug: item.slug,
     description: item.description,
     category: item.categories?.slug || item.type,
     image: item.image_url || 'https://placehold.co/300x200/667eea/ffffff?text=Image+N/A',
@@ -32,7 +33,7 @@ export default async function handler(_req, res) {
 
   const { data, error } = await supabase
     .from('apps')
-    .select('id,type,name,description,categories(slug),image_url,file_url,external_download_url,size,version,rating,popularity,downloads,badge,is_featured,release_date')
+    .select('id,type,name,slug,description,categories(slug),image_url,file_url,external_download_url,size,version,rating,popularity,downloads,badge,is_featured,release_date')
     .eq('is_published', true)
     .order('created_at', { ascending: false })
 

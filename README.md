@@ -100,4 +100,6 @@ If an admin session already exists, `/login` redirects to `/admin`.
 - `script.js` includes all startup initializer functions used by the static site wrapper.
 - Auth/admin styles live in `frontend/styles/app.css`; generated static-site CSS lives in `frontend/styles/globals.css`.
 - Admin panel supports add, edit/update, cancel edit, and delete for apps/games.
-- Public apps/games pages read published catalog items from `/api/catalog` with anon Supabase env and static data fallback.
+- Public apps/games pages merge published `/api/catalog` items with built-in static data, keeping search, filters, and pagination.
+- Catalog cards keep long descriptions scrollable and expose a `More Details` modal with full metadata and download action.
+- Homepage featured cards also use compact scrollable descriptions and `More Details`.

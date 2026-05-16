@@ -22,3 +22,6 @@
 - 2026-05-17: Moved auth/admin CSS into `frontend/styles/app.css` so `npm prepare` cannot overwrite those styles.
 - 2026-05-17: Added admin edit, update, cancel edit, and delete actions for apps/games.
 - 2026-05-17: Added `/api/catalog` using anon Supabase env and connected public app/game pages to published catalog data with static fallback.
+- 2026-05-17: Merged admin/Supabase catalog rows with built-in static catalog rows so public pages show both with existing filters and pagination.
+- 2026-05-17: Added compact scrollable card descriptions and a scrollable More Details modal for app/game catalog items.
+- 2026-05-17: Applied compact scrollable descriptions and More Details actions to homepage featured catalog cards.
