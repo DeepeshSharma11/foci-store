@@ -32,10 +32,17 @@ Backend health: `http://localhost:4000/health`
 
 ## Vercel Deploy
 
-Deploy the `frontend/` folder as the Vercel project root. The backend endpoints needed on Vercel are available as Next.js API routes:
+Deploy the repo root on Vercel. Root `vercel.json` defines:
+
+- `frontend` at `/`
+- `backend` at `/_/backend`
+
+Backend endpoints:
 
 - `/api/health`
 - `/api/supabase/status`
+- `/_/backend/health`
+- `/_/backend/api/supabase/status`
 
 Add these Vercel environment variables:
 
@@ -44,6 +51,12 @@ Add these Vercel environment variables:
 - `NEXT_PUBLIC_API_URL`
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
+
+For multi-service deploy, set:
+
+```text
+NEXT_PUBLIC_API_URL=https://your-domain.vercel.app/_/backend
+```
 
 ## Docker
 
