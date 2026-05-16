@@ -1,0 +1,359 @@
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1rem;
+    background:
+        radial-gradient(circle at top left, rgba(102, 126, 234, 0.22), transparent 32rem),
+        linear-gradient(135deg, #121326 0%, #1d1730 100%);
+}
+
+.auth-card {
+    width: min(100%, 430px);
+    background: #ffffff;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.32);
+    padding: 2rem;
+}
+
+.auth-brand {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    color: #667eea;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 1.35rem;
+}
+
+.auth-card h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.auth-subtitle {
+    color: #667085;
+    margin-bottom: 1.5rem;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.auth-form label {
+    display: grid;
+    gap: 0.45rem;
+    color: #344054;
+    font-weight: 600;
+}
+
+.auth-form input {
+    width: 100%;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    padding: 0.8rem 0.9rem;
+    font: inherit;
+    color: #101828;
+    background: #fff;
+}
+
+.auth-form input:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.22);
+    border-color: #667eea;
+}
+
+.auth-form button,
+.auth-account button {
+    border: 0;
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-form button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.auth-message {
+    margin-top: 1rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.auth-message-error {
+    color: #912018;
+    background: #fef3f2;
+    border: 1px solid #fecdca;
+}
+
+.auth-message-success {
+    color: #05603a;
+    background: #ecfdf3;
+    border: 1px solid #abefc6;
+}
+
+.auth-message-info {
+    color: #344054;
+    background: #f2f4f7;
+    border: 1px solid #eaecf0;
+}
+
+.auth-footer {
+    margin-top: 1.4rem;
+    color: #667085;
+    font-size: 0.95rem;
+}
+
+.auth-footer a {
+    color: #667eea;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-account {
+    display: grid;
+    gap: 1rem;
+}
+
+.auth-account div {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem;
+    border: 1px solid #eaecf0;
+    border-radius: 6px;
+    background: #f9fafb;
+}
+
+.auth-account span {
+    color: #667085;
+    font-size: 0.9rem;
+}
+
+.admin-page {
+    min-height: 100vh;
+    background: #f5f7fb;
+    color: #101828;
+}
+
+.admin-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem clamp(1rem, 4vw, 2rem);
+    background: #111827;
+    color: #fff;
+}
+
+.admin-topbar div,
+.admin-topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-brand {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.admin-topbar a {
+    color: #dbeafe;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.admin-topbar button {
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 6px;
+    padding: 0.55rem 0.8rem;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+}
+
+.admin-layout {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 1.5rem 0 3rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-panel {
+    background: #fff;
+    border: 1px solid #e4e7ec;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+    padding: 1.25rem;
+}
+
+.admin-intro h1 {
+    font-size: 1.7rem;
+    margin-bottom: 0.35rem;
+}
+
+.admin-intro p {
+    color: #667085;
+}
+
+.admin-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-grid.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-grid.four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-form label {
+    display: grid;
+    gap: 0.45rem;
+    color: #344054;
+    font-weight: 650;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+    width: 100%;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    padding: 0.72rem 0.8rem;
+    font: inherit;
+    color: #101828;
+    background: #fff;
+}
+
+.admin-form textarea {
+    resize: vertical;
+}
+
+.admin-inline {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+}
+
+.admin-inline button,
+.admin-submit,
+.admin-link-button {
+    border: 0;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font: inherit;
+    font-weight: 750;
+    color: #fff;
+    background: #667eea;
+    cursor: pointer;
+}
+
+.admin-link-button {
+    width: fit-content;
+    margin-top: 0.35rem;
+    padding: 0.58rem 0.8rem;
+    background: #111827;
+}
+
+.admin-submit {
+    justify-self: start;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.admin-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.admin-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-checks label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-message {
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+}
+
+.admin-message-error {
+    color: #912018;
+    background: #fef3f2;
+    border: 1px solid #fecdca;
+}
+
+.admin-message-success {
+    color: #05603a;
+    background: #ecfdf3;
+    border: 1px solid #abefc6;
+}
+
+.admin-message-info {
+    color: #344054;
+    background: #f2f4f7;
+    border: 1px solid #eaecf0;
+}
+
+.admin-table {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.admin-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 110px 100px;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.8rem;
+    border: 1px solid #eaecf0;
+    border-radius: 6px;
+    background: #fcfcfd;
+}
+
+.admin-row span {
+    color: #667085;
+}
+
+@media (max-width: 820px) {
+    .admin-grid.two,
+    .admin-grid.four,
+    .admin-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

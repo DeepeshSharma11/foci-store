@@ -19,3 +19,4 @@
 - 2026-05-17: Added login page session detection so already logged-in users redirect to `/admin` instead of seeing the login form.
 - 2026-05-17: Added Vercel-compatible Next.js API routes for backend health/Supabase status plus Dockerfiles and Compose for local/container hosting.
 - 2026-05-17: Added root `vercel.json` with `experimentalServices` for frontend `/` and backend `/_/backend` deployment.
+- 2026-05-17: Moved auth/admin CSS into `frontend/styles/app.css` so `npm prepare` cannot overwrite those styles.

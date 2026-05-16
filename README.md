@@ -97,3 +97,4 @@ If an admin session already exists, `/login` redirects to `/admin`.
 - Frontend initialization supports scripts loaded after `DOMContentLoaded`.
 - `data.js` exposes `window.appData` for reliable browser access.
 - `script.js` includes all startup initializer functions used by the static site wrapper.
+- Auth/admin styles live in `frontend/styles/app.css`; generated static-site CSS lives in `frontend/styles/globals.css`.
